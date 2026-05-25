@@ -1,0 +1,204 @@
+/* Fichier nettoyé : suppression des lignes non-CSS et des règles conflictuelles liées au curseur. */
+
+/* --- Removed custom cursor rules: use system cursor everywhere --- */
+body { cursor: auto; }
+a, button, .card { cursor: pointer; }
+
+/* ---------- Base layout ---------- */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+header {
+  background: #111827;
+  color: #e2e8f0;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #334155;
+}
+
+header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+nav a:hover {
+  background: rgba(148, 163, 184, 0.15);
+  color: #f8fafc;
+}
+
+main {
+  padding: 2rem;
+}
+
+section {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.25);
+}
+
+h2 {
+  color: #f8fafc;
+}
+
+p {
+  color: #cbd5e1;
+}
+
+footer {
+  background: #0f172a;
+  color: #94a3b8;
+  border-top: 1px solid #334155;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .container { width: 100%; }
+}
+
+/* ---------- Utilities ---------- */
+.hidden { display: none; }
+
+/* ---------- Cards ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.card {
+  position: relative;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  background: #0b1220;
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.7);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.6);
+}
+
+.card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.8rem 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(2,6,23,0.7) 100%);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Header top / logo ---------- */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-logo {
+  display: block;
+  height: 64px;
+  width: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .site-logo { height: 44px; }
+}
+
+/* Animated cursor using bongotap.gif */
+body {
+  cursor: none; /* hide native cursor so custom animation is visible */
+}
+
+/* keep native cursor on touch devices and form controls */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto !important; }
+  .animated-cursor { display: none !important; }
+}
+input, textarea, select, [contenteditable="true"] { cursor: auto !important; }
+
+/* cursor element */
+.animated-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  display: none;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* Curseur personnalisé simple */
+body {
+  cursor: url('../image/bongotap.gif') 16 16, auto;
+}
+
+a, button, .card {
+  cursor: url('../image/bongotap.gif') 16 16, pointer;
+}
+
+/* garder le curseur natif sur mobile/tactile */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto !important; }
+}
+input, textarea, select, [contenteditable="true"] {
+  cursor: auto !important;
+}
+
+.lom-header {
+  text-align: center;
+}
+
+.lom-logo {
+  display: block;
+  margin: 0.5rem auto 0;
+  max-width: 120px;
+}

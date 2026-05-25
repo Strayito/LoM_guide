@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoM Fan Guide — Legend of Mushroom</title>
+  <meta name="description" content="Your ultimate fan guide for Legend of Mushroom — class guides, PVE & PVP strategies, and damage calculators.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .features-section { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+    .about-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .formula-preview {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 2;
+    }
+    .formula-preview .v { color: var(--teal); }
+    .formula-preview .o { color: var(--gold); }
+    .formula-preview .n { color: var(--orange); }
+    .formula-preview .step { color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 8px; }
+    @media (max-width: 768px) { .about-split { grid-template-columns: 1fr; } }
+    .author-avatar-img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--teal);
+      flex-shrink: 0;
+    }
+    .hero-art-img {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 340px;
+      opacity: 0.18;
+      pointer-events: none;
+      user-select: none;
+    }
+    @media (max-width: 768px) { .hero-art-img { height: 180px; opacity: 0.1; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link active">
+      <span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span>
+    </a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">
+      <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
+    </a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="lang-fr">🍄 Legend of Mushroom · Site Fan</span>
+        <span class="lang-en hidden">🍄 Legend of Mushroom · Fan Site</span>
+        <span class="lang-sk hidden">🍄 Legend of Mushroom · Fanúšikovský web</span>
+      </div>
+      <h1>
+        <span class="lang-fr">Maîtrise chaque<br><span style="color:var(--gold)">Bataille du Royaume</span><br>Champignon</span>
+        <span class="lang-en hidden">Master Every<br><span style="color:var(--gold)">Mushroom Kingdom</span><br>Battle</span>
+        <span class="lang-sk hidden">Ovládni každú<br><span style="color:var(--gold)">Bitku Hubového</span><br>Kráľovstva</span>
+      </h1>
+      <p class="hero-subtitle">
+        <span class="lang-fr">Guides de classes, stratégies PVE &amp; PVP, et un calculateur de dégâts complet — tout en un seul endroit, créé par un joueur pour les joueurs.</span>
+        <span class="lang-en hidden">Class guides, PVE &amp; PVP strategies, and a full damage calculator — all in one place, built by a player for players.</span>
+        <span class="lang-sk hidden">Sprievodcovia triedami, stratégie PVE &amp; PVP a kompletná kalkulačka poškodenia — všetko na jednom mieste, vytvorené hráčom pre hráčov.</span>
+      </p>
+      <div class="hero-actions">
+        <a href="guide.html" class="btn btn-primary">
+          <span class="lang-fr">📖 Voir les Guides</span>
+          <span class="lang-en hidden">📖 Browse Guides</span>
+          <span class="lang-sk hidden">📖 Pozrieť sprievodcov</span>
+        </a>
+        <a href="calculator.html" class="btn btn-secondary">
+          <span class="lang-fr">🧮 Ouvrir le Calculateur</span>
+          <span class="lang-en hidden">🧮 Open Calculator</span>
+          <span class="lang-sk hidden">🧮 Otvoriť kalkulačku</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <img src="assets/image/lom/mushroom_charge.png" alt="" class="hero-art-img" aria-hidden="true">
+</section>
+
+<div class="divider"></div>
+
+<!-- Features -->
+<section class="section features-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">
+        <span class="lang-fr">Ce que vous trouverez</span>
+        <span class="lang-en hidden">What You'll Find</span>
+        <span class="lang-sk hidden">Čo tu nájdete</span>
+      </span>
+      <h2>
+        <span class="lang-fr">Tout ce qu'il vous faut pour <span class="text-teal">Dominer</span></span>
+        <span class="lang-en hidden">Everything You Need to <span class="text-teal">Dominate</span></span>
+        <span class="lang-sk hidden">Všetko čo potrebujete pre <span class="text-teal">Dominanciu</span></span>
+      </h2>
+      <p>
+        <span class="lang-fr">Des conseils pour débutants aux formules de dégâts avancées — ce guide couvre les trois classes en PVE et PVP.</span>
+        <span class="lang-en hidden">From newcomer tips to advanced damage formulas — this guide covers all three classes for both PVE and PVP.</span>
+        <span class="lang-sk hidden">Od tipov pre začiatočníkov po pokročilé vzorce poškodenia — tento sprievodca pokrýva všetky tri triedy pre PVE aj PVP.</span>
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>
+          <span class="lang-fr">Guides de Classes</span>
+          <span class="lang-en hidden">Class Guides</span>
+          <span class="lang-sk hidden">Sprievodcovia triedami</span>
+        </h3>
+        <p>
+          <span class="lang-fr">Guides approfondis pour Épée, Hache et Magie. Priorités de stats, astuces de compétences et style de jeu expliqués clairement.</span>
+          <span class="lang-en hidden">In-depth guides for Sword, Axe, and Magic. Stat priorities, skill tips, equipment focus, and playstyle explained clearly.</span>
+          <span class="lang-sk hidden">Podrobné sprievodcovia pre Meč, Sekeru a Mágiu. Priority štatistík, tipy na schopnosti a štýl hry jasne vysvetlené.</span>
+        </p>
+        <div style="margin-top:18px">
+          <a href="guide.html" class="btn btn-ghost btn-sm">
+            <span class="lang-fr">Voir les Guides →</span>
+            <span class="lang-en hidden">View Guides →</span>
+            <span class="lang-sk hidden">Pozrieť sprievodcov →</span>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏆</div>
+        <h3>
+          <span class="lang-fr">Stratégies PVE &amp; PVP</span>
+          <span class="lang-en hidden">PVE &amp; PVP Strategies</span>
+          <span class="lang-sk hidden">Stratégie PVE &amp; PVP</span>
+        </h3>
+        <p>
+          <span class="lang-fr">Stratégies distinctes pour le grinding PVE et les arènes PVP. Apprenez quand attaquer à fond ou jouer défensif.</span>
+          <span class="lang-en hidden">Separate strategies for grinding PVE content and competing in PVP arenas. Learn when to go full-offense or defensive.</span>
+          <span class="lang-sk hidden">Samostatné stratégie pre PVE grinding a PVP arény. Naučte sa kedy útočiť naplno alebo hrať defenzívne.</span>
+        </p>
+        <div style="margin-top:18px">
+          <a href="guide.html" class="btn btn-ghost btn-sm">
+            <span class="lang-fr">Voir les Stratégies →</span>
+            <span class="lang-en hidden">View Strategies →</span>
+            <span class="lang-sk hidden">Pozrieť stratégie →</span>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧮</div>
+        <h3>
+          <span class="lang-fr">Calculateur de Dégâts</span>
+          <span class="lang-en hidden">Damage Calculator</span>
+          <span class="lang-sk hidden">Kalkulačka poškodenia</span>
+        </h3>
+        <p>
+          <span class="lang-fr">Entrez vos stats et obtenez les dégâts exacts — étape par étape, avec la vraie formule LoM incluant les critiques et les boss.</span>
+          <span class="lang-en hidden">Input your stats and see exact damage output — step by step, using the real LoM damage formula including crit and boss DMG.</span>
+          <span class="lang-sk hidden">Zadajte vaše štatistiky a získajte presné poškodenie — krok za krokom, s použitím skutočnej LoM vzorce vrátane kritov a bossov.</span>
+        </p>
+        <div style="margin-top:18px">
+          <a href="calculator.html" class="btn btn-ghost btn-sm">
+            <span class="lang-fr">Ouvrir le Calculateur →</span>
+            <span class="lang-en hidden">Open Calculator →</span>
+            <span class="lang-sk hidden">Otvoriť kalkulačku →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- About the Guide -->
+<section class="section">
+  <div class="container">
+    <div class="about-split">
+      <div>
+        <span class="label">
+          <span class="lang-fr">À propos du site</span>
+          <span class="lang-en hidden">About this Site</span>
+          <span class="lang-sk hidden">O webe</span>
+        </span>
+        <h2>
+          <span class="lang-fr">Un guide créé<br>par un <span class="text-gold">Vrai Joueur</span></span>
+          <span class="lang-en hidden">A Guide Built<br>by a <span class="text-gold">Real Player</span></span>
+          <span class="lang-sk hidden">Sprievodca vytvorený<br>skutočným <span class="text-gold">Hráčom</span></span>
+        </h2>
+        <p style="color:var(--text-secondary);margin-top:14px;line-height:1.75">
+          <span class="lang-fr">Ce site fan a été créé pour combler le vide entre les pages wiki éparpillées et les infobulles vagues du jeu. Les formules sont issues de recherches communautaires et de tests en jeu — ce que vous voyez correspond à ce que le jeu calcule réellement.</span>
+          <span class="lang-en hidden">This fan site was created to fill the gap between scattered wiki pages and vague in-game tooltips. The formulas are derived from community research and in-game testing — what you see is what the game actually computes.</span>
+          <span class="lang-sk hidden">Tento fanúšikovský web bol vytvorený na zaplnenie medzery medzi roztrúsenými wiki stránkami a neurčitými hernými nápovedam. Vzorce vychádzajú z komunitného výskumu a testovania v hre — čo vidíte, to hra skutočne počíta.</span>
+        </p>
+        <p style="color:var(--text-secondary);margin-top:12px;line-height:1.75">
+          <span class="lang-fr">Les guides sont écrits à partir d'une vraie expérience de jeu sur les trois classes principales. Le calculateur implémente la formule de dégâts officielle LoM étape par étape pour comprendre <em>pourquoi</em> vos dégâts changent — pas seulement voir le chiffre final.</span>
+          <span class="lang-en hidden">Guides are written from real gameplay experience across all three main classes. The calculator implements the official LoM damage formula step by step so you can understand <em>why</em> your damage changes — not just see the final number.</span>
+          <span class="lang-sk hidden">Sprievodcovia sú písaní zo skutočných herných skúseností naprieč všetkými tromi hlavnými triedami. Kalkulačka implementuje oficiálnu LoM vzorec poškodenia krok za krokom, aby ste pochopili <em>prečo</em> sa vaše poškodenie mení — nielen videli finálne číslo.</span>
+        </p>
+        <div class="stat-row" style="margin-top:28px">
+          <div class="stat-badge">
+            <div class="val">4</div>
+            <div class="lbl"><span class="lang-fr">Classes Couvertes</span><span class="lang-en hidden">Classes Covered</span><span class="lang-sk hidden">Pokryté triedy</span></div>
+          </div>
+          <div class="stat-badge">
+            <div class="val">2</div>
+            <div class="lbl"><span class="lang-fr">Modes de Jeu</span><span class="lang-en hidden">Game Modes</span><span class="lang-sk hidden">Herné módy</span></div>
+          </div>
+          <div class="stat-badge">
+            <div class="val" style="color:var(--gold)">8+</div>
+            <div class="lbl"><span class="lang-fr">Guides Complets</span><span class="lang-en hidden">Full Guides</span><span class="lang-sk hidden">Kompletné príručky</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="label">
+          <span class="lang-fr">La Formule de Dégâts</span>
+          <span class="lang-en hidden">The Damage Formula</span>
+          <span class="lang-sk hidden">Vzorec poškodenia</span>
+        </span>
+        <div class="formula-preview">
+          <span class="step">STEP 1 — Calculate ATK &amp; DEF</span>
+          <span class="v">ATK</span> = (<span class="v">FinalATK</span> × (<span class="n">100</span> + Parking%) / <span class="n">100</span>) × (<span class="n">100</span> + Buff%) / <span class="n">100</span> + Exclusive
+          <span class="step">STEP 2 — Base Damage</span>
+          <span class="v">A</span> = (<span class="v">ATK</span> − <span class="v">DEF</span>) × <span class="v">FinalMult</span> × DMG% / <span class="n">100</span>
+          <span class="step">STEP 3 — Critical</span>
+          <span class="v">B(Crit)</span> = <span class="v">A</span> × CritMult / CritRES
+          <span class="step">STEP 4 — Resistance</span>
+          <span class="v">C</span> = (<span class="v">A</span> or <span class="v">B</span>) × (<span class="n">100</span>−RES%) / <span class="n">100</span> × (<span class="n">100</span>−DMGRES%) / <span class="n">100</span>
+          <span class="step">STEP 5 — Final Output</span>
+          <span class="v">PvE</span> = <span class="v">C</span> × Bonus (Sword <span class="n">1.1</span> / Ax <span class="n">1.05</span>)
+        </div>
+        <div style="margin-top:14px;text-align:right">
+          <a href="calculator.html" class="btn btn-primary btn-sm">
+            <span class="lang-fr">Essayer le Calculateur →</span>
+            <span class="lang-en hidden">Try the Full Calculator →</span>
+            <span class="lang-sk hidden">Vyskúšať kalkulačku →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Author -->
+<section class="section-sm">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:32px">
+      <span class="label">
+        <span class="lang-fr">L'Auteur</span>
+        <span class="lang-en hidden">The Author</span>
+        <span class="lang-sk hidden">Autor</span>
+      </span>
+      <h2>Meet <span class="text-gold">Stray</span></h2>
+    </div>
+    <div class="author-card">
+      <div class="author-avatar">
+        <img src="assets/image/stray_avatar.png" alt="Stray" class="author-avatar-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span style="display:none;font-size:3rem">🍄</span>
+      </div>
+      <div>
+        <div class="author-name">Stray</div>
+        <div class="author-role">
+          <span class="lang-fr">Joueur de Legend of Mushroom &amp; Créateur de Guide</span>
+          <span class="lang-en hidden">Legend of Mushroom Player &amp; Guide Creator</span>
+          <span class="lang-sk hidden">Hráč Legend of Mushroom &amp; Tvorca sprievodcu</span>
+        </div>
+        <p class="author-bio">
+          <span class="lang-fr">Salut ! Je suis Stray — un joueur passionné de Legend of Mushroom qui en avait assez de chercher des infos fiables éparpillées sur Discord et Reddit. Alors j'ai créé ce site. Je joue principalement Épée et Hache, je passe trop de temps à théoriser les formules de dégâts, et j'adore aider les autres joueurs à comprendre les mécaniques derrière les chiffres. Ce guide est ma façon de rendre à la communauté.</span>
+          <span class="lang-en hidden">Hey! I'm Stray — a dedicated Legend of Mushroom player who got tired of hunting for reliable info scattered across Discord servers and Reddit threads. So I built this site. I play mainly Sword and Axe, spend way too much time theorycrafting damage formulas, and genuinely enjoy helping other players understand the mechanics behind the numbers. This guide is my way of giving back to the community.</span>
+          <span class="lang-sk hidden">Ahoj! Som Stray — oddaný hráč Legend of Mushroom, ktorý sa unavil hľadaním spoľahlivých informácií rozsypaných po Discord serveroch a Reddit vláknach. Tak som vytvoril tento web. Hrám hlavne Meč a Sekeru, trávim príliš veľa času teóriou vzorcov poškodenia a úprimne rád pomáham ostatným hráčom pochopiť mechaniky za číslami. Tento sprievodca je moja cesta ako niečo vrátiť komunite.</span>
+        </p>
+        <div class="author-tags">
+          <span class="tag">⚔️ Sword Main</span>
+          <span class="tag">🪓 Axe Enjoyer</span>
+          <span class="tag">📊 Theorycraftsman</span>
+          <span class="tag">🏆 PVP Grinder</span>
+          <span class="tag">🍄 LoM Veteran</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:6px">
+    <span class="lang-fr">Site non officiel. Legend of Mushroom est développé par JoyNetwork.</span>
+    <span class="lang-en hidden">Unofficial fan site. Legend of Mushroom is developed by JoyNetwork.</span>
+    <span class="lang-sk hidden">Neoficiálny fanúšikovský web. Legend of Mushroom je vyvíjaný spoločnosťou JoyNetwork.</span>
+  </p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

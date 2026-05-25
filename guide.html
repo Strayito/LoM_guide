@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guides — LoM Fan Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">
+      <span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span>
+    </a>
+    <a href="guide.html" class="nav-link active">
+      <span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span>
+    </a>
+    <a href="calculator.html" class="nav-link">
+      <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
+    </a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <span class="label">
+      <span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span>
+    </span>
+    <h1>
+      <span class="lang-fr">Guides par Classe</span>
+      <span class="lang-en hidden">Class Guides</span>
+      <span class="lang-sk hidden">Sprievodcovia triedami</span>
+    </h1>
+    <p>
+      <span class="lang-fr">Sélectionnez votre mode et votre classe. Chaque guide couvre les priorités de stats, compétences, équipements et stratégies clés.</span>
+      <span class="lang-en hidden">Select your game mode and class. Each guide covers stat priorities, skills, equipment, and key strategies.</span>
+      <span class="lang-sk hidden">Vyberte herný režim a triedu. Každý sprievodca pokrýva priority štatistík, schopnosti, vybavenie a kľúčové stratégie.</span>
+    </p>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="tabs" id="modeTabs" role="tablist">
+    <button class="tab-btn active" data-tab="general">
+      📖 <span class="lang-fr">Général</span><span class="lang-en hidden">General</span><span class="lang-sk hidden">Všeobecné</span>
+    </button>
+    <button class="tab-btn" data-tab="pve">
+      🌿 <span class="lang-fr">PVE</span><span class="lang-en hidden">PVE</span><span class="lang-sk hidden">PVE</span>
+    </button>
+    <button class="tab-btn" data-tab="pvp">
+      ⚔️ <span class="lang-fr">PVP</span><span class="lang-en hidden">PVP</span><span class="lang-sk hidden">PVP</span>
+    </button>
+  </div>
+
+  <!-- ========== GÉNÉRAL ========== -->
+  <div class="tab-content active" id="tab-general">
+
+    <!-- Stats expliquées -->
+    <div class="card" style="margin-bottom:24px">
+      <h2 style="margin-bottom:20px">
+        <span class="lang-fr">📊 Comprendre vos Stats</span>
+        <span class="lang-en hidden">📊 Understanding Your Stats</span>
+        <span class="lang-sk hidden">📊 Pochopenie vašich štatistík</span>
+      </h2>
+      <p style="color:var(--text-secondary);line-height:1.75;margin-bottom:20px">
+        <span class="lang-fr">Dans Legend of Mushroom, chaque stat suit une hiérarchie en 3 niveaux : <strong>Base → Global → Final</strong>. Comprendre cette structure est essentiel pour optimiser votre personnage.</span>
+        <span class="lang-en hidden">In Legend of Mushroom, every stat follows a 3-tier hierarchy: <strong>Base → Global → Final</strong>. Understanding this structure is essential for optimizing your character.</span>
+        <span class="lang-sk hidden">V Legend of Mushroom, každá štatistika sleduje 3-úrovňovú hierarchiu: <strong>Základ → Globálny → Finálny</strong>. Pochopenie tejto štruktúry je nevyhnutné pre optimalizáciu vašej postavy.</span>
+      </p>
+      <div class="guide-grid">
+        <div>
+          <div class="guide-section">
+            <h3><span class="lang-fr">Système ATQ / DEF / PV</span><span class="lang-en hidden">ATK / DEF / HP System</span><span class="lang-sk hidden">Systém ATK / DEF / HP</span></h3>
+            <div class="tip-list">
+              <div class="tip" style="border-left-color:var(--orange)">
+                <span class="tip-icon">⚔️</span>
+                <div>
+                  <strong><span class="lang-fr">ATQ Base</span><span class="lang-en hidden">Base ATK</span><span class="lang-sk hidden">Základný ATK</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Stat de départ — provient de votre équipement, du niveau et des attributs. Elle forme la fondation avant tout multiplicateur.</span>
+                    <span class="lang-en hidden">Starting stat — comes from gear, level and attributes. It forms the foundation before any multiplier applies.</span>
+                    <span class="lang-sk hidden">Počiatočná štatistika — pochádza z vybavenia, úrovne a atribútov. Tvorí základ pred akýmkoľvek multiplikátorom.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--gold)">
+                <span class="tip-icon">🌐</span>
+                <div>
+                  <strong><span class="lang-fr">ATQ Global</span><span class="lang-en hidden">Global ATK</span><span class="lang-sk hidden">Globálny ATK</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Bonus en pourcentage qui s'applique à toute la couche Base. Vient principalement des statues, dino, et certaines cartes. Très puissant car il multiplie la base entière.</span>
+                    <span class="lang-en hidden">Percentage bonus applied to the entire Base layer. Comes mainly from statues, dinos, and certain cards. Very powerful as it scales the whole base.</span>
+                    <span class="lang-sk hidden">Percentuálny bonus aplikovaný na celú základnú vrstvu. Pochádza hlavne zo sôch, dinosaurov a niektorých kariet. Veľmi silný, pretože škáluje celý základ.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--teal)">
+                <span class="tip-icon">✨</span>
+                <div>
+                  <strong><span class="lang-fr">ATQ Final</span><span class="lang-en hidden">Final ATK</span><span class="lang-sk hidden">Finálny ATK</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Résultat après buffs, parking, et bonus exclusifs. C'est la valeur qui entre dans la formule de dégâts.</span>
+                    <span class="lang-en hidden">Result after buffs, parking, and exclusive bonuses. This is the value that feeds into the damage formula.</span>
+                    <span class="lang-sk hidden">Výsledok po buffoch, parkovaní a exkluzívnych bonusoch. Toto je hodnota, ktorá vstupuje do vzorca poškodenia.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="info-box" style="margin-top:12px">
+              🔢 <span>
+                <span class="lang-fr"><strong>DEF et PV</strong> suivent exactement la même logique Base → Global → Final. Plus vos stats Global sont élevées, plus votre retour sur investissement est grand.</span>
+                <span class="lang-en hidden"><strong>DEF and HP</strong> follow the exact same Base → Global → Final logic. The higher your Global stats, the greater your return on investment.</span>
+                <span class="lang-sk hidden"><strong>DEF a HP</strong> sledujú presnú rovnakú logiku Základ → Globálny → Finálny. Čím vyššie sú vaše globálne štatistiky, tým väčší je váš výnos z investície.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3><span class="lang-fr">Système Critique</span><span class="lang-en hidden">Critical System</span><span class="lang-sk hidden">Systém Kritického Zásahu</span></h3>
+            <div class="priority-list">
+              <div class="priority-item">
+                <div class="priority-rank r1">CRIT</div>
+                <div><strong><span class="lang-fr">Taux de Crit</span><span class="lang-en hidden">Crit Rate</span><span class="lang-sk hidden">Miera Krit.</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">% de chance de déclencher un coup critique. Cap effectif ≈ 100%.</span><span class="lang-en hidden">% chance to land a critical hit. Effective cap ≈ 100%.</span><span class="lang-sk hidden">% šanca na kritický zásah. Efektívny strop ≈ 100%.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r2">DMG</div>
+                <div><strong><span class="lang-fr">DMG Crit</span><span class="lang-en hidden">Crit DMG</span><span class="lang-sk hidden">Krit. Poškodenie</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Multiplicateur appliqué quand le crit se déclenche. B(Crit) = A × CritMult / CritRES.</span><span class="lang-en hidden">Multiplier applied when a crit triggers. B(Crit) = A × CritMult / CritRES.</span><span class="lang-sk hidden">Multiplikátor aplikovaný pri kritiku. B(Krit) = A × KritMult / KritOdolnosť.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r3">RES</div>
+                <div><strong>Crit RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Résistance critique de la cible. Elle divise le DMG Crit de l'attaquant. Augmentez la vôtre pour réduire les crits entrants.</span><span class="lang-en hidden">Target's crit resistance. It divides the attacker's Crit DMG. Raise yours to reduce incoming crits.</span><span class="lang-sk hidden">Kritická odolnosť cieľa. Delí útočníkovo Krit. poškodenie. Zvýšte svoje, aby ste znížili prichádzajúce kritiky.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r4">IGN</div>
+                <div><strong>Ignore Crit</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit le Taux de Crit effectif de l'ennemi contre vous.</span><span class="lang-en hidden">Reduces enemy effective Crit Rate against you.</span><span class="lang-sk hidden">Znižuje efektívnu Mieru Krit. nepriateľa voči vám.</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="guide-section">
+            <h3><span class="lang-fr">Système Combo / Riposte</span><span class="lang-en hidden">Combo / Counter System</span><span class="lang-sk hidden">Systém Komba / Protiútoku</span></h3>
+            <div class="tip-list">
+              <div class="tip" style="border-left-color:var(--teal)">
+                <span class="tip-icon">💥</span>
+                <div>
+                  <strong><span class="lang-fr">Combo %</span><span class="lang-en hidden">Combo %</span><span class="lang-sk hidden">Kombo %</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Taux de déclenchement d'un Combo. Un Combo applique le Multiplicateur Combo sur les dégâts. Les Combos ignorent la Résistance Combo de la cible si vous avez Ignore Combo.</span>
+                    <span class="lang-en hidden">Trigger rate for a Combo hit. A Combo applies the Combo Multiplier to damage. Combos bypass the target's Combo RES if you have Ignore Combo.</span>
+                    <span class="lang-sk hidden">Miera spustenia Kombo zásahu. Kombo aplikuje Multiplikátor Komba na poškodenie. Kombá obchádzajú Kombo odolnosť cieľa, ak máte Ignorovanie Komba.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--purple)">
+                <span class="tip-icon">🔄</span>
+                <div>
+                  <strong><span class="lang-fr">Riposte %</span><span class="lang-en hidden">Counter %</span><span class="lang-sk hidden">Protiútok %</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Taux de déclenchement d'une Riposte automatique. La Riposte utilise le Multiplicateur Riposte et ignore la RES Riposte si vous avez Ignore Riposte.</span>
+                    <span class="lang-en hidden">Trigger rate for an automatic Counter. Counter uses the Counter Multiplier and bypasses Counter RES if you have Ignore Counter.</span>
+                    <span class="lang-sk hidden">Miera spustenia automatického Protiútoku. Protiútok používa Multiplikátor Protiútoku a obchádza Odolnosť Protiútoku, ak máte Ignorovanie Protiútoku.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--gold)">
+                <span class="tip-icon">🌐</span>
+                <div>
+                  <strong><span class="lang-fr">Dégâts Combo Globaux</span><span class="lang-en hidden">Global Combo DMG</span><span class="lang-sk hidden">Globálne Kombo DMG</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Augmente tous les dégâts de type Combo. Stat clé pour l'Arbalète. Provient des statues, âmes roses, et runes.</span>
+                    <span class="lang-en hidden">Increases all Combo-type damage. Key stat for Archer. Comes from statues, pink souls, and runes.</span>
+                    <span class="lang-sk hidden">Zvyšuje všetko poškodenie typu Kombo. Kľúčová štatistika pre Lukostrelca. Pochádza zo sôch, ružových duší a rún.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3><span class="lang-fr">Résistances &amp; Réductions</span><span class="lang-en hidden">Resistances &amp; Reductions</span><span class="lang-sk hidden">Odolnosti &amp; Zníženia</span></h3>
+            <div class="tip-list">
+              <div class="tip"><span class="tip-icon">🛡️</span><div><strong>DMG RES %</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit tous les dégâts reçus. Appliqué à l'étape Résistance de la formule.</span><span class="lang-en hidden">Reduces all incoming damage. Applied at the Resistance step of the formula.</span><span class="lang-sk hidden">Znižuje všetko prichádzajúce poškodenie. Aplikované v kroku Odolnosť vzorca.</span></span></div></div>
+              <div class="tip"><span class="tip-icon">🗡️</span><div><strong>Skill RES / Basic ATK RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Résistance spécifique aux dégâts de compétence ou d'auto-attaque.</span><span class="lang-en hidden">Specific resistance to skill or basic attack damage.</span><span class="lang-sk hidden">Špecifická odolnosť voči poškodeniu od schopností alebo základného útoku.</span></span></div></div>
+              <div class="tip"><span class="tip-icon">👾</span><div><strong>Boss DMG / Boss DMG RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Modificateurs spécifiques aux boss. Boss DMG s'applique après le PvE bonus de classe.</span><span class="lang-en hidden">Boss-specific modifiers. Boss DMG applies after the class PvE bonus.</span><span class="lang-sk hidden">Modifikátory špecifické pre bossov. Boss DMG sa aplikuje po triednom PvE bonuse.</span></span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll vs Soul -->
+    <div class="card" style="margin-bottom:24px">
+      <h2 style="margin-bottom:6px">
+        <span class="lang-fr">📜 Parchemins vs Âmes — Efficacité par Stat</span>
+        <span class="lang-en hidden">📜 Scrolls vs Souls — Efficiency by Stat</span>
+        <span class="lang-sk hidden">📜 Zvitky vs. Duše — Efektivita podľa štatistiky</span>
+      </h2>
+      <p style="color:var(--text-secondary);line-height:1.75;margin-bottom:20px;margin-top:8px">
+        <span class="lang-fr">Les données ci-dessous montrent le gain par niveau investi pour chaque ressource. Les âmes sont toujours plus efficaces — surtout pour le Combo (8.5× mieux que les parchemins).</span>
+        <span class="lang-en hidden">The data below shows the gain per level invested for each resource. Souls are always more efficient — especially for Combo (8.5× better than scrolls).</span>
+        <span class="lang-sk hidden">Nižšie uvedené údaje ukazujú zisk na úroveň investícií pre každý zdroj. Duše sú vždy efektívnejšie — najmä pre Kombo (8,5× lepšie ako zvitky).</span>
+      </p>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border)">
+              <th style="text-align:left;padding:10px 14px;color:var(--text-muted);font-weight:600">
+                <span class="lang-fr">Stat</span><span class="lang-en hidden">Stat</span><span class="lang-sk hidden">Štat.</span>
+              </th>
+              <th style="text-align:center;padding:10px 14px;color:var(--text-muted);font-weight:600">
+                <span class="lang-fr">📜 Parchemin</span><span class="lang-en hidden">📜 Scroll</span><span class="lang-sk hidden">📜 Zvitok</span>
+              </th>
+              <th style="text-align:center;padding:10px 14px;color:var(--text-muted);font-weight:600">
+                <span class="lang-fr">👻 Âme</span><span class="lang-en hidden">👻 Soul</span><span class="lang-sk hidden">👻 Duša</span>
+              </th>
+              <th style="text-align:center;padding:10px 14px;color:var(--text-muted);font-weight:600">
+                <span class="lang-fr">Ratio Parchemin/Âme</span><span class="lang-en hidden">Scroll/Soul Ratio</span><span class="lang-sk hidden">Pomer Zvitok/Duša</span>
+              </th>
+              <th style="text-align:left;padding:10px 14px;color:var(--text-muted);font-weight:600">
+                <span class="lang-fr">Conseil</span><span class="lang-en hidden">Tip</span><span class="lang-sk hidden">Rada</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 14px;font-weight:700;color:var(--orange)">ATQ / DEF / PV</td>
+              <td style="padding:10px 14px;text-align:center;color:var(--text-secondary)">0.96</td>
+              <td style="padding:10px 14px;text-align:center;color:var(--teal)">1.85</td>
+              <td style="padding:10px 14px;text-align:center">
+                <span style="background:rgba(232,120,32,0.15);color:var(--orange);padding:2px 8px;border-radius:99px;font-size:0.78rem;font-weight:700">52%</span>
+              </td>
+              <td style="padding:10px 14px;color:var(--text-secondary);font-size:0.82rem">
+                <span class="lang-fr">Âme ~1.9× plus efficace. Parchemins restent utiles pour remplir les slots restants.</span>
+                <span class="lang-en hidden">Soul is ~1.9× more efficient. Scrolls still useful to fill remaining slots.</span>
+                <span class="lang-sk hidden">Duša je ~1,9× efektívnejšia. Zvitky sú stále užitočné na zaplnenie zostávajúcich slotov.</span>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 14px;font-weight:700;color:var(--gold)">
+                <span class="lang-fr">Combo (Global)</span><span class="lang-en hidden">Combo (Global)</span><span class="lang-sk hidden">Kombo (Globálny)</span>
+              </td>
+              <td style="padding:10px 14px;text-align:center;color:var(--text-secondary)">3.6</td>
+              <td style="padding:10px 14px;text-align:center;color:var(--teal)">30.6</td>
+              <td style="padding:10px 14px;text-align:center">
+                <span style="background:rgba(232,64,64,0.15);color:var(--red);padding:2px 8px;border-radius:99px;font-size:0.78rem;font-weight:700">12%</span>
+              </td>
+              <td style="padding:10px 14px;color:var(--text-secondary);font-size:0.82rem">
+                <span class="lang-fr">⚡ Âme <strong>8.5× plus efficace</strong>. Investissez vos âmes roses en Combo en priorité absolue.</span>
+                <span class="lang-en hidden">⚡ Soul is <strong>8.5× more efficient</strong>. Always spend pink souls on Combo as top priority.</span>
+                <span class="lang-sk hidden">⚡ Duša je <strong>8,5× efektívnejšia</strong>. Vždy investujte ružové duše do Komba ako absolútnu prioritu.</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;font-weight:700;color:var(--purple)">Crit RES / Crit DMG</td>
+              <td style="padding:10px 14px;text-align:center;color:var(--text-secondary)">4.2</td>
+              <td style="padding:10px 14px;text-align:center;color:var(--teal)">15.3</td>
+              <td style="padding:10px 14px;text-align:center">
+                <span style="background:rgba(232,120,32,0.15);color:var(--orange);padding:2px 8px;border-radius:99px;font-size:0.78rem;font-weight:700">27%</span>
+              </td>
+              <td style="padding:10px 14px;color:var(--text-secondary);font-size:0.82rem">
+                <span class="lang-fr">Âme ~3.6× plus efficace. Priorité secondaire après Combo.</span>
+                <span class="lang-en hidden">Soul is ~3.6× more efficient. Secondary priority after Combo.</span>
+                <span class="lang-sk hidden">Duša je ~3,6× efektívnejšia. Sekundárna priorita po Kombe.</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box" style="margin-top:16px">
+        💡 <span>
+          <span class="lang-fr"><strong>Règle d'or :</strong> Parchemins → ATQ en priorité. Âmes roses → Combo en priorité absolue, puis Crit DMG. Ne mettez jamais vos âmes roses sur ATQ si vous avez encore des Combo ou Crit DMG à débloquer.</span>
+          <span class="lang-en hidden"><strong>Golden rule:</strong> Scrolls → ATK first. Pink souls → Combo as absolute top priority, then Crit DMG. Never spend pink souls on ATK if you still have Combo or Crit DMG to unlock.</span>
+          <span class="lang-sk hidden"><strong>Zlaté pravidlo:</strong> Zvitky → ATK ako priorita. Ružové duše → Kombo ako absolútna priorita, potom Krit. poškodenie. Nikdy nevkladajte ružové duše do ATK, ak máte ešte Kombo alebo Krit. poškodenie na odomknutie.</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- ATK/DEF Ratio -->
+    <div class="card" style="margin-bottom:24px">
+      <h2 style="margin-bottom:6px">
+        <span class="lang-fr">⚖️ Ratio ATQ / DEF — La Règle des 1.5×</span>
+        <span class="lang-en hidden">⚖️ ATK / DEF Ratio — The 1.5× Rule</span>
+        <span class="lang-sk hidden">⚖️ Pomer ATK / DEF — Pravidlo 1,5×</span>
+      </h2>
+      <p style="color:var(--text-secondary);line-height:1.75;margin-top:8px;margin-bottom:20px">
+        <span class="lang-fr">Dans la formule de dégâts, l'écart <code style="color:var(--teal)">ATQ − DEF</code> est ce qui génère vos dégâts bruts. Si votre ATQ est inférieure ou égale à la DEF ennemie, vous infligez 0. La règle d'or dérivée des données :</span>
+        <span class="lang-en hidden">In the damage formula, the spread <code style="color:var(--teal)">ATK − DEF</code> is what generates raw damage. If your ATK is equal to or lower than enemy DEF, you deal 0 damage. The golden rule derived from data:</span>
+        <span class="lang-sk hidden">Vo vzorci poškodenia, rozdiel <code style="color:var(--teal)">ATK − DEF</code> generuje hrubé poškodenie. Ak je vaše ATK rovné alebo nižšie ako DEF nepriateľa, spôsobíte 0 poškodenia. Zlaté pravidlo odvodené z dát:</span>
+      </p>
+      <div style="text-align:center;padding:24px;background:var(--bg-secondary);border-radius:var(--r-lg);border:1px solid var(--border);margin-bottom:20px">
+        <div style="font-size:1.5rem;font-weight:800;color:var(--gold);font-family:'Courier New',monospace">
+          ATK <span class="lang-fr">idéale</span><span class="lang-en hidden">ideal</span><span class="lang-sk hidden">ideálne</span> ≥ 1.5 × DEF <span class="lang-fr">ennemie</span><span class="lang-en hidden">enemy</span><span class="lang-sk hidden">nepriateľa</span>
+        </div>
+        <div style="color:var(--text-muted);font-size:0.82rem;margin-top:8px">
+          <span class="lang-fr">Ratio optimal pour un écart de dégâts significatif</span>
+          <span class="lang-en hidden">Optimal ratio for a meaningful damage spread</span>
+          <span class="lang-sk hidden">Optimálny pomer pre zmysluplný rozdiel poškodenia</span>
+        </div>
+      </div>
+      <div class="guide-grid">
+        <div>
+          <div class="tip-list">
+            <div class="tip" style="border-left-color:var(--teal)">
+              <span class="tip-icon">✅</span>
+              <div>
+                <strong><span class="lang-fr">ATQ ≥ 1.5× DEF ennemi</span><span class="lang-en hidden">ATK ≥ 1.5× enemy DEF</span><span class="lang-sk hidden">ATK ≥ 1,5× DEF nepriateľa</span></strong><br>
+                <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Écart sain. Vos dégâts s'expriment pleinement et votre ATQ vaut son investissement.</span><span class="lang-en hidden">Healthy spread. Your damage expresses fully and ATK investment pays off.</span><span class="lang-sk hidden">Zdravý rozdiel. Vaše poškodenie sa naplno prejavuje a investícia do ATK sa oplatí.</span></span>
+              </div>
+            </div>
+            <div class="tip" style="border-left-color:var(--orange)">
+              <span class="tip-icon">⚠️</span>
+              <div>
+                <strong><span class="lang-fr">ATQ entre 1× et 1.5× DEF</span><span class="lang-en hidden">ATK between 1× and 1.5× DEF</span><span class="lang-sk hidden">ATK medzi 1× a 1,5× DEF</span></strong><br>
+                <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Écart limité — augmenter votre ATQ ou réduire la DEF ennemie (ignore DEF, sorts de débuff) aura plus d'impact que de stacker du DMG Crit.</span><span class="lang-en hidden">Limited spread — boosting ATK or reducing enemy DEF (ignore DEF, debuffs) will have more impact than stacking Crit DMG.</span><span class="lang-sk hidden">Obmedzený rozdiel — zvyšovanie ATK alebo znižovanie DEF nepriateľa (ignorovanie DEF, debuffy) bude mať väčší dopad ako hromadenie Krit. poškodenia.</span></span>
+              </div>
+            </div>
+            <div class="tip" style="border-left-color:var(--red)">
+              <span class="tip-icon">❌</span>
+              <div>
+                <strong><span class="lang-fr">ATQ ≤ DEF ennemi</span><span class="lang-en hidden">ATK ≤ enemy DEF</span><span class="lang-sk hidden">ATK ≤ DEF nepriateľa</span></strong><br>
+                <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Dégâts nuls. Concentrez-vous exclusivement sur augmenter l'ATQ avant toute autre stat.</span><span class="lang-en hidden">Zero damage. Focus exclusively on raising ATK before any other stat.</span><span class="lang-sk hidden">Nulové poškodenie. Sústreďte sa výhradne na zvyšovanie ATK pred akoukoľvek inou štatistikou.</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-top:0;padding:18px;border-left:2px solid var(--teal)">
+            <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.75">
+              <span class="lang-fr">
+                <strong style="color:var(--teal)">Pourquoi 1.5× ?</strong><br>
+                À 1.5×, l'écart ATQ−DEF représente 33% de votre ATQ totale. C'est le seuil à partir duquel investir dans DMG Crit ou Multiplicateur de Combo devient plus rentable qu'augmenter encore l'ATQ brute.
+                <br><br>
+                <strong style="color:var(--gold)">Pratique :</strong> Utilisez le calculateur pour simuler votre dégât A = (ATQ − DEF) et voir si votre écart est suffisant avant de répartir vos ressources.
+              </span>
+              <span class="lang-en hidden">
+                <strong style="color:var(--teal)">Why 1.5×?</strong><br>
+                At 1.5×, the ATK−DEF spread equals 33% of your total ATK. This is the threshold above which investing in Crit DMG or Combo Multiplier becomes more efficient than raising raw ATK further.
+                <br><br>
+                <strong style="color:var(--gold)">In practice:</strong> Use the calculator to simulate your damage A = (ATK − DEF) and check if your spread is sufficient before allocating resources.
+              </span>
+              <span class="lang-sk hidden">
+                <strong style="color:var(--teal)">Prečo 1,5×?</strong><br>
+                Pri 1,5×, rozdiel ATK−DEF predstavuje 33% vášho celkového ATK. Toto je prah, nad ktorým investovanie do Krit. poškodenia alebo Multiplikátora Komba je výhodnejšie ako ďalšie zvyšovanie surového ATK.
+                <br><br>
+                <strong style="color:var(--gold)">V praxi:</strong> Použite kalkulačku na simuláciu vášho poškodenia A = (ATK − DEF) a skontrolujte, či je váš rozdiel dostatočný pred rozdelením zdrojov.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Speed & Procs -->
+    <div class="card">
+      <h2 style="margin-bottom:6px">
+        <span class="lang-fr">⚡ Vitesse d'Attaque &amp; Déclenchements</span>
+        <span class="lang-en hidden">⚡ Attack Speed &amp; Proc Rates</span>
+        <span class="lang-sk hidden">⚡ Rýchlosť Útoku &amp; Miery Spustenia</span>
+      </h2>
+      <p style="color:var(--text-secondary);line-height:1.75;margin-top:8px;margin-bottom:16px">
+        <span class="lang-fr">La vitesse d'attaque influence directement le nombre de déclenchements par minute de vos Combos, Ripostes et Esquives. Une vitesse plus élevée = plus de procs = plus de DPS effectif, même sans augmenter votre ATQ.</span>
+        <span class="lang-en hidden">Attack speed directly influences how many Combos, Counters, and Evasions trigger per minute. Higher speed = more procs = more effective DPS, even without raising ATK.</span>
+        <span class="lang-sk hidden">Rýchlosť útoku priamo ovplyvňuje, koľko Kombov, Protiútokov a Únikov sa spustí za minútu. Vyššia rýchlosť = viac spustení = efektívnejšie DPS, aj bez zvyšovania ATK.</span>
+      </p>
+      <div class="guide-grid">
+        <div class="tip-list">
+          <div class="tip" style="border-left-color:var(--teal)"><span class="tip-icon">🏹</span><div><strong><span class="lang-fr">Arbalète — Synergie maximale</span><span class="lang-en hidden">Archer — Maximum synergy</span><span class="lang-sk hidden">Lukostrelec — Maximálna synergia</span></strong><br><span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">La vitesse d'attaque augmente la fréquence des combos et des procs passifs. C'est pourquoi le talent Envolée (+15% vitesse à 15s) et le set vitesse d'attaque débutant sont si forts.</span><span class="lang-en hidden">Attack speed increases combo and passive proc frequency. This is why the Soaring talent (+15% speed at 15s) and the early ATK speed set are so strong.</span><span class="lang-sk hidden">Rýchlosť útoku zvyšuje frekvenciu komba a pasívnych spustení. Preto je talent Vzlet (+15% rýchlosť za 15s) a začiatočnícky set rýchlosti ATK také silné.</span></span></div></div>
+          <div class="tip" style="border-left-color:var(--orange)"><span class="tip-icon">⚔️</span><div><strong><span class="lang-fr">Épée / Hache — Impact modéré</span><span class="lang-en hidden">Sword / Axe — Moderate impact</span><span class="lang-sk hidden">Meč / Sekera — Mierny dopad</span></strong><br><span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">La vitesse d'attaque reste utile mais ces classes profitent davantage de l'ATQ brute et du Crit.</span><span class="lang-en hidden">Attack speed is still useful but these classes benefit more from raw ATK and Crit.</span><span class="lang-sk hidden">Rýchlosť útoku je stále užitočná, ale tieto triedy viac profitujú zo surového ATK a Kritov.</span></span></div></div>
+        </div>
+        <div>
+          <div class="info-box">
+            🔢 <span>
+              <span class="lang-fr"><strong>Esquive :</strong> Vos procs d'esquive (déclenchements par minute) augmentent avec la vitesse. Une esquive élevée réduit significativement les dégâts reçus en PvE — notamment contre les boss qui attaquent en rafale.</span>
+              <span class="lang-en hidden"><strong>Evasion:</strong> Your evasion procs per minute scale with speed. High evasion significantly reduces incoming damage in PvE — especially against bosses that attack in bursts.</span>
+              <span class="lang-sk hidden"><strong>Únik:</strong> Vaše spustenia úniku za minútu sa škálujú s rýchlosťou. Vysoký únik výrazne znižuje prichádzajúce poškodenie v PvE — najmä proti bossom, ktorí útočia v sériách.</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tab-general -->
+
+  <!-- ========== PVE ========== -->
+  <div class="tab-content" id="tab-pve">
+    <div class="class-selector">
+      <button class="class-btn" data-class="pve-sword"><span class="icon">⚔️</span> <span class="lang-fr">Épée</span><span class="lang-en hidden">Sword</span><span class="lang-sk hidden">Meč</span></button>
+      <button class="class-btn" data-class="pve-axe"><span class="icon">🪓</span> <span class="lang-fr">Hache</span><span class="lang-en hidden">Axe</span><span class="lang-sk hidden">Sekera</span></button>
+      <button class="class-btn" data-class="pve-magic"><span class="icon">🔮</span> <span class="lang-fr">Magie</span><span class="lang-en hidden">Magic</span><span class="lang-sk hidden">Mágia</span></button>
+      <button class="class-btn active" data-class="pve-archer"><span class="icon">🏹</span> <span class="lang-fr">Arbalète</span><span class="lang-en hidden">Archer</span><span class="lang-sk hidden">Lukostrelec</span></button>
+    </div>
+
+    <!-- PVE Sword -->
+    <div class="guide-panel" id="pve-sword">
+      <div class="card">
+        <div style="text-align:center;margin:-24px -28px 20px;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:160px">
+          <img src="assets/image/lom/sword_class.png" alt="Sword" style="width:100%;height:160px;object-fit:cover;object-position:top center;opacity:0.7">
+        </div>
+        <div class="guide-header">
+          <div class="guide-icon">⚔️</div>
+          <div>
+            <h2><span class="lang-fr">Épée — Guide PVE</span><span class="lang-en hidden">Sword — PVE Guide</span><span class="lang-sk hidden">Meč — PVE Sprievodca</span></h2>
+            <p class="text-muted">
+              <span class="lang-fr">Guerrier équilibré avec le bonus PvE le plus élevé (×1.1). Idéal pour l'AFK et les boss.</span>
+              <span class="lang-en hidden">Balanced warrior with the highest PvE bonus (×1.1). Great for AFK farming and boss runs.</span>
+              <span class="lang-sk hidden">Vyvážený bojovník s najvyšším PvE bonusom (×1.1). Skvelý pre AFK farming a boje s bossmi.</span>
+            </p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Vue d'ensemble</span><span class="lang-en hidden">Overview</span><span class="lang-sk hidden">Prehľad</span></h3>
+              <p style="color:var(--text-secondary);line-height:1.7">
+                <span class="lang-fr">L'Épée est la classe la plus polyvalente. Elle bénéficie d'un <strong>bonus PvE ×1.1</strong> — le plus élevé du jeu — ce qui en fait le meilleur choix pour les sessions AFK. Son équilibre ATK/DEF permet de survivre les contenus difficiles tout en infligeant de bons dégâts.</span>
+                <span class="lang-en hidden">Sword is the most well-rounded class. It benefits from a <strong>×1.1 PvE bonus</strong> — the highest in the game — making it the top pick for AFK farming efficiency. Its balanced ATK/DEF allows surviving tough content while dealing solid sustained damage.</span>
+                <span class="lang-sk hidden">Meč je najuniverzálnejšia trieda. Profituje z <strong>PvE bonusu ×1.1</strong> — najvyššieho v hre — čo z neho robí najlepšiu voľbu pre efektivitu AFK farmenia. Jeho vyvážené ATK/DEF umožňuje prežiť náročný obsah pri spôsobovaní solidného udržaného poškodenia.</span>
+              </p>
+              <div class="info-box" style="margin-top:14px">
+                ✅ <span><strong>PvE Bonus: ×1.1</strong> — <span class="lang-fr">Le plus élevé du jeu. Chaque valeur C finale est multipliée par 1.1.</span><span class="lang-en hidden">Highest in game. Every final C damage value is multiplied by 1.1.</span><span class="lang-sk hidden">Najvyšší v hre. Každá finálna hodnota C poškodenia je vynásobená 1.1.</span></span>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Priorité de stats</span><span class="lang-en hidden">Stat Priority</span><span class="lang-sk hidden">Priorita štatistík</span></h3>
+              <div class="priority-list">
+                <div class="priority-item"><div class="priority-rank r1">1</div><div><strong>ATK</strong> <em>— <span class="lang-fr">Source principale de dégâts</span><span class="lang-en hidden">Primary damage source</span><span class="lang-sk hidden">Primárny zdroj poškodenia</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r2">2</div><div><strong>DMG CRIT %</strong> <em>— <span class="lang-fr">Multiplie les crits massivement</span><span class="lang-en hidden">Multiplies crit damage heavily</span><span class="lang-sk hidden">Masívne násobí krit. poškodenie</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r3">3</div><div><strong><span class="lang-fr">Taux de Crit</span><span class="lang-en hidden">Crit Rate</span><span class="lang-sk hidden">Miera Kritu</span></strong> <em>— <span class="lang-fr">Assure des crits constants</span><span class="lang-en hidden">Ensures consistent crits</span><span class="lang-sk hidden">Zaručuje konzistentné kritiky</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r4">4</div><div><strong>DEF / HP</strong> <em>— <span class="lang-fr">Survie en AFK</span><span class="lang-en hidden">Survivability for AFK sessions</span><span class="lang-sk hidden">Prežiteľnosť počas AFK relácií</span></em></div></div>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Conseils clés</span><span class="lang-en hidden">Key Tips</span><span class="lang-sk hidden">Kľúčové rady</span></h3>
+              <div class="tip-list">
+                <div class="tip"><span class="tip-icon">🅿️</span><div><strong><span class="lang-fr">Bonus de Parking :</span><span class="lang-en hidden">Parking Bonus:</span><span class="lang-sk hidden">Bonus Parkovania:</span></strong> <span class="lang-fr">Activez le mode Parking avant de partir AFK — il déclenche le bonus Parking Additional dans la formule ATK.</span><span class="lang-en hidden">Always enter Parking mode before going AFK — it triggers the Parking Additional bonus in the ATK formula.</span><span class="lang-sk hidden">Vždy vstúpte do Parkovacieho režimu pred odchodom AFK — spustí Bonus Parkovania vo vzorci ATK.</span></div></div>
+                <div class="tip"><span class="tip-icon">🎯</span><div><strong><span class="lang-fr">Stat Boss DMG :</span><span class="lang-en hidden">Boss DMG stat:</span><span class="lang-sk hidden">Štatistika Boss DMG:</span></strong> <span class="lang-fr">Avec le bonus PvE ×1.1, chaque % de Boss DMG se capitalise sur une base déjà forte.</span><span class="lang-en hidden">With ×1.1 PvE bonus, every % of Boss DMG compounds on an already strong base.</span><span class="lang-sk hidden">S PvE bonusom ×1.1, každé % Boss DMG sa kumuluje na už silnom základe.</span></div></div>
+                <div class="tip"><span class="tip-icon">💎</span><div><strong><span class="lang-fr">Bonus Exclusif :</span><span class="lang-en hidden">Exclusive Bonus:</span><span class="lang-sk hidden">Exkluzívny Bonus:</span></strong> <span class="lang-fr">L'ATK exclusive (flat) s'ajoute directement à l'ATK calculée, contournant les diminutions de rendement.</span><span class="lang-en hidden">Flat Exclusive ATK adds directly to Calculated ATK, bypassing percentage diminishing returns.</span><span class="lang-sk hidden">Plochý exkluzívny ATK sa priamo pridáva k vypočítanému ATK, obchádzajúc percentuálne klesajúce výnosy.</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Focus Équipement</span><span class="lang-en hidden">Equipment Focus</span><span class="lang-sk hidden">Zameranie na vybavenie</span></h3>
+              <div class="card" style="margin-top:0;padding:18px">
+                <div class="tip-list">
+                  <div class="tip" style="border-left-color:var(--gold)"><span class="tip-icon">⚔️</span><div><strong><span class="lang-fr">Arme :</span><span class="lang-en hidden">Weapon:</span><span class="lang-sk hidden">Zbraň:</span></strong> <span class="lang-fr">ATK% principal + DMG Crit en sous-stat</span><span class="lang-en hidden">ATK% main stat + Crit DMG substat</span><span class="lang-sk hidden">ATK% hlavná štatistika + Krit. DMG vedľajšia štatistika</span></div></div>
+                  <div class="tip" style="border-left-color:var(--gold)"><span class="tip-icon">🛡️</span><div><strong><span class="lang-fr">Armure :</span><span class="lang-en hidden">Armor:</span><span class="lang-sk hidden">Brnenie:</span></strong> ATK% <span class="lang-fr">ou HP% selon les besoins de survie</span><span class="lang-en hidden">or HP% depending on survivability needs</span><span class="lang-sk hidden">alebo HP% podľa potrieb prežiteľnosti</span></div></div>
+                  <div class="tip" style="border-left-color:var(--gold)"><span class="tip-icon">💍</span><div><strong><span class="lang-fr">Accessoires :</span><span class="lang-en hidden">Accessories:</span><span class="lang-sk hidden">Príslušenstvo:</span></strong> <span class="lang-fr">Taux de Crit jusqu'à ~80–100%, puis DMG Crit</span><span class="lang-en hidden">Crit Rate to ~80–100% cap, then Crit DMG</span><span class="lang-sk hidden">Miera Kritu do ~80–100% stropu, potom Krit. DMG</span></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Combats de Boss</span><span class="lang-en hidden">Boss Encounters</span><span class="lang-sk hidden">Strety s Bossmi</span></h3>
+              <div class="card" style="margin-top:0;padding:18px;border-left:2px solid var(--teal)">
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6">
+                  <span class="lang-fr">L'Épée excelle en boss solo. Avec le PvE ×1.1 déjà appliqué, le Boss DMG se capitalise :</span>
+                  <span class="lang-en hidden">Sword excels in single-target boss fights. With PvE ×1.1 already applied, Boss DMG compounds:</span>
+                  <span class="lang-sk hidden">Meč vyniká v súbojoch s jedným cieľom. S PvE ×1.1 už aplikovaným, Boss DMG sa kumuluje:</span>
+                  <br><br>
+                  <code style="color:var(--teal)">To Boss = PvE DMG × (100 + Boss%) / 100</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PVE Axe -->
+    <div class="guide-panel" id="pve-axe">
+      <div class="card">
+        <div style="text-align:center;margin:-24px -28px 20px;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:160px">
+          <img src="assets/image/lom/sword_class_f.png" alt="Axe" style="width:100%;height:160px;object-fit:cover;object-position:top center;opacity:0.7">
+        </div>
+        <div class="guide-header">
+          <div class="guide-icon">🪓</div>
+          <div>
+            <h2><span class="lang-fr">Hache — Guide PVE</span><span class="lang-en hidden">Axe — PVE Guide</span><span class="lang-sk hidden">Sekera — PVE Sprievodca</span></h2>
+            <p class="text-muted"><span class="lang-fr">Burst élevé avec bonus PvE ×1.05. Idéal pour les joueurs actifs plutôt que l'AFK pur.</span><span class="lang-en hidden">High burst with ×1.05 PvE bonus. Best for active players rather than pure AFK.</span><span class="lang-sk hidden">Vysoký burst so PvE bonusom ×1.05. Najlepšie pre aktívnych hráčov namiesto čistého AFK.</span></p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Vue d'ensemble</span><span class="lang-en hidden">Overview</span></h3>
+              <p style="color:var(--text-secondary);line-height:1.7">
+                <span class="lang-fr">La Hache est un canon de verre — elle sacrifie la survie pour des rafales explosives. Avec le bonus PvE ×1.05 et un haut potentiel de Combo Multiplier, la Hache excelle pour tuer les ennemis rapidement.</span>
+                <span class="lang-en hidden">Axe is a glass cannon — it sacrifices survivability for explosive burst damage. With ×1.05 PvE bonus and high Combo Multiplier potential, Axe excels at fast kills.</span>
+                <span class="lang-sk hidden">Sekera je sklenený kanón — obetuje prežiteľnosť pre výbušné burst poškodenie. S ×1.05 PvE bonusom a vysokým potenciálom Multiplikátora Komba, Sekera vyniká v rýchlych zabitích.</span>
+              </p>
+              <div class="info-box" style="margin-top:14px">
+                ⚡ <span><strong>PvE Bonus: ×1.05</strong> — <span class="lang-fr">Compensé par des multiplicateurs de combo/skill plus élevés.</span><span class="lang-en hidden">Offset by higher combo and skill multipliers. Axe wins on burst.</span><span class="lang-sk hidden">Kompenzovaný vyššími multiplikátormi komba a schopností. Sekera víťazí v burste.</span></span>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Priorité de stats</span><span class="lang-en hidden">Stat Priority</span></h3>
+              <div class="priority-list">
+                <div class="priority-item"><div class="priority-rank r1">1</div><div><strong>ATK</strong> <em>— <span class="lang-fr">Base de dégâts bruts</span><span class="lang-en hidden">Raw damage foundation</span><span class="lang-sk hidden">Základ surového poškodenia</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r2">2</div><div><strong><span class="lang-fr">Taux de Crit</span><span class="lang-en hidden">Crit Rate</span><span class="lang-sk hidden">Miera Kritu</span></strong> <em>— <span class="lang-fr">La Hache dépend des crits constants</span><span class="lang-en hidden">Axe relies on consistent crits for burst</span><span class="lang-sk hidden">Sekera závisí od konzistentných kritov pre burst</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r3">3</div><div><strong>DMG CRIT %</strong> <em>— <span class="lang-fr">Amplifie massivement chaque crit</span><span class="lang-en hidden">Amplifies each crit hit massively</span><span class="lang-sk hidden">Masívne amplifikuje každý krit. zásah</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r4">4</div><div><strong><span class="lang-fr">Multiplicateur Combo</span><span class="lang-en hidden">Combo Multiplier</span><span class="lang-sk hidden">Multiplikátor Komba</span></strong> <em>— <span class="lang-fr">Mécanique spéciale de la Hache</span><span class="lang-en hidden">Axe's special combat mechanic</span><span class="lang-sk hidden">Špeciálna bojová mechanika Sekery</span></em></div></div>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Conseils clés</span><span class="lang-en hidden">Key Tips</span></h3>
+              <div class="tip-list">
+                <div class="tip"><span class="tip-icon">💥</span><div><strong><span class="lang-fr">Chaînes de Combo :</span><span class="lang-en hidden">Combo Chains:</span><span class="lang-sk hidden">Reťaze Komba:</span></strong> <span class="lang-fr">Le Combo Multiplier alimente directement le Final Multiplier. Enchaînez les combos pendant les buffs actifs.</span><span class="lang-en hidden">Combo Multiplier feeds directly into the Final Multiplier formula. Chain combos while buffs are active for massive damage spikes.</span><span class="lang-sk hidden">Multiplikátor Komba sa priamo vkladá do vzorca Finálneho Multiplikátora. Reťazte kombá počas aktívnych buffov pre masívne špičky poškodenia.</span></div></div>
+                <div class="tip"><span class="tip-icon">🎯</span><div><strong><span class="lang-fr">Crit en premier :</span><span class="lang-en hidden">Crit First:</span><span class="lang-sk hidden">Krit ako prvé:</span></strong> <span class="lang-fr">Atteignez le cap de Taux de Crit avant de stacker le DMG Crit. Un archer avec 100% de crit rate est fiable.</span><span class="lang-en hidden">Reach your Crit Rate cap before stacking Crit DMG. A 100% crit rate Axe deals reliably high damage.</span><span class="lang-sk hidden">Dosiahnite strop Miery Kritu pred hromadením Krit. poškodenia. Sekera so 100% mierou kritu spôsobuje spoľahlivo vysoké poškodenie.</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Focus Équipement</span><span class="lang-en hidden">Equipment Focus</span></h3>
+              <div class="card" style="margin-top:0;padding:18px">
+                <div class="tip-list">
+                  <div class="tip" style="border-left-color:var(--orange)"><span class="tip-icon">🪓</span><div><strong><span class="lang-fr">Arme :</span><span class="lang-en hidden">Weapon:</span><span class="lang-sk hidden">Zbraň:</span></strong> ATK% + <span class="lang-fr">Taux de Crit jusqu'au cap</span><span class="lang-en hidden">Crit Rate substat until capped</span><span class="lang-sk hidden">Miera Kritu ako vedľajšia štatistika, kým nie je strop dosiahnutý</span></div></div>
+                  <div class="tip" style="border-left-color:var(--orange)"><span class="tip-icon">🛡️</span><div><strong><span class="lang-fr">Armure :</span><span class="lang-en hidden">Armor:</span><span class="lang-sk hidden">Brnenie:</span></strong> ATK% — <span class="lang-fr">Assumez la fragilité</span><span class="lang-en hidden">Lean offensive, accept the squishiness</span><span class="lang-sk hidden">Buďte ofenzívni, prijmite krehkosť</span></div></div>
+                  <div class="tip" style="border-left-color:var(--orange)"><span class="tip-icon">💍</span><div><strong><span class="lang-fr">Accessoires :</span><span class="lang-en hidden">Accessories:</span><span class="lang-sk hidden">Príslušenstvo:</span></strong> <span class="lang-fr">Plein DMG Crit une fois le Taux de Crit &gt; 85%</span><span class="lang-en hidden">Full Crit DMG once Crit Rate &gt; 85%</span><span class="lang-sk hidden">Plné Krit. poškodenie akonáhle Miera Kritu &gt; 85%</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PVE Magic -->
+    <div class="guide-panel" id="pve-magic">
+      <div class="card">
+        <div style="text-align:center;margin:-24px -28px 20px;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:160px">
+          <img src="assets/image/lom/magic_class.png" alt="Magic" style="width:100%;height:160px;object-fit:cover;object-position:top center;opacity:0.7">
+        </div>
+        <div class="guide-header">
+          <div class="guide-icon">🔮</div>
+          <div>
+            <h2><span class="lang-fr">Magie — Guide PVE</span><span class="lang-en hidden">Magic — PVE Guide</span><span class="lang-sk hidden">Mágia — PVE Sprievodca</span></h2>
+            <p class="text-muted"><span class="lang-fr">Spécialiste AoE. La Magie utilise la formule unique Skill Crit avec exposant 0.98.</span><span class="lang-en hidden">AoE specialist. Magic uses the unique Skill Crit formula with 0.98 exponent.</span><span class="lang-sk hidden">Špecialista AoE. Mágia používa jedinečný vzorec Krit. Schopnosti s exponentom 0.98.</span></p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Vue d'ensemble</span><span class="lang-en hidden">Overview</span></h3>
+              <p style="color:var(--text-secondary);line-height:1.7">
+                <span class="lang-fr">La Magie utilise une formule unique pour ses critiques de sorts : <code style="color:var(--teal)">{A × (1 + SkillCritMult)}^0.98</code>. L'exposant 0.98 limite légèrement les multiplications extrêmes. La Magie excelle pour nettoyer des groupes d'ennemis avec ses sorts AoE.</span>
+                <span class="lang-en hidden">Magic uses a unique formula for Skill Crits: <code style="color:var(--teal)">{A × (1 + SkillCritMult)}^0.98</code>. The 0.98 exponent slightly dampens extreme numbers. Magic excels at clearing groups with AoE skills.</span>
+                <span class="lang-sk hidden">Mágia používa jedinečný vzorec pre Krité Schopnosti: <code style="color:var(--teal)">{A × (1 + SkillCritMult)}^0.98</code>. Exponent 0.98 mierne tlmí extrémne čísla. Mágia vyniká pri čistení skupín s AoE schopnosťami.</span>
+              </p>
+              <div class="warning-box" style="margin-top:14px">
+                ⚠️ <span><span class="lang-fr">Pas de multiplicateur PvE séparé listé — la Magie utilise probablement ×1.0. Compensez avec le DMG Skill Crit.</span><span class="lang-en hidden">No separate PvE multiplier listed — Magic likely uses base ×1.0. Focus on Skill Crit DMG to compensate.</span><span class="lang-sk hidden">Žiadny samostatný PvE multiplikátor nie je uvedený — Mágia pravdepodobne používa základ ×1.0. Kompenzujte pomocou Krit. poškodenia Schopností.</span></span>
+              </div>
+            </div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Priorité de stats</span><span class="lang-en hidden">Stat Priority</span></h3>
+              <div class="priority-list">
+                <div class="priority-item"><div class="priority-rank r1">1</div><div><strong>ATK</strong> <em>— <span class="lang-fr">Base des dégâts de sort</span><span class="lang-en hidden">Base damage source for skills</span><span class="lang-sk hidden">Základný zdroj poškodenia pre schopnosti</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r2">2</div><div><strong>Skill Crit DMG</strong> <em>— <span class="lang-fr">Alimente la formule ^0.98</span><span class="lang-en hidden">Powers the ^0.98 skill crit formula</span><span class="lang-sk hidden">Pohání vzorec ^0.98</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r3">3</div><div><strong>Skill Crit Rate</strong> <em>— <span class="lang-fr">Assure des crits de sorts constants</span><span class="lang-en hidden">Ensures consistent skill crits</span><span class="lang-sk hidden">Zaručuje konzistentné krité schopnosti</span></em></div></div>
+                <div class="priority-item"><div class="priority-rank r4">4</div><div><strong>Buff Multiplier %</strong> <em>— <span class="lang-fr">Multiplie tous les dégâts de sorts</span><span class="lang-en hidden">Multiplies all skill damage</span><span class="lang-sk hidden">Násobí všetko poškodenie schopností</span></em></div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="guide-section">
+              <h3><span class="lang-fr">Formule Skill Crit</span><span class="lang-en hidden">Skill Crit Formula</span><span class="lang-sk hidden">Vzorec Krit. Schopnosti</span></h3>
+              <div class="card" style="margin-top:0;padding:18px;border-left:2px solid var(--purple)">
+                <div style="margin:8px 0;padding:12px;background:var(--bg-primary);border-radius:var(--r);font-family:monospace;font-size:0.88rem;color:var(--teal)">
+                  B(Skill Crit) = {A × (1 + SkillCritMult)}<sup>0.98</sup>
+                </div>
+                <p style="color:var(--text-secondary);font-size:0.88rem;line-height:1.65">
+                  <span class="lang-fr">L'exposant 0.98 limite les valeurs extrêmes. Visez un équilibre entre Skill Crit Rate et Skill Crit DMG plutôt que des valeurs extrêmes dans un seul stat.</span>
+                  <span class="lang-en hidden">The 0.98 exponent caps runaway scaling. Balance Skill Crit Rate and Skill Crit DMG rather than pushing one extreme.</span>
+                  <span class="lang-sk hidden">Exponent 0.98 obmedzuje nekontrolovateľné škálovanie. Vyvážte Mieru Kritu Schopnosti a Krit. poškodenie Schopnosti namiesto tlačenia jedného extrému.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PVE ARCHER ===================== -->
+    <div class="guide-panel active" id="pve-archer">
+      <div class="card">
+        <div style="text-align:center;margin:-24px -28px 20px;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:160px">
+          <img src="assets/image/lom/archer_class.png" alt="Archer" style="width:100%;height:160px;object-fit:cover;object-position:top center;opacity:0.7">
+        </div>
+        <div class="guide-header">
+          <div class="guide-icon">🏹</div>
+          <div>
+            <h2>
+              <span class="lang-fr">Arbalète — Guide PVE</span>
+              <span class="lang-en hidden">Archer — PVE Guide</span>
+              <span class="lang-sk hidden">Lukostrelec — PVE Sprievodca</span>
+            </h2>
+            <p class="text-muted">
+              <span class="lang-fr">Classe à distance, roi incontesté du PVE et maître du DPS combo. Guide complet par Stray / GhostyStray.</span>
+              <span class="lang-en hidden">Ranged class, undisputed PVE king and master of combo DPS. Full guide by Stray / GhostyStray.</span>
+              <span class="lang-sk hidden">Diaľková trieda, nespochybniteľný kráľ PVE a majster kombo DPS. Kompletný sprievodca od Stray / GhostyStray.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="guide-grid">
+          <div>
+
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Pourquoi Arbalète ?</span>
+                <span class="lang-en hidden">Why Archer?</span>
+                <span class="lang-sk hidden">Prečo Lukostrelec?</span>
+              </h3>
+              <p style="color:var(--text-secondary);line-height:1.75">
+                <span class="lang-fr">La classe permet de taper à distance et possède la plus grosse force de frappe dans le cas où l'on ne souhaite pas se faire toucher. Dans son kit de sorts :</span>
+                <span class="lang-en hidden">The Archer class deals ranged damage and has the highest damage output when avoiding incoming hits. Its skill kit includes:</span>
+                <span class="lang-sk hidden">Trieda útočí na diaľku a má najvyšší výstup poškodenia pri vyhýbaní sa prichádzajúcim zásahom. V jej kite schopností:</span>
+              </p>
+              <div class="tip-list" style="margin-top:12px">
+                <div class="tip" style="border-left-color:var(--gold)">
+                  <span class="tip-icon">☀️</span>
+                  <div>
+                    <strong><span class="lang-fr">Poursuite Solaire (actif)</span><span class="lang-en hidden">Solar Pursuit (active)</span><span class="lang-sk hidden">Solárna Honba (aktívna)</span></strong><br>
+                    <span class="lang-fr">Ignore complètement l'évasion des bosses et garantit 100% de précision par auto-attaque. Inflige des dégâts de zone et réduit la réduction des dégâts de combo des cibles.</span>
+                    <span class="lang-en hidden">Completely ignores boss evasion and guarantees 100% hit rate on auto-attacks. Deals AoE damage and reduces target combo damage reduction.</span>
+                    <span class="lang-sk hidden">Úplne ignoruje únik bossov a zaručuje 100% mieru zásahu pri auto-útokoch. Spôsobuje AoE poškodenie a znižuje redukciu kombo poškodenia cieľa.</span>
+                  </div>
+                </div>
+                <div class="tip" style="border-left-color:var(--teal)">
+                  <span class="tip-icon">✨</span>
+                  <div>
+                    <strong><span class="lang-fr">Passifs</span><span class="lang-en hidden">Passive Skills</span><span class="lang-sk hidden">Pasívne Schopnosti</span></strong><br>
+                    <span class="lang-fr">+30% taux de combo, augmentation de la vitesse d'attaque, ignore évasion, possibilité de tirer plusieurs fois par auto-attaque ou combo.</span>
+                    <span class="lang-en hidden">+30% combo rate, increased attack speed, evasion ignore, ability to fire multiple times per auto-attack or combo.</span>
+                    <span class="lang-sk hidden">+30% miera komba, zvýšená rýchlosť útoku, ignorovanie úniku, možnosť strieľať viackrát za auto-útok alebo kombo.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="info-box" style="margin-top:14px">
+                👑 <strong><span class="lang-fr">Tout ce kit de combat fait de l'Arbalète le roi du PVE!</span><span class="lang-en hidden">This full combat kit makes the Archer the undisputed king of PVE!</span><span class="lang-sk hidden">Tento celý bojový kit robí z Lukostrelca nespochybniteľného kráľa PVE!</span></strong>
+              </div>
+            </div>
+
+            <!-- Statue -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Statue</span>
+                <span class="lang-en hidden">Statue</span>
+                <span class="lang-sk hidden">Socha</span>
+              </h3>
+              <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:12px">
+                <span class="lang-fr">La statue dépendra de votre état dans le jeu !</span>
+                <span class="lang-en hidden">Your statue setup depends on where you are in the game!</span>
+                <span class="lang-sk hidden">Nastavenie sochy závisí od toho, kde v hre sa nachádzate!</span>
+              </p>
+              <div class="tip-list">
+                <div class="tip" style="border-left-color:var(--blue)">
+                  <span class="tip-icon">🌱</span>
+                  <div>
+                    <strong><span class="lang-fr">Débutant :</span><span class="lang-en hidden">Beginner:</span><span class="lang-sk hidden">Začiatočník:</span></strong>
+                    <span class="lang-fr">3 Combo Globaux + 2 ATK Globale (jusqu'à l'obtention de votre âme rose ATK!)</span>
+                    <span class="lang-en hidden">3 Global Combo + 2 Global ATK (until you get your pink ATK soul!)</span>
+                    <span class="lang-sk hidden">3 Globálne Kombo + 2 Globálne ATK (kým nezískate svoju ružovú dušu ATK!)</span>
+                  </div>
+                </div>
+                <div class="tip" style="border-left-color:var(--gold)">
+                  <span class="tip-icon">⭐</span>
+                  <div>
+                    <strong><span class="lang-fr">Vétéran :</span><span class="lang-en hidden">Veteran:</span><span class="lang-sk hidden">Veterán:</span></strong>
+                    <span class="lang-fr">5 Combo Globaux !</span>
+                    <span class="lang-en hidden">5 Global Combo!</span>
+                    <span class="lang-sk hidden">5 Globálnych Kombo!</span>
+                  </div>
+                </div>
+              </div>
+              <div class="info-box" style="margin-top:14px">
+                🎯 <span>
+                  <span class="lang-fr">Visez des statues <strong>SSS+</strong> sur tous vos emplacements de <strong>Dégâts de Combo Globaux</strong>. Plus le % est proche de 100%, mieux c'est. Chaque slot non-SSS+ est un gain potentiel significatif à améliorer en priorité.</span>
+                  <span class="lang-en hidden">Aim for <strong>SSS+</strong> on all your <strong>Global Combo DMG</strong> statue slots. The closer the % is to 100%, the better. Any non-SSS+ slot is a significant potential gain to upgrade as a priority.</span>
+                  <span class="lang-sk hidden">Cieľte na sochy <strong>SSS+</strong> na všetkých vašich slotoch <strong>Globálneho Kombo DMG</strong>. Čím bližšie je % k 100%, tým lepšie. Každý slot bez SSS+ je potenciálny výrazný zisk na prioritné vylepšenie.</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Relics -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Reliques</span>
+                <span class="lang-en hidden">Relics</span>
+                <span class="lang-sk hidden">Relikvie</span>
+              </h3>
+              <div class="tip-list">
+                <div class="tip" style="border-left-color:var(--teal)">
+                  <span class="tip-icon">💠</span>
+                  <div>
+                    <strong><span class="lang-fr">Set DPS principal</span><span class="lang-en hidden">Main DPS Set</span><span class="lang-sk hidden">Hlavný DPS Set</span></strong><br>
+                    <span class="lang-fr">Le set qui effectue le plus de dommages par seconde. À utiliser par défaut pour toutes les situations. Montez chaque pièce au niveau maximum disponible.</span>
+                    <span class="lang-en hidden">The set with the highest damage per second. Use by default for all situations. Level each piece to the maximum available.</span>
+                    <span class="lang-sk hidden">Set s najvyšším poškodením za sekundu. Predvolene použite pre všetky situácie. Úrovňujte každý kus na maximálnu dostupnú úroveň.</span>
+                  </div>
+                </div>
+                <div class="tip" style="border-left-color:var(--orange)">
+                  <span class="tip-icon">🔄</span>
+                  <div>
+                    <strong><span class="lang-fr">Variante Boss (Smile / Serpent / Dragon) :</span><span class="lang-en hidden">Boss Variant (Smile / Serpent / Dragon):</span><span class="lang-sk hidden">Varianta Boss (Smile / Serpent / Dragon):</span></strong><br>
+                    <span class="lang-fr">Si vous manquez de dommages et avez encore du temps de combat, remplacez la <strong>Spore Spatio Temporelle</strong> par la <strong>Spore Surpuissante</strong> !</span>
+                    <span class="lang-en hidden">If you lack damage but still have combat time, swap <strong>Spore Spatio Temporelle</strong> for <strong>Spore Surpuissante</strong>!</span>
+                    <span class="lang-sk hidden">Ak vám chýba poškodenie, ale ešte máte čas bojov, vymeňte <strong>Spore Spatio Temporelle</strong> za <strong>Spore Surpuissante</strong>!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Runes -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Runes</span>
+                <span class="lang-en hidden">Runes</span>
+                <span class="lang-sk hidden">Runy</span>
+              </h3>
+              <div class="tip-list">
+                <div class="tip" style="border-left-color:var(--purple)">
+                  <span class="tip-icon">💎</span>
+                  <div>
+                    <strong><span class="lang-fr">Set principal :</span><span class="lang-en hidden">Main set:</span><span class="lang-sk hidden">Hlavný set:</span></strong> Set 4 <span class="lang-fr">Dommages Critiques</span><span class="lang-en hidden">Critical Damage</span><span class="lang-sk hidden">Kritické Poškodenie</span> + Set 2 <span class="lang-fr">Combo Globaux</span><span class="lang-en hidden">Global Combo</span><span class="lang-sk hidden">Globálne Combo</span><br>
+                    <span class="lang-fr">En sous-stats : aller chercher le maximum de <strong>Combo Globaux</strong> possibles — c'est la stat qui permet d'avoir le meilleur DPS pour l'Arbalète.</span>
+                    <span class="lang-en hidden">Sub-stats: stack as much <strong>Global Combo</strong> as possible — it's the stat that gives the best DPS for Archer.</span>
+                    <span class="lang-sk hidden">Vedľajšie štatistiky: hromaďte čo najviac <strong>Globálneho Comba</strong> — je to štatistika, ktorá dáva najlepší DPS pre Lukostrelca.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+
+            <!-- Cards -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Cartes d'Étoiles</span>
+                <span class="lang-en hidden">Star Cards</span>
+                <span class="lang-sk hidden">Hviezdne Karty</span>
+              </h3>
+              <div class="card" style="margin-top:0;padding:18px">
+                <div class="tip-list">
+                  <div class="tip" style="border-left-color:var(--blue)">
+                    <span class="tip-icon">🌱</span>
+                    <div>
+                      <strong><span class="lang-fr">Début de jeu :</span><span class="lang-en hidden">Early game:</span><span class="lang-sk hidden">Začiatok hry:</span></strong><br>
+                      <span class="lang-fr">Set <strong>vitesse d'ATK</strong> — donne des stats brutes et joue sur la vitesse d'attaque. Se couple parfaitement avec l'Arbalète (Gardien de l'Écologie : +31.1% Vitesse d'ATQ, diminuant de 1/5 toutes les 4 secondes).</span>
+                      <span class="lang-en hidden">ATK speed set — provides raw stats and boosts attack speed. Perfect synergy with Archer (Ecology Guardian: +31.1% ATQ Speed, decreasing by 1/5 every 4 seconds).</span>
+                      <span class="lang-sk hidden">Set <strong>rýchlosti ATK</strong> — poskytuje surové štatistiky a zvyšuje rýchlosť útoku. Perfektná synergia s Lukostrelcom (Strážca Ekológie: +31.1% Rýchlosť ATQ, klesajúca o 1/5 každé 4 sekundy).</span>
+                    </div>
+                  </div>
+                  <div class="tip" style="border-left-color:var(--gold)">
+                    <span class="tip-icon">⚡</span>
+                    <div>
+                      <strong><span class="lang-fr">Late game :</span><span class="lang-en hidden">Late game:</span><span class="lang-sk hidden">Neskorá hra:</span></strong><br>
+                      <span class="lang-fr">Set <strong>Génie de Lampes</strong> — nécessite beaucoup de stats de base pour en profiter. Testez les deux quand votre champignon grandit et changez quand le Génie de Lampes fait plus de DPS que le set robot.</span>
+                      <span class="lang-en hidden"><strong>Lamp Genie set</strong> — requires high base stats to be profitable. Test both when your mushroom has grown; switch when the Lamp Genie set starts outdamaging the robot set.</span>
+                      <span class="lang-sk hidden">Set <strong>Lampa Génius</strong> — vyžaduje vysoké základné štatistiky, aby sa oplatil. Testujte oba sety keď váš hríb vyrastie; prepnite keď Lampa Génius začne spôsobovať viac DPS ako robotický set.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scrolls & Souls -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Parchemins &amp; Âmes</span>
+                <span class="lang-en hidden">Scrolls &amp; Souls</span>
+                <span class="lang-sk hidden">Zvitky &amp; Duše</span>
+              </h3>
+              <div class="card" style="margin-top:0;padding:18px;border-left:2px solid var(--teal)">
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.65;margin-bottom:12px">
+                  <span class="lang-fr">Les parchemins et les âmes doivent être en concordance. Le ratio d'ATK est plus intéressant avec les parchemins. Donc maximisez l'ATK avec les parchemins et mettez suffisamment pour les dommages critiques. Avec les âmes roses, négligez l'âme ATK globale pour prioriser COMBO et BOSS.</span>
+                  <span class="lang-en hidden">Scrolls and souls must complement each other. The ATK ratio is more efficient on scrolls. Maximize ATK on scrolls while putting sufficient points into Crit DMG. With pink souls, skip the Global ATK soul to prioritize COMBO and BOSS souls.</span>
+                  <span class="lang-sk hidden">Zvitky a duše musia byť v súlade. Pomer ATK je efektívnejší na zvitky. Maximalizujte ATK na zvitky a vložte dostatok bodov do Krit. Poškodenia. S ružovými dušami preskočte Globálnu ATK dušu a uprednostnite COMBO a BOSS duše.</span>
+                </p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <div style="padding:12px;background:var(--bg-primary);border-radius:var(--r);text-align:center">
+                    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">
+                      <span class="lang-fr">Parchemins</span><span class="lang-en hidden">Scrolls</span><span class="lang-sk hidden">Zvitky</span>
+                    </div>
+                    <div style="font-size:0.85rem;font-weight:700">
+                      <span style="color:var(--gold)">ATK</span> &gt; <span style="color:var(--teal)">DMG CRIT</span>
+                    </div>
+                  </div>
+                  <div style="padding:12px;background:var(--bg-primary);border-radius:var(--r);text-align:center">
+                    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">
+                      <span class="lang-fr">Âmes roses</span><span class="lang-en hidden">Pink Souls</span><span class="lang-sk hidden">Ružové Duše</span>
+                    </div>
+                    <div style="font-size:0.85rem;font-weight:700">
+                      <span style="color:var(--gold)">COMBO</span> &gt; <span style="color:var(--teal)">DMG CRIT</span> &gt; ATK
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guardian Pal -->
+            <div class="guide-section">
+              <h3>
+                <span class="lang-fr">Gardien (Pal)</span>
+                <span class="lang-en hidden">Guardian (Pal)</span>
+                <span class="lang-sk hidden">Strážca (Pal)</span>
+              </h3>
+              <div class="card" style="margin-top:0;padding:18px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                  <div style="font-size:1.5rem">🧝</div>
+                  <div>
+                    <div style="font-weight:700;color:var(--teal)">
+                      <span class="lang-fr">Elfe de Gardien — Voleur Fou</span>
+                      <span class="lang-en hidden">Guardian Elf — Mad Thief</span>
+                      <span class="lang-sk hidden">Strážcovský Elf — Šialený Zlodej</span>
+                    </div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary)">
+                      <span class="lang-fr">Passif : Messager du Vent — augmente la réduction des dégâts finale de 40%, l'évasion et la Vitesse.</span>
+                      <span class="lang-en hidden">Passive: Wind Messenger — increases final damage reduction by 40%, evasion, and Speed.</span>
+                      <span class="lang-sk hidden">Pasívne: Posolstvo Vetra — zvyšuje konečnú redukciu poškodenia o 40%, vyhýbanie a Rýchlosť.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="tip-list">
+                  <div class="tip"><span class="tip-icon">💨</span><div>
+                    <strong><span class="lang-fr">Plumes — Sous-stats prioritaires :</span><span class="lang-en hidden">Feathers — Priority substats:</span><span class="lang-sk hidden">Perá — Prioritné vedľajšie štatistiky:</span></strong><br>
+                    <span class="lang-fr">Vitesse d'attaque &gt; Dommages combo/crit &gt; Réduction de délai des sorts</span>
+                    <span class="lang-en hidden">Attack speed &gt; Combo/Crit DMG &gt; Skill cooldown reduction</span>
+                    <span class="lang-sk hidden">Rýchlosť útoku &gt; Combo/Krit Poškodenie &gt; Skrátenie obnovy zručnosti</span>
+                  </div></div>
+                  <div class="tip"><span class="tip-icon">⭐</span><div>
+                    <strong><span class="lang-fr">Conseil :</span><span class="lang-en hidden">Tip:</span><span class="lang-sk hidden">Rada:</span></strong>
+                    <span class="lang-fr">Montez la <strong>réduction des sorts en priorité</strong>, puis augmentez équitablement l'ATK.</span>
+                    <span class="lang-en hidden">Max <strong>skill cooldown reduction first</strong>, then increase ATK stats equally.</span>
+                    <span class="lang-sk hidden">Maximalizujte najprv <strong>skrátenie obnovy zručností</strong>, potom rovnomerne zvyšujte ATK.</span>
+                  </div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Talents - Full width -->
+        <div class="guide-section" style="margin-top:8px">
+          <h3>
+            <span class="lang-fr">Talents (Arba_DPS)</span>
+            <span class="lang-en hidden">Talents (Arba_DPS)</span>
+            <span class="lang-sk hidden">Talenty (Arba_DPS)</span>
+          </h3>
+          <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:16px">
+            <span class="lang-fr">Les fins de branches que vous aimerez obtenir sont : <strong style="color:var(--gold)">Compression du temps — Envolée — Accumulation — Attaque Rapide Combo</strong>. Ce sont ceux qui donnent le plus de DPS pour l'Arbalète sur les combats en PVE.</span>
+            <span class="lang-en hidden">The end-of-branch talents to unlock are: <strong style="color:var(--gold)">Time Compression — Soaring — Accumulation — Fast Combo Attack</strong>. These are the best DPS talents for Archer in PVE combat.</span>
+            <span class="lang-sk hidden">Talenty na konci vetiev, ktoré chcete odomknúť: <strong style="color:var(--gold)">Kompresia Času — Vznášanie — Akumulácia — Rýchly Combo Útok</strong>. Sú to najlepšie DPS talenty pre Lukostrelca v PVE boji.</span>
+          </p>
+          <div class="grid-2" style="gap:12px">
+            <div class="card" style="padding:16px;border-left:2px solid var(--gold)">
+              <div style="font-weight:700;color:var(--gold);margin-bottom:6px">
+                ⏱️ <span class="lang-fr">Compression du temps</span><span class="lang-en hidden">Time Compression</span><span class="lang-sk hidden">Kompresia Času</span>
+              </div>
+              <div style="font-family:monospace;font-size:0.82rem;color:var(--teal);background:var(--bg-primary);padding:8px;border-radius:6px;margin-bottom:8px">
+                <span class="lang-fr">Chaque déclenchement d'une compétence : ATQ +2% (30% max)</span>
+                <span class="lang-en hidden">Each skill trigger: ATQ +2% (max 30%)</span>
+                <span class="lang-sk hidden">Každé spustenie zručnosti: ATQ +2% (max 30%)</span>
+              </div>
+              <p style="color:var(--text-secondary);font-size:0.83rem">
+                <span class="lang-fr">Le talent se stack pendant le combat. Déclenchez un maximum de compétences rapidement pour le monter au cap.</span>
+                <span class="lang-en hidden">Talent stacks during combat. Trigger as many skills as possible quickly to reach the cap.</span>
+                <span class="lang-sk hidden">Talent sa hromadí počas boja. Spúšťajte čo najviac zručností rýchlo, aby ste dosiahli maximum.</span>
+              </p>
+            </div>
+            <div class="card" style="padding:16px;border-left:2px solid var(--teal)">
+              <div style="font-weight:700;color:var(--teal);margin-bottom:6px">
+                🕊️ <span class="lang-fr">Envolée</span><span class="lang-en hidden">Soaring</span><span class="lang-sk hidden">Vznášanie</span>
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.7">
+                <div>⏳ 15s : <span style="color:var(--teal)"><span class="lang-fr">Vitesse d'ATQ</span><span class="lang-en hidden">ATQ Speed</span><span class="lang-sk hidden">Rýchlosť ATQ</span> +15%</span></div>
+                <div>⏳ 30s : <span style="color:var(--orange)"><span class="lang-fr">Chance de coup critique</span><span class="lang-en hidden">Crit Rate</span><span class="lang-sk hidden">Šanca na krit</span> +20%</span></div>
+                <div>⏳ 45s : <span style="color:var(--gold)">ATQ +20%</span></div>
+              </div>
+            </div>
+            <div class="card" style="padding:16px;border-left:2px solid var(--orange)">
+              <div style="font-weight:700;color:var(--orange);margin-bottom:6px">
+                📈 <span class="lang-fr">Accumulation</span><span class="lang-en hidden">Accumulation</span><span class="lang-sk hidden">Akumulácia</span>
+              </div>
+              <div style="font-family:monospace;font-size:0.82rem;color:var(--teal);background:var(--bg-primary);padding:8px;border-radius:6px;margin-bottom:8px">
+                <span class="lang-fr">Toutes les 3s : Dégâts critiques +5% (25% max)</span>
+                <span class="lang-en hidden">Every 3s: Crit DMG +5% (max 25%)</span>
+                <span class="lang-sk hidden">Každé 3s: Krit Poškodenie +5% (max 25%)</span>
+              </div>
+              <p style="color:var(--text-secondary);font-size:0.83rem">
+                <span class="lang-fr">Critique du sort en branche accessoire. Atteint le cap en 15 secondes de combat.</span>
+                <span class="lang-en hidden">Crit branch from accessory talent. Reaches cap in 15 seconds of combat.</span>
+                <span class="lang-sk hidden">Krit vetva z doplnkového talentu. Dosiahne maximum za 15 sekúnd boja.</span>
+              </p>
+            </div>
+            <div class="card" style="padding:16px;border-left:2px solid var(--purple)">
+              <div style="font-weight:700;color:var(--purple);margin-bottom:6px">
+                ⚡ <span class="lang-fr">Attaque Rapide Combo</span><span class="lang-en hidden">Fast Combo Attack</span><span class="lang-sk hidden">Rýchly Combo Útok</span>
+              </div>
+              <div style="font-family:monospace;font-size:0.82rem;color:var(--teal);background:var(--bg-primary);padding:8px;border-radius:6px;margin-bottom:8px">
+                <span class="lang-fr">Toutes les 2s : Dégâts combo +5% (50% max)</span>
+                <span class="lang-en hidden">Every 2s: Combo DMG +5% (max 50%)</span>
+                <span class="lang-sk hidden">Každé 2s: Combo Poškodenie +5% (max 50%)</span>
+              </div>
+              <p style="color:var(--text-secondary);font-size:0.83rem">
+                <span class="lang-fr">Le bonus combo est énorme — 50% de dégâts combo supplémentaires en 20 secondes. Crucial pour tout combat long.</span>
+                <span class="lang-en hidden">The combo bonus is huge — +50% combo DMG in 20 seconds. Crucial for any extended fight.</span>
+                <span class="lang-sk hidden">Combo bonus je obrovský — +50% Combo Poškodenia za 20 sekúnd. Kľúčové pre každý dlhý boj.</span>
+              </p>
+            </div>
+          </div>
+          <div class="info-box" style="margin-top:14px">
+            💡 <span>
+              <span class="lang-fr">Branches à illuminer : <strong>Combat Furieux, Sort de Tir, Sort, Domptage des bêtes</strong> (4 branches max). Priorisez les nœuds surlignés dans les arbres de talents ci-dessus.</span>
+              <span class="lang-en hidden">Branches to light up: <strong>Combat Furieux, Sort de Tir, Sort, Domptage des bêtes</strong> (max 4 branches). Prioritize the highlighted nodes in the talent trees above.</span>
+              <span class="lang-sk hidden">Vetvy na rozsvietenie: <strong>Combat Furieux, Sort de Tir, Sort, Domptage des bêtes</strong> (max 4 vetvy). Uprednostnite zvýraznené uzly v stromoch talentov vyššie.</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Flying Animals - Full width -->
+        <div class="guide-section">
+          <h3>
+            <span class="lang-fr">🦋 Animal Volant (Avian)</span>
+            <span class="lang-en hidden">🦋 Flying Animal (Avian)</span>
+            <span class="lang-sk hidden">🦋 Lietajúce Zviera (Avian)</span>
+          </h3>
+          <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:16px">
+            <span class="lang-fr">Pour tous ces familiers, voudriez jouer avec ces affixes passifs : <strong style="color:var(--teal)">Sauvagerie Tranchante — Fort Face aux Forts — Bonus de Colère — Combo de Champignon</strong>.</span>
+            <span class="lang-en hidden">For all these avians, you want to run these passive affixes: <strong style="color:var(--teal)">Cutting Savagery — Strong vs Strong — Rage Bonus — Mushroom Combo</strong>.</span>
+            <span class="lang-sk hidden">Pre všetky tieto avianové zvieratá chcete hrať s týmito pasívnymi affixami: <strong style="color:var(--teal)">Rezná Divokosť — Silný proti Silným — Bonus Hnevu — Hríbové Combo</strong>.</span>
+          </p>
+          <div class="avian-grid">
+            <div class="avian-card">
+              <img src="assets/image/lom/avian_michelle.png" alt="Michelle" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
+              <div class="avian-name">🐾 Michelle</div>
+              <p>
+                <span class="lang-fr">Pour tous les 50 instances de dommages, l'adversaire se fait stun pendant 0.5s.</span>
+                <span class="lang-en hidden">Every 50 damage instances, stuns the opponent for 0.5s.</span>
+                <span class="lang-sk hidden">Každých 50 prípadov poškodenia omráči súpera na 0.5s.</span>
+              </p>
+              <div class="best-for">
+                ✅ <span class="lang-fr">Idéal pour débuter, ou contre des bosses avec peu de PV mais beaucoup de dommages. Suffisant pour tout tuer si votre force de frappe est assez haute.</span>
+                <span class="lang-en hidden">Best for early game, or bosses with low HP but high damage. Good if your damage output is high enough to finish the fight.</span>
+                <span class="lang-sk hidden">Ideálne pre začiatok hry, alebo proti bossom s málo PZ ale vysokým poškodením. Postačuje na zabitie všetkého ak je vaša sila útoku dostatočne vysoká.</span>
+              </div>
+            </div>
+            <div class="avian-card">
+              <img src="assets/image/lom/avian_cloud.png" alt="Nuage" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
+              <div class="avian-name">☁️ Nuage <span style="font-size:0.75rem;color:var(--text-secondary)">(<span class="lang-fr">Cloud</span><span class="lang-en hidden">Cloud</span>)</span></div>
+              <p>
+                <span class="lang-fr">Accélère toutes les compétences de 25% pendant 5 secondes.</span>
+                <span class="lang-en hidden">Accelerates all skills by 25% for 5 seconds simultaneously.</span>
+                <span class="lang-sk hidden">Urýchli všetky zručnosti o 25% počas 5 sekúnd súčasne.</span>
+              </p>
+              <div class="best-for">
+                ⚖️ <span class="lang-fr">Le plus stable en PVE. Hybride parfait entre vagues et bosses — utilisez-le si vous hésitez sur la situation.</span>
+                <span class="lang-en hidden">Most stable in PVE. Perfect hybrid between waves and bosses — use when unsure about the situation.</span>
+                <span class="lang-sk hidden">Najstabilnejší v PVE. Dokonalý hybrid medzi vlnami a bossmi — použite ho keď si nie ste istí situáciou.</span>
+              </div>
+            </div>
+            <div class="avian-card">
+              <img src="assets/image/lom/avian_firefly.png" alt="Luciole" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
+              <div class="avian-name">🌟 Luciole <span style="font-size:0.75rem;color:var(--text-secondary)">(<span class="lang-fr">Firefly</span><span class="lang-en hidden">Firefly</span>)</span></div>
+              <p>
+                <span class="lang-fr">Réduit la résistance aux dommages de l'adversaire de 15% pendant 5 secondes.</span>
+                <span class="lang-en hidden">Reduces enemy DMG resistance by 15% for 5 seconds.</span>
+                <span class="lang-sk hidden">Znižuje odolnosť súpera voči poškodeniu o 15% počas 5 sekúnd.</span>
+              </p>
+              <div class="best-for">
+                🏆 <span class="lang-fr">L'animal volant qui confère le plus de DPS lorsque vous tapez sans votre clone. Monstrueux contre les bosses.</span>
+                <span class="lang-en hidden">The avian that gives the most DPS when attacking without your clone. Monstrous against bosses.</span>
+                <span class="lang-sk hidden">Avian, ktorý dáva najviac DPS keď útočíte bez vášho klonu. Monstruózny proti bossom.</span>
+              </div>
+            </div>
+            <div class="avian-card featured">
+              <img src="assets/image/lom/avian_magic_cat.png" alt="Chat Magique" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
+              <div class="avian-name">🐱 Chat Magique ⭐ <span style="font-size:0.72rem;color:var(--gold)">(Stray's fav)</span></div>
+              <p>
+                <span class="lang-fr">Active 5× durant 2 secondes la possibilité de réduire un sort quelconque de 2 secondes. Permet de disarm/stun/debuff les bosses à des timings précis.</span>
+                <span class="lang-en hidden">5× over 2 seconds, reduces any skill cooldown by 2s. Allows you to disarm/stun/debuff bosses at precise timings.</span>
+                <span class="lang-sk hidden">5× počas 2 sekúnd znižuje obnovu ľubovolnej zručnosti o 2s. Umožňuje odzbrojovať/omráčovať/debuffovať bossov v presných momentoch.</span>
+              </p>
+              <div class="best-for">
+                👑 <span class="lang-fr">Le plus versatile du jeu, le meilleur pour le Théâtre. Mettez tous les sorts à <strong>1 seconde de délai</strong> sauf le clone à <strong>0</strong> pour profiter au maximum de l'animal volant !</span>
+                <span class="lang-en hidden">Most versatile in the game, best for Theater. Set all skills to <strong>1 second delay</strong> except the clone at <strong>0</strong> to maximize the avian!</span>
+                <span class="lang-sk hidden">Najuniverzálnejší v hre, najlepší pre Divadlo. Nastavte všetky zručnosti na <strong>1 sekundu oneskorenia</strong> okrem klonu na <strong>0</strong> pre maximálne využitie avianu!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complete Sets -->
+        <div class="guide-section">
+          <h3>
+            <span class="lang-fr">Sets Complets (F2P &amp; Spender)</span>
+            <span class="lang-en hidden">Complete Sets (F2P &amp; Spender)</span>
+            <span class="lang-sk hidden">Kompletné Sety (F2P &amp; Spender)</span>
+          </h3>
+          <p style="color:var(--text-secondary);margin-bottom:16px;font-size:0.9rem">
+            <span class="lang-fr">Rotations de sorts (délais en secondes) par profil de jeu. Le clone est toujours à 0 pour les profils avec Chat Magique.</span>
+            <span class="lang-en hidden">Skill rotation delay values (in seconds) by play profile. Clone is always 0 for Magic Cat profiles.</span>
+            <span class="lang-sk hidden">Hodnoty oneskorenia rotácie zručností (v sekundách) podľa herného profilu. Klon je vždy 0 pre profily s Magickým Mačiatkom.</span>
+          </p>
+          <div class="grid-2" style="gap:12px">
+            <div class="set-card">
+              <h4>🌱 F2P — <span class="lang-fr">Début</span><span class="lang-en hidden">Early</span><span class="lang-sk hidden">Začiatok</span></h4>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px">
+                <span class="lang-fr">Rotation 1 (délais sort)</span><span class="lang-en hidden">Rotation 1 (skill delays)</span><span class="lang-sk hidden">Rotácia 1 (oneskorenia zručností)</span>
+              </div>
+              <div class="delay-row">
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">0.5s</span>
+                <span class="delay-badge">4s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+              </div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 6px">
+                <span class="lang-fr">Rotation 2</span><span class="lang-en hidden">Rotation 2</span><span class="lang-sk hidden">Rotácia 2</span>
+              </div>
+              <div class="delay-row">
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">0.5s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+              </div>
+              <p><span class="lang-fr">Animal volant : Michelle — Formation d'Étoiles Set 10</span><span class="lang-en hidden">Avian: Michelle — Star Array Set 10</span><span class="lang-sk hidden">Avian: Michelle — Hviezdná Formácia Set 10</span></p>
+            </div>
+            <div class="set-card">
+              <h4>📈 F2P — <span class="lang-fr">Avancé</span><span class="lang-en hidden">Advanced</span><span class="lang-sk hidden">Pokročilý</span></h4>
+              <div class="delay-row">
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">2s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">0s</span>
+                <span class="delay-badge">0.5s</span>
+              </div>
+              <p><span class="lang-fr">Animal volant : Luciole — Formation d'Étoiles Set 9</span><span class="lang-en hidden">Avian: Luciole — Star Array Set 9</span><span class="lang-sk hidden">Avian: Luciole — Hviezdná Formácia Set 9</span></p>
+            </div>
+            <div class="set-card">
+              <h4>💰 <span class="lang-fr">Low Spender — Avancé</span><span class="lang-en hidden">Low Spender — Advanced</span><span class="lang-sk hidden">Low Spender — Pokročilý</span></h4>
+              <div class="delay-row">
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">2s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">0s</span>
+              </div>
+              <p>
+                <span class="lang-fr">Animal volant : Chat Magique ⭐ — Set Arba_DPS</span>
+                <span class="lang-en hidden">Avian: Magic Cat ⭐ — Arba_DPS set</span>
+                <span class="lang-sk hidden">Avian: Magické Mačiatko ⭐ — Set Arba_DPS</span>
+              </p>
+              <p style="color:var(--teal);font-size:0.8rem">
+                <span class="lang-fr">Dégâts de combo +54% / Dégâts de contre-attaque +54%</span>
+                <span class="lang-en hidden">Combo DMG +54% / Counter DMG +54%</span>
+                <span class="lang-sk hidden">Combo Poškodenie +54% / Protiútok Poškodenie +54%</span>
+              </p>
+            </div>
+            <div class="set-card">
+              <h4>💎 <span class="lang-fr">High Spender — Avancé</span><span class="lang-en hidden">High Spender — Advanced</span><span class="lang-sk hidden">High Spender — Pokročilý</span></h4>
+              <div class="delay-row">
+                <span class="delay-badge">show</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">0s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+              </div>
+              <p>
+                <span class="lang-fr">Animal volant : Chat Magique ⭐ — Formation d'Étoiles Set 8</span>
+                <span class="lang-en hidden">Avian: Magic Cat ⭐ — Star Array Set 8</span>
+                <span class="lang-sk hidden">Avian: Magické Mačiatko ⭐ — Hviezdná Formácia Set 8</span>
+              </p>
+            </div>
+            <div class="set-card" style="grid-column:span 2;border-color:var(--gold)">
+              <h4>👑 <span class="lang-fr">High Spender BIS — Avancé</span><span class="lang-en hidden">High Spender BIS — Advanced</span><span class="lang-sk hidden">High Spender BIS — Pokročilý</span></h4>
+              <div class="delay-row">
+                <span class="delay-badge" style="color:var(--gold);border-color:var(--gold)">grumpy</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+                <span class="delay-badge">1s</span>
+              </div>
+              <p>
+                <span class="lang-fr">Animal volant : Chat Magique ⭐ — Formation d'Étoiles Set 10 (BIS)</span>
+                <span class="lang-en hidden">Avian: Magic Cat ⭐ — Star Array Set 10 (BIS)</span>
+                <span class="lang-sk hidden">Avian: Magické Mačiatko ⭐ — Hviezdná Formácia Set 10 (BIS)</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Affixes -->
+        <div class="info-box" style="margin-top:4px">
+          🐾 <span>
+            <strong><span class="lang-fr">Affixes passifs recommandés :</span><span class="lang-en hidden">Recommended passive affixes:</span><span class="lang-sk hidden">Odporúčané pasívne affixe:</span></strong>
+            <span style="color:var(--teal)"> Sauvagerie Tranchante · Fort Face aux Forts · Bonus de Colère · Combo de Champignon</span>
+          </span>
+        </div>
+
+      </div>
+    </div><!-- end pve-archer -->
+
+  </div><!-- end tab-pve -->
+
+  <!-- ========== PVP ========== -->
+  <div class="tab-content" id="tab-pvp">
+    <div style="text-align:center;padding:80px 24px">
+      <div style="font-size:3rem;margin-bottom:20px">⚔️</div>
+      <h2 style="color:var(--text-secondary);margin-bottom:12px">
+        <span class="lang-fr">Guides PVP</span>
+        <span class="lang-en hidden">PVP Guides</span>
+        <span class="lang-sk hidden">PVP Sprievodcovia</span>
+      </h2>
+      <p style="color:var(--text-muted);font-size:1.1rem;font-style:italic">
+        <span class="lang-fr">Prochainement...</span>
+        <span class="lang-en hidden">Coming soon...</span>
+        <span class="lang-sk hidden">Čoskoro...</span>
+      </p>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-top:12px">
+        <span class="lang-fr">Les guides PVP pour chaque classe sont en cours de préparation. Revenez bientôt !</span>
+        <span class="lang-en hidden">PVP guides for each class are being prepared. Check back soon!</span>
+        <span class="lang-sk hidden">PVP sprievodcovia pre každú triedu sú v príprave. Vráťte sa čoskoro!</span>
+      </p>
+    </div>
+  </div><!-- end tab-pvp -->
+
+  <div style="margin:48px 0;text-align:center">
+    <p class="text-muted" style="margin-bottom:16px">
+      <span class="lang-fr">Vous voulez voir exactement combien de dégâts font vos stats ?</span>
+      <span class="lang-en hidden">Want to see exactly how much damage your stats deal?</span>
+      <span class="lang-sk hidden">Chcete vidieť presne koľko poškodenia vaše štatistiky spôsobujú?</span>
+    </p>
+    <a href="calculator.html" class="btn btn-primary">🧮 <span class="lang-fr">Ouvrir le Calculateur</span><span class="lang-en hidden">Open the Calculator</span><span class="lang-sk hidden">Otvoriť kalkulačku</span></a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — <span class="lang-fr">créé par</span><span class="lang-en hidden">built by</span><span class="lang-sk hidden">vytvoril</span> <strong>Stray</strong></p>
+  <p style="margin-top:6px">
+    <span class="lang-fr">Site fan non officiel. Legend of Mushroom est développé par JoyNetwork.</span>
+    <span class="lang-en hidden">Unofficial fan site. Legend of Mushroom is developed by JoyNetwork.</span>
+    <span class="lang-sk hidden">Neoficiálny fanúšikovský web. Legend of Mushroom je vyvíjaný spoločnosťou JoyNetwork.</span>
+  </p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Mode tabs
+  document.querySelectorAll('#modeTabs .tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#modeTabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Class selector for each tab
+  document.querySelectorAll('.class-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var parent = btn.closest('.tab-content');
+      parent.querySelectorAll('.class-btn').forEach(function(b) { b.classList.remove('active'); });
+      parent.querySelectorAll('.guide-panel').forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      var panel = parent.querySelector('#' + btn.dataset.class);
+      if (panel) panel.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

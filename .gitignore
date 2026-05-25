@@ -1,0 +1,10 @@
+# Claude Code local settings
+.claude/
+
+# Downloaded game asset packs (not used by the website)
+assets/image/Legend of Mushroom Assets*/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

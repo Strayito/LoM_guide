@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator — LoM Fan Guide</title>
+  <meta name="description" content="Calculate ATK, DEF, and full damage output using the real Legend of Mushroom damage formula.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .formula-ref {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .formula-ref h4 { color: var(--gold); margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .formula-line {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.6;
+    }
+    .formula-line:last-child { border-bottom: none; }
+    .formula-line .v { color: var(--teal); }
+    .formula-line .o { color: var(--gold); }
+    .formula-line .n { color: var(--orange); }
+    .formula-line .step { color: var(--text-muted); font-size: 0.72rem; margin-right: 8px; }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .lbl { font-size: 0.82rem; color: var(--text-secondary); }
+    .result-row .val { font-size: 1.05rem; font-weight: 700; color: var(--teal); }
+    .result-row .val.atk { color: var(--orange); }
+    .result-row .val.def { color: var(--blue); }
+    .result-row .val.gold { color: var(--gold); }
+
+    .sticky-results {
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+    }
+    @media (max-width: 900px) { .sticky-results { position: static; } }
+
+    sup { font-size: 0.7em; }
+
+    /* ── Basic Stats Calculator ── */
+    .bsc-type-btn {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .bsc-type-btn.active[data-stat="atk"] { background: var(--orange); color: #0d1117; border-color: var(--orange); }
+    .bsc-type-btn.active[data-stat="hp"]  { background: #e05c6f; color: #fff; border-color: #e05c6f; }
+    .bsc-type-btn.active[data-stat="def"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .bsc-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .bsc-expand-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--teal);
+      background: transparent;
+      color: var(--teal);
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+      line-height: 1;
+      padding: 0;
+    }
+    .bsc-section.expanded .bsc-expand-btn { transform: rotate(45deg); }
+    .bsc-detail { margin-top:12px; padding:14px; background:var(--bg-secondary); border-radius:var(--r); border:1px solid var(--border); }
+    .bsc-detail.hidden { display:none; }
+
+    .input-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .section-chip {
+      display: inline-block;
+      padding: 2px 10px;
+      background: rgba(32,212,168,0.1);
+      border: 1px solid rgba(32,212,168,0.2);
+      border-radius: 99px;
+      font-size: 0.72rem;
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">
+      <span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span>
+    </a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link active">
+      <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
+    </a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <span class="label">
+      <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
+    </span>
+    <h1>
+      <span class="lang-fr">Calculateur de Dégâts</span><span class="lang-en hidden">Damage Calculator</span><span class="lang-sk hidden">Kalkulačka poškodenia</span>
+    </h1>
+    <p>
+      <span class="lang-fr">Entrez vos stats et obtenez les dégâts exacts — étape par étape avec la vraie formule LoM.</span>
+      <span class="lang-en hidden">Input your stats and get exact damage output — step by step using the real LoM damage formula.</span>
+      <span class="lang-sk hidden">Zadajte vaše štatistiky a získajte presné poškodenie — krok za krokom s použitím skutočnej LoM vzorce.</span>
+    </p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="calcTabs" role="tablist">
+    <button class="tab-btn active" data-tab="stats">
+      📊 <span class="lang-fr">Calculateur de Stats</span><span class="lang-en hidden">Stat Calculator</span><span class="lang-sk hidden">Kalkulačka štatistík</span>
+    </button>
+    <button class="tab-btn" data-tab="damage">
+      ⚔️ <span class="lang-fr">Calculateur de Dégâts</span><span class="lang-en hidden">Damage Calculator</span><span class="lang-sk hidden">Kalkulačka poškodenia</span>
+    </button>
+    <button class="tab-btn" data-tab="hp">
+      📐 <span class="lang-fr">Stats Basiques</span><span class="lang-en hidden">Basic Stats</span><span class="lang-sk hidden">Základné štatistiky</span>
+    </button>
+  </div>
+
+  <!-- Formula Reference -->
+  <div class="formula-ref">
+    <h4>
+      <span class="lang-fr">Référence des Formules</span><span class="lang-en hidden">Formula Reference</span><span class="lang-sk hidden">Referencia vzorcov</span>
+    </h4>
+    <div class="formula-line"><span class="step">STEP 1</span><span class="v">ATK/DEF</span> = (FinalBase × (<span class="n">100</span> + Parking%) ÷ <span class="n">100</span>) × (<span class="n">100</span> + Buff%) ÷ <span class="n">100</span> + Exclusive</div>
+    <div class="formula-line"><span class="step">STEP 2</span><span class="v">FinalMult</span> = (Skill% + BuffAdd%) ÷ <span class="n">100</span> × (<span class="n">100</span> + BuffMult%) ÷ <span class="n">100</span> + BuffExcl% ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 3</span><span class="v">A</span> = (ATK − DEF) × <span class="v">FinalMult</span> × DMGMult% ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 4</span><span class="v">B(Crit)</span> = A × CritMult ÷ CritRES &nbsp;|&nbsp; <span class="v">B(SkillCrit)</span> = {A × (<span class="n">1</span> + SkillCritMult)}<sup><span class="n">0.98</span></sup></div>
+    <div class="formula-line"><span class="step">STEP 5</span><span class="v">C</span> = (A or B) × (<span class="n">100</span>−RES%) ÷ <span class="n">100</span> × (<span class="n">100</span>−DMGRES%) ÷ <span class="n">100</span> × (<span class="n">100</span>+BuffFinal%) ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 6</span><span class="v">PvP</span> = C ÷ PvPDecrease &nbsp;|&nbsp; <span class="v">PvE</span> = C × PvEBonus (Sword <span class="n">1.1</span> / Ax <span class="n">1.05</span>) &nbsp;|&nbsp; <span class="v">ToBoss</span> = PvE × (<span class="n">100</span>+Boss%) ÷ <span class="n">100</span></div>
+  </div>
+
+  <!-- ===== STAT CALCULATOR ===== -->
+  <div class="tab-content active" id="tab-stats">
+    <div class="calc-layout">
+      <form id="stat-calc-form" onsubmit="return false">
+
+        <div class="section-chip">
+          <span class="lang-fr">Stats de l'Attaquant</span><span class="lang-en hidden">Attacker Stats</span><span class="lang-sk hidden">Štatistiky útočníka</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sc-finalATK">
+              <span class="lang-fr">ATQ Final (base)</span><span class="lang-en hidden">Final ATK (base)</span><span class="lang-sk hidden">Finálny ATK (základ)</span>
+            </label>
+            <input class="form-input" type="number" id="sc-finalATK" value="10000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sc-finalDEF">
+              <span class="lang-fr">DEF Finale (base)</span><span class="lang-en hidden">Final DEF (base)</span><span class="lang-sk hidden">Finálny DEF (základ)</span>
+            </label>
+            <input class="form-input" type="number" id="sc-finalDEF" value="5000" min="0" step="1">
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="sc-parking">
+          <label for="sc-parking">
+            <span class="lang-fr">Mode Parking activé ?</span><span class="lang-en hidden">Using Parking mode?</span><span class="lang-sk hidden">Parkovací režim aktívny?</span>
+          </label>
+        </div>
+
+        <div class="toggle-section hidden" id="sc-parking-section">
+          <div class="form-group">
+            <label class="form-label" for="sc-parkingPct">
+              <span class="lang-fr">Bonus Parking (%)</span><span class="lang-en hidden">Parking Additional (%)</span><span class="lang-sk hidden">Parkovací bonus (%)</span>
+            </label>
+            <input class="form-input" type="number" id="sc-parkingPct" value="0" min="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">Bonus % appliqué à l'ATQ et la DEF en mode parking</span>
+              <span class="lang-en hidden">Bonus % applied to both ATK and DEF when parking</span>
+              <span class="lang-sk hidden">Bonus % uplatnený na ATK aj DEF v parkovacom režime</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="sc-buffDebuff">
+            <span class="lang-fr">Total Buffs &amp; Débuffs (%)</span><span class="lang-en hidden">Total Buff &amp; Debuff (%)</span><span class="lang-sk hidden">Celkové Buffy &amp; Debuffy (%)</span>
+          </label>
+          <input class="form-input" type="number" id="sc-buffDebuff" value="0" step="0.1">
+          <div class="input-hint">
+            <span class="lang-fr">Somme nette de tous les buffs/débuffs ATQ/DEF (peut être négatif)</span>
+            <span class="lang-en hidden">Net sum of all ATK/DEF buffs and debuffs (can be negative)</span>
+            <span class="lang-sk hidden">Čistý súčet všetkých buffov/debuffov ATK/DEF (môže byť záporný)</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sc-exclATK">
+              <span class="lang-fr">Bonus Exclusif (ATQ)</span><span class="lang-en hidden">Exclusive Bonus (ATK)</span><span class="lang-sk hidden">Exkluzívny bonus (ATK)</span>
+            </label>
+            <input class="form-input" type="number" id="sc-exclATK" value="0" min="0" step="1">
+            <div class="input-hint">
+              <span class="lang-fr">ATQ fixe issu de l'équipement exclusif</span>
+              <span class="lang-en hidden">Flat ATK from exclusive gear</span>
+              <span class="lang-sk hidden">Pevný ATK z exkluzívneho vybavenia</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sc-exclDEF">
+              <span class="lang-fr">Bonus Exclusif (DEF)</span><span class="lang-en hidden">Exclusive Bonus (DEF)</span><span class="lang-sk hidden">Exkluzívny bonus (DEF)</span>
+            </label>
+            <input class="form-input" type="number" id="sc-exclDEF" value="0" min="0" step="1">
+            <div class="input-hint">
+              <span class="lang-fr">DEF fixe issue de l'équipement exclusif</span>
+              <span class="lang-en hidden">Flat DEF from exclusive gear</span>
+              <span class="lang-sk hidden">Pevný DEF z exkluzívneho vybavenia</span>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Stat Results -->
+      <div class="results-panel sticky-results">
+        <div class="results-header">
+          📊 <span class="lang-fr">Stats Calculées</span><span class="lang-en hidden">Calculated Stats</span><span class="lang-sk hidden">Vypočítané štatistiky</span>
+        </div>
+        <div class="results-body">
+
+          <div class="stat-result-grid">
+            <div class="stat-result-box">
+              <div class="label-sm"><span class="lang-fr">ATQ Calculé</span><span class="lang-en hidden">Calculated ATK</span><span class="lang-sk hidden">Vypočítaný ATK</span></div>
+              <div class="value atk" id="sc-out-atk">10,000</div>
+            </div>
+            <div class="stat-result-box">
+              <div class="label-sm"><span class="lang-fr">DEF Calculée</span><span class="lang-en hidden">Calculated DEF</span><span class="lang-sk hidden">Vypočítaný DEF</span></div>
+              <div class="value def" id="sc-out-def">5,000</div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px">
+            <div class="result-step-label" style="margin-bottom:8px">
+              <span class="lang-fr">Détail ATQ</span><span class="lang-en hidden">ATK Breakdown</span><span class="lang-sk hidden">Detail ATK</span>
+            </div>
+            <div style="font-family:'Courier New',monospace;font-size:0.8rem;color:var(--text-secondary);padding:10px;background:var(--bg-secondary);border-radius:var(--r)" id="sc-breakdown-atk">—</div>
+          </div>
+          <div style="margin-top:14px">
+            <div class="result-step-label" style="margin-bottom:8px">
+              <span class="lang-fr">Détail DEF</span><span class="lang-en hidden">DEF Breakdown</span><span class="lang-sk hidden">Detail DEF</span>
+            </div>
+            <div style="font-family:'Courier New',monospace;font-size:0.8rem;color:var(--text-secondary);padding:10px;background:var(--bg-secondary);border-radius:var(--r)" id="sc-breakdown-def">—</div>
+          </div>
+
+          <div class="info-box" style="margin-top:20px;font-size:0.82rem">
+            💡 <span>
+              <span class="lang-fr">Ces valeurs s'insèrent dans l'étape 3 de la formule : <strong>A = (ATQ − DEF) × MultFinal × DMG%/100</strong></span>
+              <span class="lang-en hidden">These values feed into Step 3 of the damage formula: <strong>A = (ATK − DEF) × FinalMult × DMG%/100</strong></span>
+              <span class="lang-sk hidden">Tieto hodnoty vstupujú do kroku 3 vzorca: <strong>A = (ATK − DEF) × FinalMult × DMG%/100</strong></span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAMAGE CALCULATOR ===== -->
+  <div class="tab-content" id="tab-damage">
+    <div class="calc-layout">
+
+      <form id="dmg-calc-form" onsubmit="return false">
+
+        <!-- ── Attacker ATK ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 1 — ATQ de l'Attaquant</span><span class="lang-en hidden">Step 1 — Attacker ATK</span><span class="lang-sk hidden">Krok 1 — ATK útočníka</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dc-atkBase">
+            <span class="lang-fr">ATQ Final (base)</span><span class="lang-en hidden">Final ATK (base)</span><span class="lang-sk hidden">Finálny ATK (základ)</span>
+          </label>
+          <input class="form-input" type="number" id="dc-atkBase" value="15000" min="0" step="1">
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="dc-atkParking">
+          <label for="dc-atkParking">
+            <span class="lang-fr">Attaquant en mode Parking ?</span><span class="lang-en hidden">Attacker in Parking mode?</span><span class="lang-sk hidden">Útočník v parkovacom režime?</span>
+          </label>
+        </div>
+        <div class="toggle-section hidden" id="dc-atkpark-section">
+          <div class="form-group">
+            <label class="form-label" for="dc-atkParkPct">
+              <span class="lang-fr">Bonus Parking (%)</span><span class="lang-en hidden">Parking Additional (%)</span><span class="lang-sk hidden">Parkovací bonus (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-atkParkPct" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="dc-atkBuff">
+              <span class="lang-fr">Total Buffs &amp; Débuffs (%)</span><span class="lang-en hidden">Total Buff &amp; Debuff (%)</span><span class="lang-sk hidden">Celkové Buffy &amp; Debuffy (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-atkBuff" value="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-atkExcl">
+              <span class="lang-fr">Bonus Exclusif (ATQ fixe)</span><span class="lang-en hidden">Exclusive Bonus (flat ATK)</span><span class="lang-sk hidden">Exkluzívny bonus (pevný ATK)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-atkExcl" value="0" min="0" step="1">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Target DEF ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 1 — DEF de la Cible</span><span class="lang-en hidden">Step 1 — Target DEF</span><span class="lang-sk hidden">Krok 1 — DEF cieľa</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dc-defBase">
+            <span class="lang-fr">DEF Finale de la Cible (base)</span><span class="lang-en hidden">Target Final DEF (base)</span><span class="lang-sk hidden">Finálny DEF cieľa (základ)</span>
+          </label>
+          <input class="form-input" type="number" id="dc-defBase" value="8000" min="0" step="1">
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="dc-defParking">
+          <label for="dc-defParking">
+            <span class="lang-fr">Cible en mode Parking ?</span><span class="lang-en hidden">Target in Parking mode?</span><span class="lang-sk hidden">Cieľ v parkovacom režime?</span>
+          </label>
+        </div>
+        <div class="toggle-section hidden" id="dc-defpark-section">
+          <div class="form-group">
+            <label class="form-label" for="dc-defParkPct">
+              <span class="lang-fr">Bonus Parking (%)</span><span class="lang-en hidden">Parking Additional (%)</span><span class="lang-sk hidden">Parkovací bonus (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-defParkPct" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="dc-defBuff">
+              <span class="lang-fr">Buffs &amp; Débuffs de la Cible (%)</span><span class="lang-en hidden">Target Buff &amp; Debuff (%)</span><span class="lang-sk hidden">Buffy &amp; Debuffy cieľa (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-defBuff" value="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-defExcl">
+              <span class="lang-fr">Bonus Exclusif Cible (DEF)</span><span class="lang-en hidden">Target Exclusive Bonus (DEF)</span><span class="lang-sk hidden">Exkluzívny bonus cieľa (DEF)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-defExcl" value="0" min="0" step="1">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Final Multiplier ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 2 — Multiplicateur Final</span><span class="lang-en hidden">Step 2 — Final Multiplier</span><span class="lang-sk hidden">Krok 2 — Finálny multiplikátor</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dc-skillMult">
+            <span class="lang-fr">Multiplicateur de base Compétence/Combo/Riposte (%)</span><span class="lang-en hidden">Base Skill/Combo/Counter Multiplier (%)</span><span class="lang-sk hidden">Základný multiplikátor Schopnosti/Komba/Protiútoku (%)</span>
+          </label>
+          <input class="form-input" type="number" id="dc-skillMult" value="200" min="0" step="1">
+          <div class="input-hint">
+            <span class="lang-fr">Le % de base pour le type d'attaque utilisé (ex. ATQ Basique = 100%, une compétence peut être 300%)</span>
+            <span class="lang-en hidden">The base % multiplier for the skill type used (e.g. Basic ATK = 100%, a skill may be 300%)</span>
+            <span class="lang-sk hidden">Základné % pre typ použitého útoku (napr. Základný ATK = 100%, schopnosť môže byť 300%)</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="dc-buffAdd">
+              <span class="lang-fr">Buff Additionnel (%)</span><span class="lang-en hidden">Buff Additional (%)</span><span class="lang-sk hidden">Dodatočný buff (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-buffAdd" value="0" min="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">% plat ajouté au multiplicateur de compétence</span>
+              <span class="lang-en hidden">Flat % added to skill multiplier</span>
+              <span class="lang-sk hidden">Pevné % pridané k multiplikátoru schopnosti</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-buffMult">
+              <span class="lang-fr">Buff Multiplicateur (%)</span><span class="lang-en hidden">Buff Multiplier (%)</span><span class="lang-sk hidden">Buff multiplikátor (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-buffMult" value="0" min="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">Multiplié après base + buff additionnel</span>
+              <span class="lang-en hidden">Multiplied after base + buff add</span>
+              <span class="lang-sk hidden">Násobené po základe + dodatočný buff</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="dc-buffExcl">
+              <span class="lang-fr">Buff Exclusif (%)</span><span class="lang-en hidden">Buff Exclusive (%)</span><span class="lang-sk hidden">Exkluzívny buff (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-buffExcl" value="0" min="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">Ajouté en plat au multiplicateur final</span>
+              <span class="lang-en hidden">Added flat to final multiplier</span>
+              <span class="lang-sk hidden">Pridané pevne k finálnemu multiplikátoru</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-dmgMult">
+              <span class="lang-fr">Multiplicateur de Dégâts (%)</span><span class="lang-en hidden">DMG Multiplier (%)</span><span class="lang-sk hidden">Multiplikátor poškodenia (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-dmgMult" value="100" min="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">Généralement 100 sauf modification</span>
+              <span class="lang-en hidden">Usually 100 unless modified</span>
+              <span class="lang-sk hidden">Zvyčajne 100, pokiaľ nie je upravené</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Attack Type ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 3 — Type d'Attaque</span><span class="lang-en hidden">Step 3 — Attack Type</span><span class="lang-sk hidden">Krok 3 — Typ útoku</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dc-atkType">
+            <span class="lang-fr">Type d'Attaque</span><span class="lang-en hidden">Attack Type</span><span class="lang-sk hidden">Typ útoku</span>
+          </label>
+          <select class="form-select" id="dc-atkType"
+            data-opts-fr="Normal (sans crit)|Coup Critique|Critique de Compétence"
+            data-opts-en="Normal (no crit)|Critical Hit|Skill Critical Hit"
+            data-opts-sk="Normálny (bez kritu)|Kritický úder|Kritický úder schopnosti">
+            <option value="normal">Normal (sans crit)</option>
+            <option value="crit">Coup Critique</option>
+            <option value="skillcrit">Critique de Compétence</option>
+          </select>
+        </div>
+
+        <div class="toggle-section hidden" id="dc-crit-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="dc-critMult">
+                <span class="lang-fr">Multiplicateur de Dégâts Critique (%)</span><span class="lang-en hidden">Final Crit DMG Multiplier (%)</span><span class="lang-sk hidden">Multiplikátor kritického poškodenia (%)</span>
+              </label>
+              <input class="form-input" type="number" id="dc-critMult" value="200" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dc-critRES">
+                <span class="lang-fr">RES Critique de la Cible (%)</span><span class="lang-en hidden">Target Crit RES (%)</span><span class="lang-sk hidden">Kritická odolnosť cieľa (%)</span>
+              </label>
+              <input class="form-input" type="number" id="dc-critRES" value="100" min="1" step="0.1">
+              <div class="input-hint">B(Crit) = A × CritMult / CritRES</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toggle-section hidden" id="dc-skillcrit-section">
+          <div class="form-group">
+            <label class="form-label" for="dc-skillCritMult">
+              <span class="lang-fr">Multiplicateur Critique de Compétence (%)</span><span class="lang-en hidden">Final Skill Crit DMG Multiplier (%)</span><span class="lang-sk hidden">Multiplikátor kritickej schopnosti (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-skillCritMult" value="200" min="0" step="0.1">
+            <div class="input-hint">B = {A × (1 + SkillCritMult/100)}<sup>0.98</sup></div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Resistances ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 4 — Résistances</span><span class="lang-en hidden">Step 4 — Resistances</span><span class="lang-sk hidden">Krok 4 — Odolnosti</span>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label" for="dc-someRES">
+              <span class="lang-fr">RES (%)</span><span class="lang-en hidden">Some RES (%)</span><span class="lang-sk hidden">Odolnosť (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-someRES" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-dmgRES">
+              <span class="lang-fr">RES Dégâts (%)</span><span class="lang-en hidden">DMG RES (%)</span><span class="lang-sk hidden">Odolnosť voči poškodeniu (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-dmgRES" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dc-buffFinal">
+              <span class="lang-fr">Buff Dégâts Final (%)</span><span class="lang-en hidden">Buff Final DMG (%)</span><span class="lang-sk hidden">Buff finálneho poškodenia (%)</span>
+            </label>
+            <input class="form-input" type="number" id="dc-buffFinal" value="0" step="0.1">
+            <div class="input-hint">
+              <span class="lang-fr">Positif = plus de dégâts</span>
+              <span class="lang-en hidden">Positive = damage up</span>
+              <span class="lang-sk hidden">Kladné = viac poškodenia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Context ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Étape 5 — Mode de Sortie</span><span class="lang-en hidden">Step 5 — Output Mode</span><span class="lang-sk hidden">Krok 5 — Výstupný režim</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dc-context">
+            <span class="lang-fr">Contexte de Combat</span><span class="lang-en hidden">Combat Context</span><span class="lang-sk hidden">Kontext boja</span>
+          </label>
+          <select class="form-select" id="dc-context"
+            data-opts-fr="PvE (normal)|PvP|PvE — Combat de Boss"
+            data-opts-en="PvE (normal)|PvP|PvE — Boss Fight"
+            data-opts-sk="PvE (normálny)|PvP|PvE — Súboj s bossom">
+            <option value="pve">PvE (normal)</option>
+            <option value="pvp">PvP</option>
+            <option value="boss">PvE — Combat de Boss</option>
+          </select>
+        </div>
+
+        <div class="toggle-section visible" id="dc-pve-section">
+          <div class="form-group">
+            <label class="form-label" for="dc-class">
+              <span class="lang-fr">Votre Classe</span><span class="lang-en hidden">Your Class</span><span class="lang-sk hidden">Vaša trieda</span>
+            </label>
+            <select class="form-select" id="dc-class"
+              data-opts-fr="⚔️ Épée (×1.10 Bonus PvE)|🪓 Hache (×1.05 Bonus PvE)|🔮 Magie (×1.00 Bonus PvE)"
+              data-opts-en="⚔️ Sword (×1.10 PvE Bonus)|🪓 Axe (×1.05 PvE Bonus)|🔮 Magic (×1.00 PvE Bonus)"
+              data-opts-sk="⚔️ Meč (×1.10 PvE Bonus)|🪓 Sekera (×1.05 PvE Bonus)|🔮 Mágia (×1.00 PvE Bonus)">
+              <option value="sword">⚔️ Épée (×1.10 Bonus PvE)</option>
+              <option value="axe">🪓 Hache (×1.05 Bonus PvE)</option>
+              <option value="magic">🔮 Magie (×1.00 Bonus PvE)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-section hidden" id="dc-pvp-section">
+          <div class="form-group">
+            <label class="form-label" for="dc-pvpDecrease">
+              <span class="lang-fr">Réduction de Dégâts PvP de l'Adversaire</span><span class="lang-en hidden">Opponent PvP DMG Decrease</span><span class="lang-sk hidden">Zníženie PvP poškodenia súpera</span>
+            </label>
+            <input class="form-input" type="number" id="dc-pvpDecrease" value="1.0" min="0.01" step="0.01">
+            <div class="input-hint">
+              <span class="lang-fr">Dégâts PvP = C ÷ cette valeur. Plus élevé = moins de dégâts infligés.</span>
+              <span class="lang-en hidden">PvP DMG = C ÷ this value. Higher = you deal less damage to them.</span>
+              <span class="lang-sk hidden">PvP poškodenie = C ÷ táto hodnota. Vyššia = menej spôsobeného poškodenia.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="toggle-section hidden" id="dc-boss-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="dc-bossDmgRES">
+                <span class="lang-fr">RES Dégâts du Boss (%)</span><span class="lang-en hidden">Boss DMG RES (%)</span><span class="lang-sk hidden">Odolnosť bossa voči poškodeniu (%)</span>
+              </label>
+              <input class="form-input" type="number" id="dc-bossDmgRES" value="0" min="0" max="100" step="0.1">
+              <div class="input-hint">
+                <span class="lang-fr">Dégâts reçus du boss (côté défense)</span>
+                <span class="lang-en hidden">Damage taken from boss (defense side)</span>
+                <span class="lang-sk hidden">Poškodenie prijaté od bossa (obranná strana)</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dc-bossDmgPct">
+                <span class="lang-fr">Vos Dégâts Boss (%)</span><span class="lang-en hidden">Your Boss DMG (%)</span><span class="lang-sk hidden">Vaše poškodenie bossa (%)</span>
+              </label>
+              <input class="form-input" type="number" id="dc-bossDmgPct" value="0" min="0" step="0.1">
+              <div class="input-hint">
+                <span class="lang-fr">Bonus de dégâts boss issu de vos stats</span>
+                <span class="lang-en hidden">Boss DMG bonus from your stats</span>
+                <span class="lang-sk hidden">Bonus poškodenia bossa z vašich štatistík</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Damage Results -->
+      <div class="results-panel sticky-results">
+        <div class="results-header">
+          ⚔️ <span class="lang-fr">Détail des Dégâts</span><span class="lang-en hidden">Damage Breakdown</span><span class="lang-sk hidden">Detail poškodenia</span>
+        </div>
+        <div class="results-body">
+
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">ATQ Calculé</span><span class="lang-en hidden">Calculated ATK</span><span class="lang-sk hidden">Vypočítaný ATK</span></span>
+            <span class="val atk" id="dc-r-atk">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">DEF Calc. de la Cible</span><span class="lang-en hidden">Target Calc. DEF</span><span class="lang-sk hidden">Vypočítaný DEF cieľa</span></span>
+            <span class="val def" id="dc-r-def">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">ATQ − DEF (écart)</span><span class="lang-en hidden">ATK − DEF (spread)</span><span class="lang-sk hidden">ATK − DEF (rozdiel)</span></span>
+            <span class="val" id="dc-r-spread">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Multiplicateur Final</span><span class="lang-en hidden">Final Multiplier</span><span class="lang-sk hidden">Finálny multiplikátor</span></span>
+            <span class="val" id="dc-r-finalmult">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">A (Dégâts de Base)</span><span class="lang-en hidden">A (Base Damage)</span><span class="lang-sk hidden">A (Základné poškodenie)</span></span>
+            <span class="val" id="dc-r-A">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl" id="dc-r-crittype"><span class="lang-fr">Type de Critique</span><span class="lang-en hidden">Crit type</span><span class="lang-sk hidden">Typ kritu</span></span>
+            <span class="val gold" id="dc-r-B">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">C (après résistances)</span><span class="lang-en hidden">C (after resistances)</span><span class="lang-sk hidden">C (po odolnostiach)</span></span>
+            <span class="val" id="dc-r-C">—</span>
+          </div>
+
+          <!-- Boss extra rows -->
+          <div id="dc-r-boss-row" style="display:none">
+            <div class="result-row">
+              <span class="lbl"><span class="lang-fr">Depuis Dégâts Boss</span><span class="lang-en hidden">From Boss DMG</span><span class="lang-sk hidden">Od bossa (poškodenie)</span></span>
+              <span class="val" id="dc-r-fromboss">—</span>
+            </div>
+            <div class="result-row">
+              <span class="lbl"><span class="lang-fr">Vers Boss (PvE × Boss%)</span><span class="lang-en hidden">To Boss DMG (PvE × Boss%)</span><span class="lang-sk hidden">Na bossa (PvE × Boss%)</span></span>
+              <span class="val gold" id="dc-r-toboss">—</span>
+            </div>
+          </div>
+
+          <div class="result-final">
+            <div class="lbl" id="dc-r-final-label">
+              <span class="lang-fr">Dégâts Finaux</span><span class="lang-en hidden">Final DMG</span><span class="lang-sk hidden">Finálne poškodenie</span>
+            </div>
+            <div class="val" id="dc-r-final-val">—</div>
+          </div>
+
+          <div class="info-box" style="margin-top:16px;font-size:0.8rem">
+            💡 <span>
+              <span class="lang-fr">Toutes les valeurs se mettent à jour en direct. Consultez les <a href="guide.html">Guides</a> pour savoir quelles stats prioriser pour votre classe.</span>
+              <span class="lang-en hidden">All values update live as you type. Use the <a href="guide.html">Guides</a> to understand which stats to prioritize for your class.</span>
+              <span class="lang-sk hidden">Všetky hodnoty sa aktualizujú životodarným spôsobom. Pozrite si <a href="guide.html">Sprievodcov</a> pre pochopenie, ktoré štatistiky uprednostniť pre vašu triedu.</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== HP CALCULATOR ===== -->
+  <div class="tab-content" id="tab-hp">
+    <div class="calc-layout">
+      <form id="bsc-form" onsubmit="return false">
+
+        <!-- Stat type selector -->
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <button type="button" class="bsc-type-btn active" data-stat="atk">⚔️ ATK</button>
+          <button type="button" class="bsc-type-btn" data-stat="hp">❤️ HP</button>
+          <button type="button" class="bsc-type-btn" data-stat="def">🛡️ DEF</button>
+        </div>
+
+        <!-- Formula mini-ref -->
+        <div class="formula-ref" style="margin-bottom:20px">
+          <h4>
+            <span class="lang-fr">Formule — Stats Basiques</span><span class="lang-en hidden">Basic Stat Formula</span><span class="lang-sk hidden">Vzorec — Základné štatistiky</span>
+          </h4>
+          <div class="formula-line"><span class="step">STEP 1</span><span class="v">Stat_Flat</span> = Initial + Equip + Adv + Enchant + Avian</div>
+          <div class="formula-line"><span class="step">STEP 2</span><span class="v">BaseFactor</span> = <span class="n">1</span> + (Pal + Skill + Tech + Relic + Mount + Artifact + Parking + BackAcc + Ring + Sail + StarHero + SacredTree) ÷ <span class="n">100</span></div>
+          <div class="formula-line"><span class="step">STEP 3</span><span class="v">GlobalFactor</span> = <span class="n">1</span> + (Mount + Artifact + Soul + Awaken + Costume + BackAcc + Sail + Divining) ÷ <span class="n">100</span></div>
+          <div class="formula-line"><span class="step">RESULT</span><span class="v">Final Stat</span> = <span class="v">Stat_Flat</span> × <span class="v">BaseFactor</span> × <span class="v">GlobalFactor</span></div>
+        </div>
+
+        <!-- ── SECTION 1: Flat Sources ── -->
+        <div class="bsc-section" id="bsc-flat-section">
+          <div class="bsc-section-header">
+            <div class="section-chip">
+              <span class="lang-fr">Sources Fixes</span><span class="lang-en hidden">Flat Sources</span><span class="lang-sk hidden">Fixné zdroje</span>
+            </div>
+            <button type="button" class="bsc-expand-btn" data-target="bsc-flat-section">+</button>
+          </div>
+          <div class="input-hint" style="margin-bottom:8px">
+            <span class="lang-fr">Somme de toutes vos sources fixes. Cliquez + pour entrer les détails.</span>
+            <span class="lang-en hidden">Sum of all your flat sources. Click + to enter individual details.</span>
+            <span class="lang-sk hidden">Súčet všetkých fixných zdrojov. Kliknite + pre zadanie jednotlivých hodnôt.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bsc-flat-quick">
+              <span class="lang-fr">Total fixes</span><span class="lang-en hidden">Flat total</span><span class="lang-sk hidden">Fixný súčet</span>
+            </label>
+            <input class="form-input" type="number" id="bsc-flat-quick" value="0" min="0" step="1" placeholder="ex: 19396300">
+          </div>
+          <div class="bsc-detail hidden" id="bsc-flat-detail">
+            <div class="input-hint" style="margin-bottom:12px">
+              <span class="lang-fr">Valeurs complètes — ex: 19 396 300 pour "19396.3K" en jeu</span>
+              <span class="lang-en hidden">Full numbers — e.g. 19396300 for "19396.3K" in game</span>
+              <span class="lang-sk hidden">Plné hodnoty — napr. 19396300 pre "19396.3K" v hre</span>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Attributs Initiaux</span><span class="lang-en hidden">Initial Attributes</span><span class="lang-sk hidden">Počiatočné atribúty</span>
+                </label>
+                <input class="form-input bsc-flat-input" type="number" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Équipement</span><span class="lang-en hidden">Equip</span><span class="lang-sk hidden">Vybavenie</span>
+                </label>
+                <input class="form-input bsc-flat-input" type="number" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Avancement Aventure</span><span class="lang-en hidden">Adventure Adv.</span><span class="lang-sk hidden">Pokrok v dobrodružstve</span>
+                </label>
+                <input class="form-input bsc-flat-input" type="number" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Enchantement</span><span class="lang-en hidden">Enchant</span><span class="lang-sk hidden">Očarovanie</span>
+                </label>
+                <input class="form-input bsc-flat-input" type="number" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                <span class="lang-fr">Aviaire</span><span class="lang-en hidden">Avian</span><span class="lang-sk hidden">Avian</span>
+              </label>
+              <input class="form-input bsc-flat-input" type="number" value="0" min="0" step="1">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── SECTION 2: Base% Multipliers ── -->
+        <div class="bsc-section" id="bsc-base-section">
+          <div class="bsc-section-header">
+            <div class="section-chip">
+              <span class="lang-fr">Multiplicateurs de Base (%)</span><span class="lang-en hidden">Base % Multipliers</span><span class="lang-sk hidden">Základné % multiplikátory</span>
+            </div>
+            <button type="button" class="bsc-expand-btn" data-target="bsc-base-section">+</button>
+          </div>
+          <div class="input-hint" style="margin-bottom:8px">
+            <span class="lang-fr">Somme totale des % de Base (ex: 129300 pour "129.3K%"). Cliquez + pour le détail.</span>
+            <span class="lang-en hidden">Total sum of Base % (e.g. 129300 for "129.3K%"). Click + for individual sources.</span>
+            <span class="lang-sk hidden">Celkový súčet základných % (napr. 129300 pre "129.3K%"). Kliknite + pre jednotlivé zdroje.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bsc-base-quick">
+              <span class="lang-fr">Total Base %</span><span class="lang-en hidden">Base % total</span><span class="lang-sk hidden">Základ % celkom</span>
+            </label>
+            <input class="form-input" type="number" id="bsc-base-quick" value="0" min="0" step="0.01" placeholder="ex: 129300">
+          </div>
+          <div class="bsc-detail hidden" id="bsc-base-detail">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Familier (%)</span><span class="lang-en hidden">Pal (%)</span><span class="lang-sk hidden">Spoločník (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Compétences (%)</span><span class="lang-en hidden">Skill (%)</span><span class="lang-sk hidden">Schopnosti (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Technologie (%)</span><span class="lang-en hidden">Tech (%)</span><span class="lang-sk hidden">Technológia (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Relique (%)</span><span class="lang-en hidden">Relic (%)</span><span class="lang-sk hidden">Relikvie (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Monture — Base (%)</span><span class="lang-en hidden">Mount — Base (%)</span><span class="lang-sk hidden">Jazdec — Základ (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Artefact — Base (%)</span><span class="lang-en hidden">Artifact — Base (%)</span><span class="lang-sk hidden">Artefakt — Základ (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Parking (%)</span><span class="lang-en hidden">Parking Slot (%)</span><span class="lang-sk hidden">Parkovací slot (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Acc. Dorsal — Base (%)</span><span class="lang-en hidden">Back Acc. — Base (%)</span><span class="lang-sk hidden">Prísl. chrbát — Základ (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Bague (%)</span><span class="lang-en hidden">Ring (%)</span><span class="lang-sk hidden">Prsteň (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Saison Navale — Base (%)</span><span class="lang-en hidden">Sail — Base (%)</span><span class="lang-sk hidden">Námorná sezóna — Základ (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Héros Étoile (%)</span><span class="lang-en hidden">Star Hero (%)</span><span class="lang-sk hidden">Hviezdny hrdina (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Arbre Sacré (%)</span><span class="lang-en hidden">Sacred Tree (%)</span><span class="lang-sk hidden">Posvätný strom (%)</span>
+                </label>
+                <input class="form-input bsc-base-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── SECTION 3: Global% Multipliers ── -->
+        <div class="bsc-section" id="bsc-global-section">
+          <div class="bsc-section-header">
+            <div class="section-chip">
+              <span class="lang-fr">Multiplicateurs Globaux (%)</span><span class="lang-en hidden">Global % Multipliers</span><span class="lang-sk hidden">Globálne % multiplikátory</span>
+            </div>
+            <button type="button" class="bsc-expand-btn" data-target="bsc-global-section">+</button>
+          </div>
+          <div class="input-hint" style="margin-bottom:8px">
+            <span class="lang-fr">Somme totale des % Globaux. Cliquez + pour le détail.</span>
+            <span class="lang-en hidden">Total sum of Global %. Click + for individual sources.</span>
+            <span class="lang-sk hidden">Celkový súčet globálnych %. Kliknite + pre jednotlivé zdroje.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bsc-global-quick">
+              <span class="lang-fr">Total Global %</span><span class="lang-en hidden">Global % total</span><span class="lang-sk hidden">Globálne % celkom</span>
+            </label>
+            <input class="form-input" type="number" id="bsc-global-quick" value="0" min="0" step="0.01" placeholder="ex: 85000">
+          </div>
+          <div class="bsc-detail hidden" id="bsc-global-detail">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Monture — Global (%)</span><span class="lang-en hidden">Mount — Global (%)</span><span class="lang-sk hidden">Jazdec — Globálny (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Artefact — Global (%)</span><span class="lang-en hidden">Artifact — Global (%)</span><span class="lang-sk hidden">Artefakt — Globálny (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Âme (%)</span><span class="lang-en hidden">Soul (%)</span><span class="lang-sk hidden">Duša (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Sceau d'Éveil (%)</span><span class="lang-en hidden">Awaken Seal (%)</span><span class="lang-sk hidden">Pečať prebudenia (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Costume (%)</span><span class="lang-en hidden">Costume (%)</span><span class="lang-sk hidden">Kostým (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Acc. Dorsal — Global (%)</span><span class="lang-en hidden">Back Acc. — Global (%)</span><span class="lang-sk hidden">Prísl. chrbát — Globálny (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Saison Navale — Global (%)</span><span class="lang-en hidden">Sail — Global (%)</span><span class="lang-sk hidden">Námorná sezóna — Globálny (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="lang-fr">Chemin de Divination (%)</span><span class="lang-en hidden">Divining Path (%)</span><span class="lang-sk hidden">Veštecká cesta (%)</span>
+                </label>
+                <input class="form-input bsc-global-input" type="number" value="0" min="0" step="0.01">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Basic Stats Results -->
+      <div class="results-panel sticky-results">
+        <div class="results-header" id="bsc-results-header">
+          ⚔️ <span id="bsc-stat-label">ATK</span> — <span class="lang-fr">Résultat</span><span class="lang-en hidden">Result</span><span class="lang-sk hidden">Výsledok</span>
+        </div>
+        <div class="results-body">
+
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Sources Fixes (somme)</span><span class="lang-en hidden">Flat Sources (sum)</span><span class="lang-sk hidden">Fixné zdroje (súčet)</span></span>
+            <span class="val atk" id="bsc-r-flat">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">% de Base (somme)</span><span class="lang-en hidden">Base % (sum)</span><span class="lang-sk hidden">Základ % (súčet)</span></span>
+            <span class="val" id="bsc-r-basepct">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Facteur de Base</span><span class="lang-en hidden">Base Factor</span><span class="lang-sk hidden">Základný faktor</span></span>
+            <span class="val gold" id="bsc-r-basefactor">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">% Global (somme)</span><span class="lang-en hidden">Global % (sum)</span><span class="lang-sk hidden">Globálne % (súčet)</span></span>
+            <span class="val" id="bsc-r-globalpct">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Facteur Global</span><span class="lang-en hidden">Global Factor</span><span class="lang-sk hidden">Globálny faktor</span></span>
+            <span class="val gold" id="bsc-r-globalfactor">—</span>
+          </div>
+
+          <div class="result-final" style="margin-top:16px">
+            <div class="lbl" id="bsc-r-final-label">
+              <span class="lang-fr">Stat Finale</span><span class="lang-en hidden">Final Stat</span><span class="lang-sk hidden">Finálna štatistika</span>
+            </div>
+            <div class="val" id="bsc-r-final">—</div>
+          </div>
+
+          <div style="margin-top:20px">
+            <div class="result-step-label" style="margin-bottom:8px">
+              <span class="lang-fr">Calcul</span><span class="lang-en hidden">Breakdown</span><span class="lang-sk hidden">Výpočet</span>
+            </div>
+            <div style="font-family:'Courier New',monospace;font-size:0.78rem;color:var(--text-secondary);padding:10px;background:var(--bg-secondary);border-radius:var(--r);line-height:1.8" id="bsc-r-breakdown">—</div>
+          </div>
+
+          <div class="info-box" style="margin-top:16px;font-size:0.8rem">
+            💡 <span>
+              <span class="lang-fr">Mount, Artefact, Acc. Dorsal et Saison Navale comptent dans les deux groupes de multiplicateurs.</span>
+              <span class="lang-en hidden">Mount, Artifact, Back Acc. and Sail Season each count in both multiplier groups.</span>
+              <span class="lang-sk hidden">Jazdec, Artefakt, Prísl. na chrbát a Námorná sezóna sa počítajú v oboch skupinách multiplikátorov.</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:6px">
+    <span class="lang-fr">Site non officiel. Legend of Mushroom est développé par JoyNetwork.</span>
+    <span class="lang-en hidden">Unofficial fan site. Legend of Mushroom is developed by JoyNetwork.</span>
+    <span class="lang-sk hidden">Neoficiálny fanúšikovský web. Legend of Mushroom je vyvíjaný spoločnosťou JoyNetwork.</span>
+  </p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="js/calculator.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Translate <select> options (CSS hidden class doesn't work inside <option>)
+  function updateSelectOptions(lang) {
+    document.querySelectorAll('select[data-opts-fr]').forEach(function(sel) {
+      var opts;
+      if (lang === 'fr') opts = sel.dataset.optsFr.split('|');
+      else if (lang === 'sk' && sel.dataset.optsSk) opts = sel.dataset.optsSk.split('|');
+      else opts = sel.dataset.optsEn.split('|');
+      sel.querySelectorAll('option').forEach(function(opt, i) {
+        if (opts[i] !== undefined) opt.textContent = opts[i];
+      });
+    });
+  }
+
+  // Apply on load and whenever the lang-switcher fires
+  document.addEventListener('DOMContentLoaded', function() {
+    var lang = localStorage.getItem('siteLang') || 'fr';
+    updateSelectOptions(lang);
+    document.querySelectorAll('.lang-switcher button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        updateSelectOptions(btn.dataset.lang);
+      });
+    });
+  });
+</script>
+</body>
+</html>
