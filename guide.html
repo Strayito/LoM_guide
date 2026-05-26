@@ -24,6 +24,7 @@
     <a href="calculator.html" class="nav-link">
       <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
     </a>
+    <a href="data.html" class="nav-link">Data</a>
   </div>
   <div class="lang-switcher" id="langSwitcher">
     <button data-lang="fr">FR</button>
@@ -153,7 +154,7 @@
 
         <div>
           <div class="guide-section">
-            <h3><span class="lang-fr">Système Combo / Riposte</span><span class="lang-en hidden">Combo / Counter System</span><span class="lang-sk hidden">Systém Komba / Protiútoku</span></h3>
+            <h3><span class="lang-fr">Système Combo / Contre-attaque</span><span class="lang-en hidden">Combo / Counter System</span><span class="lang-sk hidden">Systém Komba / Protiútoku</span></h3>
             <div class="tip-list">
               <div class="tip" style="border-left-color:var(--teal)">
                 <span class="tip-icon">💥</span>
@@ -169,9 +170,9 @@
               <div class="tip" style="border-left-color:var(--purple)">
                 <span class="tip-icon">🔄</span>
                 <div>
-                  <strong><span class="lang-fr">Riposte %</span><span class="lang-en hidden">Counter %</span><span class="lang-sk hidden">Protiútok %</span></strong><br>
+                  <strong><span class="lang-fr">Contre-attaque %</span><span class="lang-en hidden">Counter %</span><span class="lang-sk hidden">Protiútok %</span></strong><br>
                   <span style="color:var(--text-secondary);font-size:0.85rem">
-                    <span class="lang-fr">Taux de déclenchement d'une Riposte automatique. La Riposte utilise le Multiplicateur Riposte et ignore la RES Riposte si vous avez Ignore Riposte.</span>
+                    <span class="lang-fr">Taux de déclenchement d'une Contre-attaque automatique. La Contre-attaque utilise le Multiplicateur Contre-attaque et ignore la RES Contre-attaque si vous avez Ignore Contre-attaque.</span>
                     <span class="lang-en hidden">Trigger rate for an automatic Counter. Counter uses the Counter Multiplier and bypasses Counter RES if you have Ignore Counter.</span>
                     <span class="lang-sk hidden">Miera spustenia automatického Protiútoku. Protiútok používa Multiplikátor Protiútoku a obchádza Odolnosť Protiútoku, ak máte Ignorovanie Protiútoku.</span>
                   </span>
@@ -180,7 +181,7 @@
               <div class="tip" style="border-left-color:var(--gold)">
                 <span class="tip-icon">🌐</span>
                 <div>
-                  <strong><span class="lang-fr">Dégâts Combo Globaux</span><span class="lang-en hidden">Global Combo DMG</span><span class="lang-sk hidden">Globálne Kombo DMG</span></strong><br>
+                  <strong><span class="lang-fr">Dégâts Combo/Contre-attaque Globaux</span><span class="lang-en hidden">Global Combo/Counter DMG</span><span class="lang-sk hidden">Globálne Kombo/Protiútok DMG</span></strong><br>
                   <span style="color:var(--text-secondary);font-size:0.85rem">
                     <span class="lang-fr">Augmente tous les dégâts de type Combo. Stat clé pour l'Arbalète. Provient des statues, âmes roses, et runes.</span>
                     <span class="lang-en hidden">Increases all Combo-type damage. Key stat for Archer. Comes from statues, pink souls, and runes.</span>
@@ -197,6 +198,9 @@
               <div class="tip"><span class="tip-icon">🛡️</span><div><strong>DMG RES %</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit tous les dégâts reçus. Appliqué à l'étape Résistance de la formule.</span><span class="lang-en hidden">Reduces all incoming damage. Applied at the Resistance step of the formula.</span><span class="lang-sk hidden">Znižuje všetko prichádzajúce poškodenie. Aplikované v kroku Odolnosť vzorca.</span></span></div></div>
               <div class="tip"><span class="tip-icon">🗡️</span><div><strong>Skill RES / Basic ATK RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Résistance spécifique aux dégâts de compétence ou d'auto-attaque.</span><span class="lang-en hidden">Specific resistance to skill or basic attack damage.</span><span class="lang-sk hidden">Špecifická odolnosť voči poškodeniu od schopností alebo základného útoku.</span></span></div></div>
               <div class="tip"><span class="tip-icon">👾</span><div><strong>Boss DMG / Boss DMG RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Modificateurs spécifiques aux boss. Boss DMG s'applique après le PvE bonus de classe.</span><span class="lang-en hidden">Boss-specific modifiers. Boss DMG applies after the class PvE bonus.</span><span class="lang-sk hidden">Modifikátory špecifické pre bossov. Boss DMG sa aplikuje po triednom PvE bonuse.</span></span></div></div>
+              <div class="tip"><span class="tip-icon">🔵</span><div><strong>Combo RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit les dégâts des Combos ennemis. Stat clé en PvP.</span><span class="lang-en hidden">Reduces incoming Combo damage. Key PvP stat.</span><span class="lang-sk hidden">Znižuje poškodenie od nepriateľských Kombov. Kľúčová PvP štatistika.</span></span></div></div>
+              <div class="tip"><span class="tip-icon">🐾</span><div><strong>Pal RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit les dégâts infligés par les Acolytes ennemis. Stat clé en PvP.</span><span class="lang-en hidden">Reduces damage dealt by enemy Pals. Key PvP stat.</span><span class="lang-sk hidden">Znižuje poškodenie od nepriateľských Palov. Kľúčová PvP štatistika.</span></span></div></div>
+              <div class="tip"><span class="tip-icon">🔄</span><div><strong>Counter RES</strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit les dégâts des Contre-attaques ennemies. Stat clé en PvP.</span><span class="lang-en hidden">Reduces incoming Counter attack damage. Key PvP stat.</span><span class="lang-sk hidden">Znižuje poškodenie od nepriateľských Protiútokov. Kľúčová PvP štatistika.</span></span></div></div>
             </div>
           </div>
         </div>
@@ -373,7 +377,7 @@
         <span class="lang-sk hidden">⚡ Rýchlosť Útoku &amp; Miery Spustenia</span>
       </h2>
       <p style="color:var(--text-secondary);line-height:1.75;margin-top:8px;margin-bottom:16px">
-        <span class="lang-fr">La vitesse d'attaque influence directement le nombre de déclenchements par minute de vos Combos, Ripostes et Esquives. Une vitesse plus élevée = plus de procs = plus de DPS effectif, même sans augmenter votre ATQ.</span>
+        <span class="lang-fr">La vitesse d'attaque influence directement le nombre de déclenchements par minute de vos Combos, Contre-attaques et Esquives. Une vitesse plus élevée = plus de procs = plus de DPS effectif, même sans augmenter votre ATQ.</span>
         <span class="lang-en hidden">Attack speed directly influences how many Combos, Counters, and Evasions trigger per minute. Higher speed = more procs = more effective DPS, even without raising ATK.</span>
         <span class="lang-sk hidden">Rýchlosť útoku priamo ovplyvňuje, koľko Kombov, Protiútokov a Únikov sa spustí za minútu. Vyššia rýchlosť = viac spustení = efektívnejšie DPS, aj bez zvyšovania ATK.</span>
       </p>
@@ -391,6 +395,185 @@
             </span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Additional Stats -->
+    <div class="card" style="margin-top:24px">
+      <h2 style="margin-bottom:20px">
+        <span class="lang-fr">🔧 Statistiques Avancées</span>
+        <span class="lang-en hidden">🔧 Advanced Stats</span>
+        <span class="lang-sk hidden">🔧 Pokročilé štatistiky</span>
+      </h2>
+      <div class="guide-grid">
+
+        <div>
+          <div class="guide-section">
+            <h3>
+              <span class="lang-fr">Contrôle de Foule (CC)</span>
+              <span class="lang-en hidden">Crowd Control (CC)</span>
+              <span class="lang-sk hidden">Kontrola davu (CC)</span>
+            </h3>
+            <div class="tip-list">
+              <div class="tip" style="border-left-color:var(--purple)">
+                <span class="tip-icon">⬇️</span>
+                <div>
+                  <strong><span class="lang-fr">Stun (Down)</span><span class="lang-en hidden">Stun (Down)</span><span class="lang-sk hidden">Stun (Down)</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">% de chance d'étourdir la cible lors d'une auto-attaque, l'immobilisant brièvement.</span>
+                    <span class="lang-en hidden">% chance on normal attack to stun the target, rendering them immobile briefly.</span>
+                    <span class="lang-sk hidden">% šanca pri normálnom útoku stunovať cieľ a imobilizovať ho.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--teal)">
+                <span class="tip-icon">🛡️</span>
+                <div>
+                  <strong><span class="lang-fr">Ignorer Stun</span><span class="lang-en hidden">Ignore Stun</span><span class="lang-sk hidden">Ignorovať Stun</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Réduit la probabilité d'être étourdi par les auto-attaques ennemies.</span>
+                    <span class="lang-en hidden">Reduces the chance of being stunned when hit by a normal attack.</span>
+                    <span class="lang-sk hidden">Znižuje šancu byť stunovaný pri zásahu normálnym útokom.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--orange)">
+                <span class="tip-icon">🚀</span>
+                <div>
+                  <strong><span class="lang-fr">En vol (Launch)</span><span class="lang-en hidden">Airborne (Launch)</span><span class="lang-sk hidden">Vo vzduchu (Launch)</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">% de chance de propulser la cible dans les airs (0,5 s) lors d'une auto-attaque, l'immobilisant.</span>
+                    <span class="lang-en hidden">% chance on normal attack to launch the target into the air for 0.5 s, rendering them immobile.</span>
+                    <span class="lang-sk hidden">% šanca pri normálnom útoku vypustiť cieľ do vzduchu na 0,5 s a imobilizovať ho.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3>
+              <span class="lang-fr">Compétences</span>
+              <span class="lang-en hidden">Skills</span>
+              <span class="lang-sk hidden">Schopnosti</span>
+            </h3>
+            <div class="priority-list">
+              <div class="priority-item">
+                <div class="priority-rank r1">SC</div>
+                <div><strong><span class="lang-fr">Taux de Crit de Compétence</span><span class="lang-en hidden">Skill Crit Rate</span><span class="lang-sk hidden">Miera Krit. Schopnosti</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">% de chance d'infliger un critique additionnel lors de l'activation d'une compétence.</span><span class="lang-en hidden">% chance to deal additional critical damage when a skill is activated.</span><span class="lang-sk hidden">% šanca spôsobiť ďalšie kritické poškodenie pri aktivácii schopnosti.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r2">SD</div>
+                <div><strong><span class="lang-fr">DMG Crit de Compétence</span><span class="lang-en hidden">Skill Crit DMG</span><span class="lang-sk hidden">Krit. DMG Schopnosti</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Coefficient de dégâts supplémentaires lors d'un critique de compétence.</span><span class="lang-en hidden">Additional damage coefficient when a skill critical hit occurs.</span><span class="lang-sk hidden">Ďalší koeficient poškodenia pri kritickom zásahu schopnosti.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r3">SK</div>
+                <div><strong><span class="lang-fr">DMG de Compétence</span><span class="lang-en hidden">Skill DMG</span><span class="lang-sk hidden">DMG Schopnosti</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Coefficient de dégâts de base lors de l'activation d'une compétence.</span><span class="lang-en hidden">Base damage coefficient when a skill is activated.</span><span class="lang-sk hidden">Základný koeficient poškodenia pri aktivácii schopnosti.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r4">RD</div>
+                <div><strong><span class="lang-fr">Réduction DMG de Compétence</span><span class="lang-en hidden">Skill DMG Reduction</span><span class="lang-sk hidden">Zníženie DMG Schopnosti</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Réduit les dégâts reçus par les compétences ennemies.</span><span class="lang-en hidden">Reduces skill damage received from enemies.</span><span class="lang-sk hidden">Znižuje poškodenie schopností od nepriateľov.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r1">CP</div>
+                <div><strong><span class="lang-fr">Combo Acolyte (Pals)</span><span class="lang-en hidden">Pal Combo</span><span class="lang-sk hidden">Kombo Akolyta</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Taux de Combo déclenché par vos Acolytes lors de leurs attaques.</span><span class="lang-en hidden">Combo rate triggered by your Pals when they attack.</span><span class="lang-sk hidden">Miera Komba spusteného vašimi Akolytmi pri útoku.</span></span></div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-rank r2">CR</div>
+                <div><strong><span class="lang-fr">Crit Acolyte (Pals)</span><span class="lang-en hidden">Pal Crit</span><span class="lang-sk hidden">Krit. Akolyta</span></strong> — <span style="color:var(--text-secondary);font-size:0.85rem"><span class="lang-fr">Taux de critique déclenché par vos Acolytes lors de leurs attaques.</span><span class="lang-en hidden">Crit rate triggered by your Pals when they attack.</span><span class="lang-sk hidden">Miera kritického zásahu spusteného vašimi Akolytmi pri útoku.</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="guide-section">
+            <h3>
+              <span class="lang-fr">Régénération &amp; Soin</span>
+              <span class="lang-en hidden">Regen &amp; Healing</span>
+              <span class="lang-sk hidden">Regenerácia &amp; Liečenie</span>
+            </h3>
+            <div class="tip-list">
+              <div class="tip" style="border-left-color:var(--teal)">
+                <span class="tip-icon">❤️</span>
+                <div>
+                  <strong><span class="lang-fr">Récupération (Recovery)</span><span class="lang-en hidden">Recovery</span><span class="lang-sk hidden">Zotavenie</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Restaure un % des PV maximum chaque seconde. Régénération passive continue.</span>
+                    <span class="lang-en hidden">Restores a % of max HP every second. Passive continuous regeneration.</span>
+                    <span class="lang-sk hidden">Obnovuje % maximálnych HP každú sekundu. Pasívna nepretržitá regenerácia.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--gold)">
+                <span class="tip-icon">🩹</span>
+                <div>
+                  <strong><span class="lang-fr">Taux de Soin (Cure Rate)</span><span class="lang-en hidden">Cure Rate</span><span class="lang-sk hidden">Miera Liečenia</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">% de chance de déclencher un soin lors d'une auto-attaque.</span>
+                    <span class="lang-en hidden">% chance to trigger healing on a normal attack.</span>
+                    <span class="lang-sk hidden">% šanca spustiť liečenie pri normálnom útoku.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--gold)">
+                <span class="tip-icon">💊</span>
+                <div>
+                  <strong><span class="lang-fr">Quantité de Soin (Healing Amount)</span><span class="lang-en hidden">Healing Amount</span><span class="lang-sk hidden">Množstvo Liečenia</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">% des PV max restaurés lorsque le soin se déclenche.</span>
+                    <span class="lang-en hidden">% of max HP restored when healing triggers.</span>
+                    <span class="lang-sk hidden">% maximálnych HP obnovených pri aktivácii liečenia.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3>
+              <span class="lang-fr">Utilitaire</span>
+              <span class="lang-en hidden">Utility</span>
+              <span class="lang-sk hidden">Utilita</span>
+            </h3>
+            <div class="tip-list">
+              <div class="tip">
+                <span class="tip-icon">⚡</span>
+                <div>
+                  <strong><span class="lang-fr">DMG Allié</span><span class="lang-en hidden">Ally DMG</span><span class="lang-sk hidden">DMG Spojenca</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Augmente les dégâts infligés par vos alliés. Stat de soutien clé en contenu de guilde.</span>
+                    <span class="lang-en hidden">Increases damage dealt by allies. Key support stat in guild content.</span>
+                    <span class="lang-sk hidden">Zvyšuje poškodenie spojencov. Kľúčová podpôrná štatistika v obsahu cechu.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip">
+                <span class="tip-icon">🛡️</span>
+                <div>
+                  <strong><span class="lang-fr">Réduction DMG Allié</span><span class="lang-en hidden">Ally DMG Reduction</span><span class="lang-sk hidden">Zníženie DMG Spojenca</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Réduit les dégâts reçus par vos alliés. Vital en contenu de guilde et co-op.</span>
+                    <span class="lang-en hidden">Reduces damage taken by allies. Vital in guild and co-op content.</span>
+                    <span class="lang-sk hidden">Znižuje poškodenie prijímané spojencami. Kľúčové v obsahu cechu a kooperácii.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="tip" style="border-left-color:var(--red)">
+                <span class="tip-icon">🚫</span>
+                <div>
+                  <strong><span class="lang-fr">Désarmer (Disarm)</span><span class="lang-en hidden">Disarm</span><span class="lang-sk hidden">Odzbrojiť (Disarm)</span></strong><br>
+                  <span style="color:var(--text-secondary);font-size:0.85rem">
+                    <span class="lang-fr">Annule les auto-attaques de la cible. L'une des mécaniques de contrôle les plus rares du jeu.</span>
+                    <span class="lang-en hidden">Nullifies the target's normal attacks. One of the rarest control mechanics in the game.</span>
+                    <span class="lang-sk hidden">Anuluje normálne útoky cieľa. Jedna z najvzácnejších ovládacích mechaník v hre.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -637,7 +820,7 @@
                   <span class="tip-icon">☀️</span>
                   <div>
                     <strong><span class="lang-fr">Poursuite Solaire (actif)</span><span class="lang-en hidden">Solar Pursuit (active)</span><span class="lang-sk hidden">Solárna Honba (aktívna)</span></strong><br>
-                    <span class="lang-fr">Ignore complètement l'évasion des bosses et garantit 100% de précision par auto-attaque. Inflige des dégâts de zone et réduit la réduction des dégâts de combo des cibles.</span>
+                    <span class="lang-fr">Ignore complètement l'évasion des boss et garantit 100% de précision par auto-attaque. Inflige des dégâts de zone et réduit la réduction des dégâts de combo des cibles.</span>
                     <span class="lang-en hidden">Completely ignores boss evasion and guarantees 100% hit rate on auto-attacks. Deals AoE damage and reduces target combo damage reduction.</span>
                     <span class="lang-sk hidden">Úplne ignoruje únik bossov a zaručuje 100% mieru zásahu pri auto-útokoch. Spôsobuje AoE poškodenie a znižuje redukciu kombo poškodenia cieľa.</span>
                   </div>
@@ -710,7 +893,7 @@
                   <span class="tip-icon">💠</span>
                   <div>
                     <strong><span class="lang-fr">Set DPS principal</span><span class="lang-en hidden">Main DPS Set</span><span class="lang-sk hidden">Hlavný DPS Set</span></strong><br>
-                    <span class="lang-fr">Le set qui effectue le plus de dommages par seconde. À utiliser par défaut pour toutes les situations. Montez chaque pièce au niveau maximum disponible.</span>
+                    <span class="lang-fr">Le set qui effectue le plus de dégâts par seconde. À utiliser par défaut pour toutes les situations. Montez chaque pièce au niveau maximum disponible.</span>
                     <span class="lang-en hidden">The set with the highest damage per second. Use by default for all situations. Level each piece to the maximum available.</span>
                     <span class="lang-sk hidden">Set s najvyšším poškodením za sekundu. Predvolene použite pre všetky situácie. Úrovňujte každý kus na maximálnu dostupnú úroveň.</span>
                   </div>
@@ -719,7 +902,7 @@
                   <span class="tip-icon">🔄</span>
                   <div>
                     <strong><span class="lang-fr">Variante Boss (Smile / Serpent / Dragon) :</span><span class="lang-en hidden">Boss Variant (Smile / Serpent / Dragon):</span><span class="lang-sk hidden">Varianta Boss (Smile / Serpent / Dragon):</span></strong><br>
-                    <span class="lang-fr">Si vous manquez de dommages et avez encore du temps de combat, remplacez la <strong>Spore Spatio Temporelle</strong> par la <strong>Spore Surpuissante</strong> !</span>
+                    <span class="lang-fr">Si vous manquez de dégâts et avez encore du temps de combat, remplacez la <strong>Spore Spatio Temporelle</strong> par la <strong>Spore Surpuissante</strong> !</span>
                     <span class="lang-en hidden">If you lack damage but still have combat time, swap <strong>Spore Spatio Temporelle</strong> for <strong>Spore Surpuissante</strong>!</span>
                     <span class="lang-sk hidden">Ak vám chýba poškodenie, ale ešte máte čas bojov, vymeňte <strong>Spore Spatio Temporelle</strong> za <strong>Spore Surpuissante</strong>!</span>
                   </div>
@@ -791,7 +974,7 @@
               </h3>
               <div class="card" style="margin-top:0;padding:18px;border-left:2px solid var(--teal)">
                 <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.65;margin-bottom:12px">
-                  <span class="lang-fr">Les parchemins et les âmes doivent être en concordance. Le ratio d'ATK est plus intéressant avec les parchemins. Donc maximisez l'ATK avec les parchemins et mettez suffisamment pour les dommages critiques. Avec les âmes roses, négligez l'âme ATK globale pour prioriser COMBO et BOSS.</span>
+                  <span class="lang-fr">Les parchemins et les âmes doivent être en concordance. Le ratio d'ATK est plus intéressant avec les parchemins. Donc maximisez l'ATK avec les parchemins et mettez suffisamment pour les dégâts critiques. Avec les âmes roses, négligez l'âme ATK globale pour prioriser COMBO et BOSS.</span>
                   <span class="lang-en hidden">Scrolls and souls must complement each other. The ATK ratio is more efficient on scrolls. Maximize ATK on scrolls while putting sufficient points into Crit DMG. With pink souls, skip the Global ATK soul to prioritize COMBO and BOSS souls.</span>
                   <span class="lang-sk hidden">Zvitky a duše musia byť v súlade. Pomer ATK je efektívnejší na zvitky. Maximalizujte ATK na zvitky a vložte dostatok bodov do Krit. Poškodenia. S ružovými dušami preskočte Globálnu ATK dušu a uprednostnite COMBO a BOSS duše.</span>
                 </p>
@@ -954,12 +1137,12 @@
               <img src="assets/image/lom/avian_michelle.png" alt="Michelle" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
               <div class="avian-name">🐾 Michelle</div>
               <p>
-                <span class="lang-fr">Pour tous les 50 instances de dommages, l'adversaire se fait stun pendant 0.5s.</span>
+                <span class="lang-fr">Pour tous les 50 instances de dégâts, l'adversaire se fait stun pendant 0.5s.</span>
                 <span class="lang-en hidden">Every 50 damage instances, stuns the opponent for 0.5s.</span>
                 <span class="lang-sk hidden">Každých 50 prípadov poškodenia omráči súpera na 0.5s.</span>
               </p>
               <div class="best-for">
-                ✅ <span class="lang-fr">Idéal pour débuter, ou contre des bosses avec peu de PV mais beaucoup de dommages. Suffisant pour tout tuer si votre force de frappe est assez haute.</span>
+                ✅ <span class="lang-fr">Idéal pour débuter, ou contre des boss avec peu de PV mais beaucoup de dégâts. Suffisant pour tout tuer si votre force de frappe est assez haute.</span>
                 <span class="lang-en hidden">Best for early game, or bosses with low HP but high damage. Good if your damage output is high enough to finish the fight.</span>
                 <span class="lang-sk hidden">Ideálne pre začiatok hry, alebo proti bossom s málo PZ ale vysokým poškodením. Postačuje na zabitie všetkého ak je vaša sila útoku dostatočne vysoká.</span>
               </div>
@@ -973,7 +1156,7 @@
                 <span class="lang-sk hidden">Urýchli všetky zručnosti o 25% počas 5 sekúnd súčasne.</span>
               </p>
               <div class="best-for">
-                ⚖️ <span class="lang-fr">Le plus stable en PVE. Hybride parfait entre vagues et bosses — utilisez-le si vous hésitez sur la situation.</span>
+                ⚖️ <span class="lang-fr">Le plus stable en PVE. Hybride parfait entre vagues et boss — utilisez-le si vous hésitez sur la situation.</span>
                 <span class="lang-en hidden">Most stable in PVE. Perfect hybrid between waves and bosses — use when unsure about the situation.</span>
                 <span class="lang-sk hidden">Najstabilnejší v PVE. Dokonalý hybrid medzi vlnami a bossmi — použite ho keď si nie ste istí situáciou.</span>
               </div>
@@ -982,12 +1165,12 @@
               <img src="assets/image/lom/avian_firefly.png" alt="Luciole" style="width:72px;height:72px;object-fit:contain;margin-bottom:8px;border-radius:8px">
               <div class="avian-name">🌟 Luciole <span style="font-size:0.75rem;color:var(--text-secondary)">(<span class="lang-fr">Firefly</span><span class="lang-en hidden">Firefly</span>)</span></div>
               <p>
-                <span class="lang-fr">Réduit la résistance aux dommages de l'adversaire de 15% pendant 5 secondes.</span>
+                <span class="lang-fr">Réduit la résistance aux dégâts de l'adversaire de 15% pendant 5 secondes.</span>
                 <span class="lang-en hidden">Reduces enemy DMG resistance by 15% for 5 seconds.</span>
                 <span class="lang-sk hidden">Znižuje odolnosť súpera voči poškodeniu o 15% počas 5 sekúnd.</span>
               </p>
               <div class="best-for">
-                🏆 <span class="lang-fr">L'animal volant qui confère le plus de DPS lorsque vous tapez sans votre clone. Monstrueux contre les bosses.</span>
+                🏆 <span class="lang-fr">L'animal volant qui confère le plus de DPS lorsque vous tapez sans votre clone. Monstrueux contre les boss.</span>
                 <span class="lang-en hidden">The avian that gives the most DPS when attacking without your clone. Monstrous against bosses.</span>
                 <span class="lang-sk hidden">Avian, ktorý dáva najviac DPS keď útočíte bez vášho klonu. Monstruózny proti bossom.</span>
               </div>
@@ -1166,7 +1349,8 @@
   <p style="margin-top:10px">
     <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
     <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
-    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data.html">Data</a>
   </p>
 </footer>
 

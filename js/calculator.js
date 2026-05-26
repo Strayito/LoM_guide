@@ -1,355 +1,644 @@
-'use strict';
+(function () {
+  'use strict';
 
-// ─── i18n helper ────────────────────────────────────────────────────────────
-function getLang() {
-  return localStorage.getItem('siteLang') || 'fr';
-}
-function t(fr, en, sk) {
-  var lang = getLang();
-  if (lang === 'sk' && sk) return sk;
-  return lang === 'fr' ? fr : en;
-}
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function n(id) { return document.getElementById(id); }
+  function parseK(s){var u=String(s).trim().replace(/\s/g,'').toUpperCase();if(u.endsWith('K'))return(parseFloat(u)||0)*1e3;if(u.endsWith('B'))return(parseFloat(u)||0)*1e6;return parseFloat(u)||0;}
+  function v(id){return parseK(n(id).value);}
+  function isChecked(id) { return n(id).checked; }
+  function fmt(x){var a=Math.abs(x);if(a>=1e6)return(x/1e6).toFixed(2)+'B';if(a>=1e3)return(x/1e3).toFixed(2)+'K';return x.toFixed(2);}
+  function fmtDec(x, d) { return x.toFixed(d === undefined ? 2 : d); }
 
-// ─── Stat Calculator ───────────────────────────────────────────────────────
-
-function calcStat(finalBase, parkingAdditional, isParking, totalBuffDebuff, exclusiveBonus) {
-  var parkingFactor = isParking ? (100 + parkingAdditional) / 100 : 1;
-  var buffFactor    = (100 + totalBuffDebuff) / 100;
-  return finalBase * parkingFactor * buffFactor + exclusiveBonus;
-}
-
-function updateStatCalc() {
-  var isParking = document.getElementById('sc-parking').checked;
-
-  var finalATK  = parseFloat(document.getElementById('sc-finalATK').value)  || 0;
-  var finalDEF  = parseFloat(document.getElementById('sc-finalDEF').value)  || 0;
-  var parkingPct = parseFloat(document.getElementById('sc-parkingPct').value) || 0;
-  var buffPct    = parseFloat(document.getElementById('sc-buffDebuff').value)  || 0;
-  var exclATK    = parseFloat(document.getElementById('sc-exclATK').value)    || 0;
-  var exclDEF    = parseFloat(document.getElementById('sc-exclDEF').value)    || 0;
-
-  var calcATK = calcStat(finalATK, parkingPct, isParking, buffPct, exclATK);
-  var calcDEF = calcStat(finalDEF, parkingPct, isParking, buffPct, exclDEF);
-
-  document.getElementById('sc-out-atk').textContent = Math.round(calcATK).toLocaleString();
-  document.getElementById('sc-out-def').textContent = Math.round(calcDEF).toLocaleString();
-
-  // formula breakdown
-  var pStr = isParking ? '× ' + ((100 + parkingPct) / 100).toFixed(4) : '× 1';
-  document.getElementById('sc-breakdown-atk').textContent =
-    finalATK + ' ' + pStr + ' × ' + ((100 + buffPct) / 100).toFixed(4) + ' + ' + exclATK + ' = ' + Math.round(calcATK).toLocaleString();
-  document.getElementById('sc-breakdown-def').textContent =
-    finalDEF + ' ' + pStr + ' × ' + ((100 + buffPct) / 100).toFixed(4) + ' + ' + exclDEF + ' = ' + Math.round(calcDEF).toLocaleString();
-}
-
-// ─── Damage Calculator ──────────────────────────────────────────────────────
-
-function updateDmgCalc() {
-  // ATK inputs
-  var atkBase     = parseFloat(document.getElementById('dc-atkBase').value)     || 0;
-  var atkIsParking= document.getElementById('dc-atkParking').checked;
-  var atkParkPct  = parseFloat(document.getElementById('dc-atkParkPct').value)  || 0;
-  var atkBuffPct  = parseFloat(document.getElementById('dc-atkBuff').value)     || 0;
-  var atkExcl     = parseFloat(document.getElementById('dc-atkExcl').value)     || 0;
-
-  // DEF inputs
-  var defBase     = parseFloat(document.getElementById('dc-defBase').value)     || 0;
-  var defIsParking= document.getElementById('dc-defParking').checked;
-  var defParkPct  = parseFloat(document.getElementById('dc-defParkPct').value)  || 0;
-  var defBuffPct  = parseFloat(document.getElementById('dc-defBuff').value)     || 0;
-  var defExcl     = parseFloat(document.getElementById('dc-defExcl').value)     || 0;
-
-  // Final Multiplier inputs
-  var skillMult   = parseFloat(document.getElementById('dc-skillMult').value)   || 0;
-  var buffAdd     = parseFloat(document.getElementById('dc-buffAdd').value)     || 0;
-  var buffMultPct = parseFloat(document.getElementById('dc-buffMult').value)    || 0;
-  var buffExclPct = parseFloat(document.getElementById('dc-buffExcl').value)    || 0;
-  var dmgMultPct  = parseFloat(document.getElementById('dc-dmgMult').value)     || 100;
-
-  // Attack type
-  var atkType     = document.getElementById('dc-atkType').value;
-
-  // Crit inputs
-  var critMult    = parseFloat(document.getElementById('dc-critMult').value)    || 100;
-  var critRES     = parseFloat(document.getElementById('dc-critRES').value)     || 100;
-
-  // Skill Crit inputs
-  var skillCritMult = parseFloat(document.getElementById('dc-skillCritMult').value) || 0;
-
-  // Resistance inputs
-  var someRES     = parseFloat(document.getElementById('dc-someRES').value)     || 0;
-  var dmgRES      = parseFloat(document.getElementById('dc-dmgRES').value)      || 0;
-  var buffFinalPct= parseFloat(document.getElementById('dc-buffFinal').value)   || 0;
-
-  // Context
-  var context     = document.getElementById('dc-context').value;
-  var pvpDecrease = parseFloat(document.getElementById('dc-pvpDecrease').value) || 1;
-  var playerClass = document.getElementById('dc-class').value;
-  var bossDmgRES  = parseFloat(document.getElementById('dc-bossDmgRES').value)  || 0;
-  var bossDmgPct  = parseFloat(document.getElementById('dc-bossDmgPct').value)  || 0;
-
-  // ── Step 1: Calculated ATK & DEF ──
-  var calcATK = calcStat(atkBase, atkParkPct, atkIsParking, atkBuffPct, atkExcl);
-  var calcDEF = calcStat(defBase, defParkPct, defIsParking, defBuffPct, defExcl);
-
-  // ── Step 2 part A: Final Multiplier ──
-  var finalMult = (skillMult + buffAdd) / 100 * (100 + buffMultPct) / 100 + buffExclPct / 100;
-
-  // ── Step 2: Base Damage A ──
-  var spread = Math.max(0, calcATK - calcDEF);
-  var A = spread * finalMult * dmgMultPct / 100;
-
-  // ── Step 3: Crit / Skill Crit ──
-  var B = A;
-  var critLabel = t('Normal (sans crit)', 'Normal (no crit)', 'Normálny (bez kritu)');
-  if (atkType === 'crit') {
-    B = A * (critMult / 100) / (critRES / 100);
-    critLabel = t('Dégâts Critique', 'Crit DMG', 'Kritické poškodenie');
-  } else if (atkType === 'skillcrit') {
-    var base = A * (1 + skillCritMult / 100);
-    B = Math.pow(Math.max(0, base), 0.98);
-    critLabel = t('Crit. Compétence', 'Skill Crit DMG', 'Krit. schopnosti');
+  // ── i18n ─────────────────────────────────────────────────────────────────────
+  function getLang() { return localStorage.getItem('siteLang') || 'fr'; }
+  var i18n = {
+    noEntries:  { fr: 'Aucune entrée sauvegardée', en: 'No saved entries', sk: 'Žiadne uložené záznamy' },
+    unpin:      { fr: 'Désépingler', en: 'Unpin', sk: 'Odopnúť' },
+    pin:        { fr: 'Épingler', en: 'Pin', sk: 'Pripnúť' },
+    pinCompare: { fr: 'Épingler pour comparer', en: 'Pin to compare', sk: 'Pripnúť pre porovnanie' },
+    delete:     { fr: 'Supprimer', en: 'Delete', sk: 'Vymazať' },
+    comparison: { fr: '📊 Comparaison', en: '📊 Comparison', sk: '📊 Porovnanie' },
+    pinned:     { fr: '📌 Épinglé', en: '📌 Pinned', sk: '📌 Pripnuté' },
+    current:    { fr: '🔵 Actuel', en: '🔵 Current', sk: '🔵 Aktuálne' }
+  };
+  function t(key) { var l = getLang(); return (i18n[key] && i18n[key][l]) || i18n[key].fr; }
+  function fmtDate(ts) {
+    var locales = { fr: 'fr-FR', en: 'en-GB', sk: 'sk-SK' };
+    var loc = locales[getLang()] || 'fr-FR';
+    var d = new Date(ts);
+    return d.toLocaleDateString(loc) + ' ' + d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' });
   }
 
-  // ── Step 4: Resistance → C ──
-  var C = B * (100 - someRES) / 100 * (100 - dmgRES) / 100 * (100 + buffFinalPct) / 100;
-
-  // ── Step 5: Final DMG ──
-  var finalDmg = 0;
-  var finalLabel = '';
-  var pveBonusLabels = { sword: '×1.10 (Sword)', axe: '×1.05 (Axe)', magic: '×1.00 (Magic)' };
-  var pveBonusValues = { sword: 1.10, axe: 1.05, magic: 1.00 };
-
-  if (context === 'pvp') {
-    finalDmg   = C / Math.max(0.01, pvpDecrease);
-    finalLabel = t('Dégâts PvP = C ÷ ', 'PvP DMG = C ÷ ', 'PvP Poškodenie = C ÷ ') + pvpDecrease.toFixed(2);
-  } else if (context === 'pve') {
-    var pveMult = pveBonusValues[playerClass] || 1.0;
-    finalDmg   = C * pveMult;
-    finalLabel = t('Dégâts PvE = C × ', 'PvE DMG = C × ', 'PvE Poškodenie = C × ') + pveBonusLabels[playerClass];
-  } else if (context === 'boss') {
-    var pveMult2 = pveBonusValues[playerClass] || 1.0;
-    var pveDmg   = C * pveMult2;
-    var fromBoss = C * (100 - bossDmgRES) / 100;
-    var toBoss   = pveDmg * (100 + bossDmgPct) / 100;
-    document.getElementById('dc-r-final-label').textContent = t('Vers Boss', 'To Boss DMG', 'Poškodenie Bossa');
-    document.getElementById('dc-r-final-val').textContent   = Math.round(toBoss).toLocaleString();
-    document.getElementById('dc-r-boss-row').style.display  = 'block';
-    document.getElementById('dc-r-fromboss').textContent    = Math.round(fromBoss).toLocaleString();
-    document.getElementById('dc-r-toboss').textContent      = Math.round(toBoss).toLocaleString();
-
-    finalDmg   = toBoss;
-    finalLabel = t('Vers Boss = PvE × (100 + Boss DMG%) / 100', 'To Boss DMG = PvE × (100 + Boss DMG%) / 100', 'Poškodenie Bossa = PvE × (100 + Boss DMG%) / 100');
-  }
-
-  if (context !== 'boss') {
-    document.getElementById('dc-r-boss-row').style.display = 'none';
-    document.getElementById('dc-r-final-label').textContent = context === 'pvp' ? t('Dégâts PvP', 'PvP DMG', 'PvP Poškodenie') : t('Dégâts PvE', 'PvE DMG', 'PvE Poškodenie');
-    document.getElementById('dc-r-final-val').textContent   = Math.round(finalDmg).toLocaleString();
-  }
-
-  // Update result elements
-  document.getElementById('dc-r-atk').textContent       = Math.round(calcATK).toLocaleString();
-  document.getElementById('dc-r-def').textContent       = Math.round(calcDEF).toLocaleString();
-  document.getElementById('dc-r-spread').textContent    = Math.round(spread).toLocaleString();
-  document.getElementById('dc-r-finalmult').textContent = finalMult.toFixed(4);
-  document.getElementById('dc-r-A').textContent         = Math.round(A).toLocaleString();
-  document.getElementById('dc-r-crittype').textContent  = critLabel;
-  document.getElementById('dc-r-B').textContent         = Math.round(B).toLocaleString();
-  document.getElementById('dc-r-C').textContent         = Math.round(C).toLocaleString();
-}
-
-// ─── Basic Stats Calculator ─────────────────────────────────────────────────
-
-function getActiveStat() {
-  var btn = document.querySelector('.bsc-type-btn.active');
-  return btn ? btn.dataset.stat : 'atk';
-}
-
-function sumInputs(selector) {
-  var sum = 0;
-  document.querySelectorAll(selector).forEach(function(el) {
-    sum += parseFloat(el.value) || 0;
-  });
-  return sum;
-}
-
-function updateBasicStats() {
-  var sections = [
-    { key: 'flat',   cls: '.bsc-flat-input',   quickId: 'bsc-flat-quick' },
-    { key: 'base',   cls: '.bsc-base-input',   quickId: 'bsc-base-quick' },
-    { key: 'global', cls: '.bsc-global-input', quickId: 'bsc-global-quick' }
-  ];
-  var totals = {};
-
-  sections.forEach(function(s) {
-    var section = document.getElementById('bsc-' + s.key + '-section');
-    var quickEl = document.getElementById(s.quickId);
-    if (section && section.classList.contains('expanded')) {
-      var sum = sumInputs(s.cls);
-      if (quickEl) quickEl.value = sum;
-      totals[s.key] = sum;
-    } else {
-      totals[s.key] = parseFloat(quickEl ? quickEl.value : 0) || 0;
-    }
-  });
-
-  var flatSum    = totals.flat;
-  var baseSum    = totals.base;
-  var globalSum  = totals.global;
-  var baseFactor = 1 + baseSum   / 100;
-  var glbFactor  = 1 + globalSum / 100;
-  var final      = flatSum * baseFactor * glbFactor;
-
-  var stat = getActiveStat();
-  var icons = { atk: '⚔️', hp: '❤️', def: '🛡️' };
-  var header = document.getElementById('bsc-results-header');
-  if (header) header.firstChild.textContent = icons[stat] + ' ';
-
-  var labelEl = document.getElementById('bsc-stat-label');
-  if (labelEl) labelEl.textContent = stat.toUpperCase();
-
-  var rVal = document.getElementById('bsc-r-final');
-  if (rVal) {
-    rVal.className = 'val ' + (stat === 'atk' ? 'atk' : stat === 'def' ? 'def' : '');
-  }
-
-  function set(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; }
-  set('bsc-r-flat',         Math.round(flatSum).toLocaleString());
-  set('bsc-r-basepct',      baseSum.toFixed(2) + '%');
-  set('bsc-r-basefactor',   baseFactor.toFixed(4));
-  set('bsc-r-globalpct',    globalSum.toFixed(2) + '%');
-  set('bsc-r-globalfactor', glbFactor.toFixed(4));
-  set('bsc-r-final',        Math.round(final).toLocaleString());
-  set('bsc-r-breakdown',
-    Math.round(flatSum).toLocaleString() +
-    ' × ' + baseFactor.toFixed(4) +
-    ' × ' + glbFactor.toFixed(4) +
-    ' = ' + Math.round(final).toLocaleString());
-}
-
-function toggleBscSection(sectionId) {
-  var section = document.getElementById(sectionId);
-  if (!section) return;
-  var key = sectionId.replace('bsc-', '').replace('-section', '');
-  var detail = document.getElementById('bsc-' + key + '-detail');
-  var expanded = section.classList.toggle('expanded');
-  if (detail) detail.classList.toggle('hidden', !expanded);
-  updateBasicStats();
-}
-
-// ─── Visibility toggles ─────────────────────────────────────────────────────
-
-function toggleSection(id, show) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle('hidden',  !show);
-  el.classList.toggle('visible',  show);
-}
-
-// ─── Init ───────────────────────────────────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', function() {
-
-  // Hamburger nav
-  var hamburger = document.getElementById('hamburger');
-  if (hamburger) {
-    hamburger.addEventListener('click', function() {
-      document.getElementById('navLinks').classList.toggle('open');
-    });
-  }
-
-  // Tab system
-  document.querySelectorAll('[data-tab]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var group = btn.closest('[role="tablist"]') || btn.parentElement;
-      group.querySelectorAll('[data-tab]').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var tabId = 'tab-' + btn.dataset.tab;
-      document.querySelectorAll('.tab-content').forEach(function(c) {
-        if (c.id === tabId) c.classList.add('active');
-        else c.classList.remove('active');
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  function initTabs() {
+    const tabs = document.getElementById('calcTabs');
+    if (!tabs) return;
+    tabs.addEventListener('click', function (e) {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      const tab = btn.dataset.tab;
+      tabs.querySelectorAll('.tab-btn').forEach(function (b) {
+        b.classList.toggle('active', b === btn);
+      });
+      document.querySelectorAll('.tab-content').forEach(function (t) {
+        t.classList.toggle('active', t.id === 'tab-' + tab);
       });
     });
-  });
+  }
 
-  // Stat Calculator live update
-  document.querySelectorAll('#stat-calc-form input').forEach(function(el) {
-    el.addEventListener('input', updateStatCalc);
-  });
-  updateStatCalc();
+  // ── Stat Calculator (sc-*) ────────────────────────────────────────────────
+  function calcStats() {
+    var base = v('sc-finalATK');
+    var defBase = v('sc-finalDEF');
+    var parking = isChecked('sc-parking');
+    var parkPct = parking ? v('sc-parkingPct') : 0;
+    var buff = v('sc-buffDebuff');
+    var exclATK = v('sc-exclATK');
+    var exclDEF = v('sc-exclDEF');
 
-  // Parking toggle → show/hide parking %
-  var scParking = document.getElementById('sc-parking');
-  if (scParking) {
-    scParking.addEventListener('change', function() {
-      toggleSection('sc-parking-section', scParking.checked);
-      updateStatCalc();
+    var atk = (base * (1 + parkPct / 100)) * (1 + buff / 100) + exclATK;
+    var def = (defBase * (1 + parkPct / 100)) * (1 + buff / 100) + exclDEF;
+
+    n('sc-out-atk').textContent = fmt(atk);
+    n('sc-out-def').textContent = fmt(def);
+
+    scCurrentResult = { atk: Math.round(atk), def: Math.round(def), ts: Date.now() };
+    scRenderCompare();
+
+    var brkATK = fmt(base);
+    if (parkPct) brkATK += ' × ' + fmtDec(1 + parkPct / 100, 4);
+    if (buff !== 0) brkATK += ' × ' + fmtDec(1 + buff / 100, 4);
+    if (exclATK) brkATK += ' + ' + fmt(exclATK);
+    brkATK += ' = ' + fmt(atk);
+    n('sc-breakdown-atk').textContent = brkATK;
+
+    var brkDEF = fmt(defBase);
+    if (parkPct) brkDEF += ' × ' + fmtDec(1 + parkPct / 100, 4);
+    if (buff !== 0) brkDEF += ' × ' + fmtDec(1 + buff / 100, 4);
+    if (exclDEF) brkDEF += ' + ' + fmt(exclDEF);
+    brkDEF += ' = ' + fmt(def);
+    n('sc-breakdown-def').textContent = brkDEF;
+  }
+
+  // ── Stat Calculator — Save / Compare ─────────────────────────────────────
+  var SC_KEY = 'sc_history';
+  var SC_MAX = 10;
+  var scPinned = null;
+  var scCurrentResult = null;
+
+  function scLoadHistory() {
+    try { return JSON.parse(localStorage.getItem(SC_KEY)) || []; } catch (e) { return []; }
+  }
+
+  function scSave() {
+    if (!scCurrentResult) return;
+    var entry = Object.assign({}, scCurrentResult, { ts: Date.now() });
+    var hist = scLoadHistory();
+    hist.unshift(entry);
+    if (hist.length > SC_MAX) hist.pop();
+    localStorage.setItem(SC_KEY, JSON.stringify(hist));
+    scRenderHistory();
+  }
+
+  function scRenderHistory() {
+    var list = n('sc-history-list');
+    if (!list) return;
+    var hist = scLoadHistory();
+    if (!hist.length) {
+      list.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:16px 0">' + t('noEntries') + '</div>';
+      return;
+    }
+    list.innerHTML = hist.map(function (e, i) {
+      var ds = fmtDate(e.ts);
+      var pinned = scPinned && scPinned.ts === e.ts;
+      return '<div class="yk-history-entry' + (pinned ? ' yk-pinned' : '') + '">'
+        + '<div class="yk-entry-info"><span class="yk-entry-label">ATK ' + fmt(e.atk) + ' / DEF ' + fmt(e.def) + '</span><span class="yk-entry-date">' + ds + '</span></div>'
+        + '<div class="yk-entry-actions">'
+        + '<button class="yk-action-btn sc-pin-btn" data-i="' + i + '" title="' + (pinned ? t('unpin') : t('pin')) + '">📌</button>'
+        + '<button class="yk-action-btn sc-del-btn" data-i="' + i + '" title="' + t('delete') + '">🗑️</button>'
+        + '</div></div>';
+    }).join('');
+
+    list.querySelectorAll('.sc-pin-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.dataset.i);
+        var h = scLoadHistory();
+        scPinned = (scPinned && scPinned.ts === h[idx].ts) ? null : h[idx];
+        scRenderHistory();
+        scRenderCompare();
+      });
+    });
+    list.querySelectorAll('.sc-del-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.dataset.i);
+        var h = scLoadHistory();
+        if (scPinned && scPinned.ts === h[idx].ts) scPinned = null;
+        h.splice(idx, 1);
+        localStorage.setItem(SC_KEY, JSON.stringify(h));
+        scRenderHistory();
+        scRenderCompare();
+      });
     });
   }
 
-  // Damage Calculator live update
-  document.querySelectorAll('#dmg-calc-form input, #dmg-calc-form select').forEach(function(el) {
-    el.addEventListener('input', updateDmgCalc);
-    el.addEventListener('change', updateDmgCalc);
-  });
+  function scRenderCompare() {
+    var panel = n('sc-compare-panel');
+    if (!panel) return;
+    if (!scPinned || !scCurrentResult) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+    var cur = scCurrentResult;
+    var pin = scPinned;
+    var dAtk = cur.atk - pin.atk, dDef = cur.def - pin.def;
+    var dAtkPct = pin.atk ? fmtDec(dAtk / pin.atk * 100, 1) : '—';
+    var dDefPct = pin.def ? fmtDec(dDef / pin.def * 100, 1) : '—';
+    function row(lbl, pv, cv, d, dp) {
+      var col = d >= 0 ? 'var(--teal)' : '#e05c6f';
+      var sign = d >= 0 ? '+' : '';
+      return '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.84rem">'
+        + '<span style="color:var(--text-muted)">' + lbl + '</span>'
+        + '<span>📌 <strong>' + fmt(pv) + '</strong> → 🔵 <strong>' + fmt(cv) + '</strong>'
+        + ' <span style="color:' + col + ';margin-left:6px">' + sign + fmt(d) + ' (' + sign + dp + '%)</span></span>'
+        + '</div>';
+    }
+    panel.innerHTML = '<div class="yk-compare-header">' + t('comparison') + '</div>'
+      + row('ATK', pin.atk, cur.atk, dAtk, dAtkPct)
+      + row('DEF', pin.def, cur.def, dDef, dDefPct);
+  }
 
-  // Attack type visibility
-  var atkTypeEl = document.getElementById('dc-atkType');
-  if (atkTypeEl) {
-    atkTypeEl.addEventListener('change', function() {
-      toggleSection('dc-crit-section',      atkTypeEl.value === 'crit');
-      toggleSection('dc-skillcrit-section', atkTypeEl.value === 'skillcrit');
-      updateDmgCalc();
+  function initStatCalc() {
+    var form = document.getElementById('stat-calc-form');
+    if (!form) return;
+    n('sc-parking').addEventListener('change', function () {
+      n('sc-parking-section').classList.toggle('hidden', !this.checked);
+      calcStats();
+    });
+    var saveBtn = n('sc-save-btn');
+    if (saveBtn) saveBtn.addEventListener('click', scSave);
+    form.addEventListener('input', calcStats);
+    scRenderHistory();
+    calcStats();
+  }
+
+  // ── Damage Calculator (dc-*) ──────────────────────────────────────────────
+  function calcDamage() {
+    // Step 1 — ATK
+    var atkBase = v('dc-atkBase');
+    var atkPark = isChecked('dc-atkParking') ? v('dc-atkParkPct') : 0;
+    var atkBuff = v('dc-atkBuff');
+    var atkExcl = v('dc-atkExcl');
+    var atk = (atkBase * (1 + atkPark / 100)) * (1 + atkBuff / 100) + atkExcl;
+
+    // Step 1 — DEF
+    var defBase = v('dc-defBase');
+    var defPark = isChecked('dc-defParking') ? v('dc-defParkPct') : 0;
+    var defBuff = v('dc-defBuff');
+    var defExcl = v('dc-defExcl');
+    var def = (defBase * (1 + defPark / 100)) * (1 + defBuff / 100) + defExcl;
+
+    var spread = Math.max(1, atk - def);
+
+    // Step 2 — Final Multiplier
+    var skillMult = v('dc-skillMult');
+    var buffAdd = v('dc-buffAdd');
+    var buffMult = v('dc-buffMult');
+    var buffExcl = v('dc-buffExcl');
+    var dmgMult = v('dc-dmgMult');
+    var finalMult = (skillMult + buffAdd) / 100 * (1 + buffMult / 100) + buffExcl / 100;
+
+    // Step 3 — A
+    var A = spread * finalMult * dmgMult / 100;
+
+    // Step 4 — B (crit)
+    var atkType = n('dc-atkType').value;
+    var B = A;
+    var critLabel = '—';
+    if (atkType === 'crit') {
+      var critMult = v('dc-critMult');
+      var critRES = Math.max(50, v('dc-critRES'));
+      B = A * critMult / critRES;
+      critLabel = 'A × ' + critMult + '% ÷ ' + fmtDec(critRES, 1) + '%';
+    } else if (atkType === 'skillcrit') {
+      var skillCritMult = v('dc-skillCritMult');
+      B = Math.pow(A * (1 + skillCritMult / 100), 0.98);
+      critLabel = '{A × ' + fmtDec(1 + skillCritMult / 100, 3) + '}^0.98';
+    }
+
+    // Step 5 — C (after resistances)
+    var someRES = v('dc-someRES');
+    var dmgRES = Math.min(80, v('dc-dmgRES'));
+    var buffFinal = v('dc-buffFinal');
+    var C = B * (1 - someRES / 100) * (1 - dmgRES / 100) * (1 + buffFinal / 100);
+
+    // Step 6 — Final
+    var context = n('dc-context').value;
+    var classVal = n('dc-class').value;
+    var pveBonusMap = { sword: 1.10, axe: 1.05, magic: 1.00 };
+    var pveBonus = pveBonusMap[classVal] || 1;
+    var pvpDecrease = Math.max(0.01, v('dc-pvpDecrease'));
+    var bossDmgRES = v('dc-bossDmgRES');
+    var bossDmgPct = v('dc-bossDmgPct');
+
+    var final = C;
+    var fromBoss = 0, toBoss = 0;
+    if (context === 'pve') {
+      final = C * pveBonus;
+    } else if (context === 'pvp') {
+      final = C / pvpDecrease;
+    } else if (context === 'boss') {
+      var pve = C * pveBonus;
+      toBoss = pve * (1 + bossDmgPct / 100);
+      fromBoss = C * (1 - bossDmgRES / 100);
+      final = toBoss;
+    }
+
+    // Update DOM
+    n('dc-r-atk').textContent = fmt(atk);
+    n('dc-r-def').textContent = fmt(def);
+    n('dc-r-spread').textContent = fmt(spread);
+    n('dc-r-finalmult').textContent = fmtDec(finalMult, 4) + '×';
+    n('dc-r-A').textContent = fmt(A);
+    n('dc-r-crittype').innerHTML = atkType === 'normal' ? '—' : critLabel;
+    n('dc-r-B').textContent = atkType === 'normal' ? '—' : fmt(B);
+    n('dc-r-C').textContent = fmt(C);
+    n('dc-r-final-val').textContent = fmt(final);
+
+    var bossRow = n('dc-r-boss-row');
+    if (context === 'boss') {
+      bossRow.style.display = '';
+      n('dc-r-fromboss').textContent = fmt(fromBoss);
+      n('dc-r-toboss').textContent = fmt(toBoss);
+    } else {
+      bossRow.style.display = 'none';
+    }
+  }
+
+  function initDamageCalc() {
+    var form = document.getElementById('dmg-calc-form');
+    if (!form) return;
+
+    n('dc-atkParking').addEventListener('change', function () {
+      n('dc-atkpark-section').classList.toggle('hidden', !this.checked);
+      calcDamage();
+    });
+    n('dc-defParking').addEventListener('change', function () {
+      n('dc-defpark-section').classList.toggle('hidden', !this.checked);
+      calcDamage();
+    });
+    n('dc-atkType').addEventListener('change', function () {
+      n('dc-crit-section').classList.toggle('hidden', this.value !== 'crit');
+      n('dc-skillcrit-section').classList.toggle('hidden', this.value !== 'skillcrit');
+      calcDamage();
+    });
+    n('dc-context').addEventListener('change', function () {
+      var isPvP = this.value === 'pvp';
+      var isBoss = this.value === 'boss';
+      n('dc-pve-section').classList.toggle('hidden', isPvP);
+      n('dc-pvp-section').classList.toggle('hidden', !isPvP);
+      n('dc-boss-section').classList.toggle('hidden', !isBoss);
+      calcDamage();
+    });
+
+    form.addEventListener('input', calcDamage);
+    calcDamage();
+  }
+
+  // ── Basic Stats Calculator (bsc-*) ────────────────────────────────────────
+  function sumInputs(selector) {
+    return Array.from(document.querySelectorAll(selector))
+      .reduce(function (s, el) { return s + parseK(el.value); }, 0);
+  }
+
+  function updateBasicStats() {
+    var flatExp = n('bsc-flat-section').classList.contains('expanded');
+    var baseExp = n('bsc-base-section').classList.contains('expanded');
+    var globalExp = n('bsc-global-section').classList.contains('expanded');
+
+    var flat, basePct, globalPct;
+    if (flatExp) {
+      flat = sumInputs('.bsc-flat-input');
+      n('bsc-flat-quick').value = Math.round(flat);
+    } else {
+      flat = v('bsc-flat-quick');
+    }
+    if (baseExp) {
+      basePct = sumInputs('.bsc-base-input');
+      n('bsc-base-quick').value = fmtDec(basePct, 2);
+    } else {
+      basePct = v('bsc-base-quick');
+    }
+    if (globalExp) {
+      globalPct = sumInputs('.bsc-global-input');
+      n('bsc-global-quick').value = fmtDec(globalPct, 2);
+    } else {
+      globalPct = v('bsc-global-quick');
+    }
+
+    var baseFactor = 1 + basePct / 100;
+    var globalFactor = 1 + globalPct / 100;
+    var result = flat * baseFactor * globalFactor;
+
+    n('bsc-r-flat').textContent = fmt(flat);
+    n('bsc-r-basepct').textContent = fmtDec(basePct, 2) + '%';
+    n('bsc-r-basefactor').textContent = fmtDec(baseFactor, 4) + '×';
+    n('bsc-r-globalpct').textContent = fmtDec(globalPct, 2) + '%';
+    n('bsc-r-globalfactor').textContent = fmtDec(globalFactor, 4) + '×';
+    n('bsc-r-final').textContent = fmt(result);
+    n('bsc-r-breakdown').textContent =
+      fmt(flat) + ' × ' + fmtDec(baseFactor, 4) + ' × ' + fmtDec(globalFactor, 4) + ' = ' + fmt(result);
+  }
+
+  function initBscCalc() {
+    var form = document.getElementById('bsc-form');
+    if (!form) return;
+
+    var statIcons = { atk: '⚔️', hp: '❤️', def: '🛡️' };
+    var statLabels = { atk: 'ATK', hp: 'HP', def: 'DEF' };
+
+    document.querySelectorAll('.bsc-type-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.bsc-type-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var stat = this.dataset.stat;
+        n('bsc-stat-label').textContent = statLabels[stat] || stat.toUpperCase();
+      });
+    });
+
+    var detailMap = {
+      'bsc-flat-section': 'bsc-flat-detail',
+      'bsc-base-section': 'bsc-base-detail',
+      'bsc-global-section': 'bsc-global-detail'
+    };
+    document.querySelectorAll('.bsc-expand-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sectionId = this.dataset.target;
+        var section = n(sectionId);
+        var expanded = section.classList.toggle('expanded');
+        var detailId = detailMap[sectionId];
+        if (detailId) n(detailId).classList.toggle('hidden', !expanded);
+        updateBasicStats();
+      });
+    });
+
+    form.addEventListener('input', updateBasicStats);
+    updateBasicStats();
+  }
+
+  // ── Yuko Formula Calculator (yk-*) ────────────────────────────────────────
+  var YK_KEY = 'yk_history';
+  var YK_MAX = 10;
+  var ykDmgType = 'basic';
+  var ykCritType = 'none';
+  var ykCtx = 'pve';
+  var ykPinned = null;
+  var ykCurrentResult = null;
+
+  var ykTypeLabels = { basic: 'ATQ Basique', combo: 'Combo', counter: 'Contre-attaque', skill: 'Compétence' };
+  var ykCritSuffix = { none: '', normal: ' + Crit', skill: ' + Skill Crit' };
+  var ykCtxLabels = { pve: 'PvE', pvp: 'PvP', boss: 'Boss' };
+
+  function ykGet(id) { var el = n(id); return el ? parseK(el.value) : 0; }
+
+  function calcYuko() {
+    // Final ATK
+    var atkFlat = ykGet('yk-atk-flat');
+    var atkBase = ykGet('yk-atk-base');
+    var atkGlobal = ykGet('yk-atk-global');
+    var finalATK = atkFlat * (1 + atkBase / 100) * (1 + atkGlobal / 100);
+
+    // Final DEF
+    var defFlat = ykGet('yk-def-flat');
+    var defBase = ykGet('yk-def-base');
+    var defGlobal = ykGet('yk-def-global');
+    var finalDEF = defFlat * (1 + defBase / 100) * (1 + defGlobal / 100);
+
+    n('yk-atk-preview').textContent = fmt(finalATK);
+    n('yk-def-preview').textContent = fmt(finalDEF);
+
+    var spread = Math.max(1, finalATK - finalDEF);
+
+    // Multiplier by damage type
+    var finalMult = 0;
+    if (ykDmgType === 'basic') {
+      var bMult = ykGet('yk-basic-mult');
+      var bBonus = ykGet('yk-basic-dmg-bonus');
+      var bGlobal = ykGet('yk-basic-global');
+      finalMult = bMult / 100 * (1 + bBonus / 100) * (1 + bGlobal / 100);
+    } else if (ykDmgType === 'combo') {
+      var cMult = ykGet('yk-combo-mult');
+      var cBonus = ykGet('yk-combo-dmg-bonus');
+      var cGlobal = ykGet('yk-combo-global');
+      finalMult = cMult / 100 * (1 + cBonus / 100) * (1 + cGlobal / 100);
+    } else if (ykDmgType === 'counter') {
+      var ctMult = ykGet('yk-counter-mult');
+      var ctBonus = ykGet('yk-counter-dmg-bonus');
+      var ctGlobal = ykGet('yk-counter-global');
+      finalMult = ctMult / 100 * (1 + ctBonus / 100) * (1 + ctGlobal / 100);
+    } else if (ykDmgType === 'skill') {
+      var sMult = ykGet('yk-skill-mult');
+      var sPlayer = ykGet('yk-skill-player-dmg');
+      var sGlobal = ykGet('yk-skill-global');
+      finalMult = sMult / 100 * sPlayer / 100 * (1 + sGlobal / 100);
+    }
+
+    var baseDmg = spread * finalMult;
+
+    // Crit
+    var afterCrit = baseDmg;
+    if (ykCritType === 'normal') {
+      var critDmgPct = ykGet('yk-crit-dmg');
+      var critRES = Math.max(50, ykGet('yk-crit-res'));
+      afterCrit = baseDmg * critDmgPct / critRES;
+    } else if (ykCritType === 'skill') {
+      var skillCritBonus = ykGet('yk-skill-crit-dmg');
+      afterCrit = Math.pow(baseDmg * (1 + skillCritBonus / 100), 0.98);
+    }
+
+    // Resistances (each capped at 80%)
+    var typeRES = Math.min(80, ykGet('yk-type-res'));
+    var dmgRES = Math.min(80, ykGet('yk-dmg-res'));
+    var afterRES = afterCrit * (1 - typeRES / 100) * (1 - dmgRES / 100);
+
+    // Context
+    var finalDmg = afterRES;
+    if (ykCtx === 'pvp') {
+      var pvpFactor = Math.max(1, ykGet('yk-pvp-factor'));
+      finalDmg = afterRES / pvpFactor;
+    } else if (ykCtx === 'boss') {
+      var bossDmgBonus = ykGet('yk-boss-dmg');
+      finalDmg = afterRES * (1 + bossDmgBonus / 100);
+    }
+
+    // Update results DOM
+    n('yk-r-final-atk').textContent = fmt(finalATK);
+    n('yk-r-final-def').textContent = fmt(finalDEF);
+    n('yk-r-spread').textContent = fmt(spread);
+    n('yk-r-mult').textContent = fmtDec(finalMult, 4) + '×';
+    n('yk-r-base').textContent = fmt(baseDmg);
+    n('yk-r-after-crit').textContent = ykCritType === 'none' ? '—' : fmt(afterCrit);
+    n('yk-r-after-res').textContent = fmt(afterRES);
+    n('yk-r-final').textContent = fmt(finalDmg);
+
+    ykCurrentResult = {
+      type: ykDmgType,
+      crit: ykCritType,
+      ctx: ykCtx,
+      finalATK: Math.round(finalATK),
+      finalDEF: Math.round(finalDEF),
+      spread: Math.round(spread),
+      mult: finalMult,
+      baseDmg: Math.round(baseDmg),
+      afterCrit: Math.round(afterCrit),
+      afterRES: Math.round(afterRES),
+      final: Math.round(finalDmg),
+      ts: Date.now()
+    };
+
+    ykRenderCompare();
+  }
+
+  function ykLoadHistory() {
+    try { return JSON.parse(localStorage.getItem(YK_KEY)) || []; } catch (e) { return []; }
+  }
+
+  function ykSave() {
+    if (!ykCurrentResult) return;
+    var entry = Object.assign({}, ykCurrentResult, { ts: Date.now() });
+    var hist = ykLoadHistory();
+    hist.unshift(entry);
+    if (hist.length > YK_MAX) hist.pop();
+    localStorage.setItem(YK_KEY, JSON.stringify(hist));
+    ykRenderHistory();
+  }
+
+  function ykRenderHistory() {
+    var list = n('yk-history-list');
+    var hist = ykLoadHistory();
+    if (!hist.length) {
+      list.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:16px 0">' + t('noEntries') + '</div>';
+      return;
+    }
+    list.innerHTML = hist.map(function (entry, i) {
+      var ds = fmtDate(entry.ts);
+      var lbl = (ykTypeLabels[entry.type] || entry.type) + (ykCritSuffix[entry.crit] || '') + ' — ' + (ykCtxLabels[entry.ctx] || entry.ctx);
+      var pinned = ykPinned && ykPinned.ts === entry.ts;
+      return '<div class="yk-history-entry' + (pinned ? ' yk-pinned' : '') + '">'
+        + '<div class="yk-entry-info"><span class="yk-entry-label">' + lbl + '</span><span class="yk-entry-date">' + ds + '</span></div>'
+        + '<div class="yk-entry-val">' + fmt(entry.final) + '</div>'
+        + '<div class="yk-entry-actions">'
+        + '<button class="yk-action-btn yk-pin-btn" data-i="' + i + '" title="' + (pinned ? t('unpin') : t('pinCompare')) + '">📌</button>'
+        + '<button class="yk-action-btn yk-del-btn" data-i="' + i + '" title="' + t('delete') + '">🗑️</button>'
+        + '</div></div>';
+    }).join('');
+
+    list.querySelectorAll('.yk-pin-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.dataset.i);
+        var h = ykLoadHistory();
+        ykPinned = (ykPinned && ykPinned.ts === h[idx].ts) ? null : h[idx];
+        ykRenderHistory();
+        ykRenderCompare();
+      });
+    });
+    list.querySelectorAll('.yk-del-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(this.dataset.i);
+        var h = ykLoadHistory();
+        if (ykPinned && ykPinned.ts === h[idx].ts) ykPinned = null;
+        h.splice(idx, 1);
+        localStorage.setItem(YK_KEY, JSON.stringify(h));
+        ykRenderHistory();
+        ykRenderCompare();
+      });
     });
   }
 
-  // ATK parking toggle
-  var dcAtkParking = document.getElementById('dc-atkParking');
-  if (dcAtkParking) {
-    dcAtkParking.addEventListener('change', function() {
-      toggleSection('dc-atkpark-section', dcAtkParking.checked);
-    });
+  function ykRenderCompare() {
+    var panel = n('yk-compare-panel');
+    if (!ykPinned || !ykCurrentResult) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+    var cur = ykCurrentResult;
+    var pin = ykPinned;
+    var diff = cur.final - pin.final;
+    var diffPct = pin.final ? fmtDec(diff / pin.final * 100, 1) : '—';
+    var diffColor = diff >= 0 ? 'var(--teal)' : '#e05c6f';
+    var sign = diff >= 0 ? '+' : '';
+    panel.innerHTML =
+      '<div class="yk-compare-header">' + t('comparison') + '</div>'
+      + '<div class="yk-compare-grid">'
+      + '<div class="yk-compare-col">'
+      + '<div class="yk-compare-lbl">' + t('pinned') + '</div>'
+      + '<div style="font-size:0.8rem;color:var(--orange)">ATK: ' + fmt(pin.finalATK) + '</div>'
+      + '<div style="font-size:0.8rem;color:var(--blue)">DEF: ' + fmt(pin.finalDEF) + '</div>'
+      + '<div style="font-size:1.05rem;font-weight:700;color:var(--gold);margin-top:4px">' + fmt(pin.final) + '</div>'
+      + '<div style="font-size:0.72rem;color:var(--text-muted)">' + (ykTypeLabels[pin.type] || pin.type) + (ykCritSuffix[pin.crit] || '') + ' • ' + (ykCtxLabels[pin.ctx] || pin.ctx) + '</div>'
+      + '</div>'
+      + '<div style="font-weight:900;color:var(--text-muted);font-size:0.9rem;align-self:center">VS</div>'
+      + '<div class="yk-compare-col">'
+      + '<div class="yk-compare-lbl">' + t('current') + '</div>'
+      + '<div style="font-size:0.8rem;color:var(--orange)">ATK: ' + fmt(cur.finalATK) + '</div>'
+      + '<div style="font-size:0.8rem;color:var(--blue)">DEF: ' + fmt(cur.finalDEF) + '</div>'
+      + '<div style="font-size:1.05rem;font-weight:700;color:var(--gold);margin-top:4px">' + fmt(cur.final) + '</div>'
+      + '<div style="font-size:0.72rem;color:var(--text-muted)">' + (ykTypeLabels[cur.type] || cur.type) + (ykCritSuffix[cur.crit] || '') + ' • ' + (ykCtxLabels[cur.ctx] || cur.ctx) + '</div>'
+      + '</div></div>'
+      + '<div style="text-align:center;font-size:1rem;font-weight:700;color:' + diffColor + ';margin-top:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--r)">'
+      + sign + fmt(diff) + ' (' + sign + diffPct + '%)</div>';
   }
 
-  // DEF parking toggle
-  var dcDefParking = document.getElementById('dc-defParking');
-  if (dcDefParking) {
-    dcDefParking.addEventListener('change', function() {
-      toggleSection('dc-defpark-section', dcDefParking.checked);
+  function initYukoCalc() {
+    var tab = document.getElementById('tab-yuko');
+    if (!tab) return;
+
+    // Damage type buttons
+    tab.querySelectorAll('.yk-type-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tab.querySelectorAll('.yk-type-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        ykDmgType = this.dataset.type;
+        tab.querySelectorAll('.yk-type-section').forEach(function (s) { s.classList.add('hidden'); });
+        var sec = n('yk-sec-' + ykDmgType);
+        if (sec) sec.classList.remove('hidden');
+        calcYuko();
+      });
     });
+
+    // Crit type buttons
+    tab.querySelectorAll('.yk-crit-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tab.querySelectorAll('.yk-crit-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        ykCritType = this.dataset.crit;
+        n('yk-crit-normal-inputs').classList.toggle('hidden', ykCritType !== 'normal');
+        n('yk-crit-skill-inputs').classList.toggle('hidden', ykCritType !== 'skill');
+        calcYuko();
+      });
+    });
+
+    // Context buttons
+    tab.querySelectorAll('.yk-ctx-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tab.querySelectorAll('.yk-ctx-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        ykCtx = this.dataset.ctx;
+        n('yk-pvp-inputs').classList.toggle('hidden', ykCtx !== 'pvp');
+        n('yk-boss-inputs').classList.toggle('hidden', ykCtx !== 'boss');
+        calcYuko();
+      });
+    });
+
+    n('yk-save-btn').addEventListener('click', ykSave);
+    tab.addEventListener('input', calcYuko);
+
+    ykRenderHistory();
+    calcYuko();
   }
 
-  // Context visibility
-  var ctxEl = document.getElementById('dc-context');
-  if (ctxEl) {
-    ctxEl.addEventListener('change', function() {
-      toggleSection('dc-pvp-section',   ctxEl.value === 'pvp');
-      toggleSection('dc-pve-section',   ctxEl.value === 'pve' || ctxEl.value === 'boss');
-      toggleSection('dc-boss-section',  ctxEl.value === 'boss');
-    });
-  }
-
-  updateDmgCalc();
-
-  // Basic Stats Calculator
-  document.querySelectorAll('.bsc-type-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.bsc-type-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      updateBasicStats();
-    });
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function () {
+    initTabs();
+    initStatCalc();
+    initDamageCalc();
+    initBscCalc();
+    initYukoCalc();
   });
 
-  document.querySelectorAll('.bsc-expand-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      toggleBscSection(btn.dataset.target);
-    });
-  });
-
-  document.querySelectorAll('#bsc-form input').forEach(function(el) {
-    el.addEventListener('input', updateBasicStats);
-  });
-
-  updateBasicStats();
-});
+}());

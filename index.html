@@ -25,12 +25,15 @@
     .formula-preview .n { color: var(--orange); }
     .formula-preview .step { color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 8px; }
     @media (max-width: 768px) { .about-split { grid-template-columns: 1fr; } }
+    .author-avatar { width: 120px; height: 120px; }
     .author-avatar-img {
-      width: 96px;
-      height: 96px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
+      object-position: center 20%;
       border: 3px solid var(--teal);
+      box-shadow: 0 0 0 4px rgba(32,212,168,0.15), 0 4px 24px rgba(0,0,0,0.4);
       flex-shrink: 0;
     }
     .hero-art-img {
@@ -43,6 +46,22 @@
       user-select: none;
     }
     @media (max-width: 768px) { .hero-art-img { height: 180px; opacity: 0.1; } }
+    .cal-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px}
+    .cal-nav button{background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-primary);padding:6px 18px;border-radius:var(--r);cursor:pointer;font-size:0.85rem;transition:background .15s}
+    .cal-nav button:hover{background:var(--bg-primary);border-color:var(--teal)}
+    .cal-nav button[hidden]{display:none}
+    .cal-month{font-weight:700;font-size:1rem;color:var(--gold);min-width:130px;text-align:center}
+    .cal-img-wrap{text-align:center}
+    .cal-img-wrap img{max-width:440px;width:100%;border-radius:var(--r-lg);box-shadow:0 4px 32px rgba(0,0,0,.45)}
+    .gantt-sect{background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+    .cal-day-hdr{text-align:center;font-size:.65rem;font-weight:700;color:var(--text-muted);padding:5px 0;background:var(--bg-primary);border-radius:4px}
+    .cal-cell{background:var(--bg-primary);border:1px solid var(--border);border-radius:5px;min-height:72px;padding:4px;overflow:hidden}
+    .cal-cell.g-empty{opacity:.12;pointer-events:none}
+    .cal-cell.g-today{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
+    .cal-cell.g-we{background:rgba(255,255,255,.02)}
+    .cal-day-num{font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:3px}
+    .cal-evt{border-radius:3px;padding:1px 4px;font-size:.52rem;font-weight:600;color:#fff;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5}
   </style>
 </head>
 <body>
@@ -60,6 +79,7 @@
     <a href="calculator.html" class="nav-link">
       <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
     </a>
+    <a href="data.html" class="nav-link">Data</a>
   </div>
   <div class="lang-switcher" id="langSwitcher">
     <button data-lang="fr">FR</button>
@@ -109,6 +129,40 @@
 
 <div class="divider"></div>
 
+<!-- Calendar -->
+<section class="section-sm" style="padding-bottom:32px">
+  <div class="container">
+    <div class="cal-nav">
+      <button id="calPrev">← <span class="lang-fr">Précédent</span><span class="lang-en hidden">Previous</span><span class="lang-sk hidden">Predchádzajúci</span></button>
+      <span class="cal-month" id="calMonth"></span>
+      <button id="calNext"><span class="lang-fr">Suivant</span><span class="lang-en hidden">Next</span><span class="lang-sk hidden">Nasledujúci</span> →</button>
+    </div>
+    <div class="cal-img-wrap">
+      <img id="calImg" src="" alt="Calendrier mensuel Legend of Mushroom" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Gantt -->
+<section class="section gantt-sect">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:16px">
+      <span class="label"><span class="lang-fr">Frise Chronologique</span><span class="lang-en hidden">Event Timeline</span><span class="lang-sk hidden">Udalosti</span></span>
+      <h2><span class="lang-fr">Calendrier</span><span class="lang-en hidden">Calendar</span><span class="lang-sk hidden">Kalendár</span></h2>
+    </div>
+    <div class="cal-nav" style="margin-bottom:16px">
+      <button id="ganttPrev">← <span class="lang-fr">Précédent</span><span class="lang-en hidden">Previous</span><span class="lang-sk hidden">Predchádzajúci</span></button>
+      <span class="cal-month" id="ganttMonth"></span>
+      <button id="ganttNext"><span class="lang-fr">Suivant</span><span class="lang-en hidden">Next</span><span class="lang-sk hidden">Nasledujúci</span> →</button>
+    </div>
+    <div id="ganttChart"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- Features -->
 <section class="section features-section">
   <div class="container">
@@ -124,9 +178,9 @@
         <span class="lang-sk hidden">Všetko čo potrebujete pre <span class="text-teal">Dominanciu</span></span>
       </h2>
       <p>
-        <span class="lang-fr">Des conseils pour débutants aux formules de dégâts avancées — ce guide couvre les trois classes en PVE et PVP.</span>
-        <span class="lang-en hidden">From newcomer tips to advanced damage formulas — this guide covers all three classes for both PVE and PVP.</span>
-        <span class="lang-sk hidden">Od tipov pre začiatočníkov po pokročilé vzorce poškodenia — tento sprievodca pokrýva všetky tri triedy pre PVE aj PVP.</span>
+        <span class="lang-fr">Des conseils pour débutants aux formules de dégâts avancées — ce guide couvre des contenus pour le PVE &amp; PVP incluant les critiques, les boss et les 4 classes avec le dresseur.</span>
+        <span class="lang-en hidden">From newcomer tips to advanced damage formulas — this guide covers PVE &amp; PVP content including criticals, bosses and all 4 classes with the Tamer.</span>
+        <span class="lang-sk hidden">Od tipov pre začiatočníkov po pokročilé vzorce — tento sprievodca pokrýva obsah PVE &amp; PVP vrátane kritov, bossov a všetkých 4 tried s Krotiteľom.</span>
       </p>
     </div>
     <div class="grid-3">
@@ -138,9 +192,9 @@
           <span class="lang-sk hidden">Sprievodcovia triedami</span>
         </h3>
         <p>
-          <span class="lang-fr">Guides approfondis pour Épée, Hache et Magie. Priorités de stats, astuces de compétences et style de jeu expliqués clairement.</span>
-          <span class="lang-en hidden">In-depth guides for Sword, Axe, and Magic. Stat priorities, skill tips, equipment focus, and playstyle explained clearly.</span>
-          <span class="lang-sk hidden">Podrobné sprievodcovia pre Meč, Sekeru a Mágiu. Priority štatistík, tipy na schopnosti a štýl hry jasne vysvetlené.</span>
+          <span class="lang-fr">Guides approfondis pour Épée, Hache, Magie et Dresseur. Priorités de stats, astuces de compétences et style de jeu expliqués clairement.</span>
+          <span class="lang-en hidden">In-depth guides for Sword, Axe, Magic, and Tamer. Stat priorities, skill tips, equipment focus, and playstyle explained clearly.</span>
+          <span class="lang-sk hidden">Podrobné sprievodcovia pre Meč, Sekeru, Mágiu a Krotiteľa. Priority štatistík, tipy na schopnosti a štýl hry jasne vysvetlené.</span>
         </p>
         <div style="margin-top:18px">
           <a href="guide.html" class="btn btn-ghost btn-sm">
@@ -207,19 +261,14 @@
           <span class="lang-sk hidden">O webe</span>
         </span>
         <h2>
-          <span class="lang-fr">Un guide créé<br>par un <span class="text-gold">Vrai Joueur</span></span>
-          <span class="lang-en hidden">A Guide Built<br>by a <span class="text-gold">Real Player</span></span>
-          <span class="lang-sk hidden">Sprievodca vytvorený<br>skutočným <span class="text-gold">Hráčom</span></span>
+          <span class="lang-fr">Un guide créé<br>par un <span class="text-gold">champignon un peu fou</span></span>
+          <span class="lang-en hidden">A Guide Built<br>by a <span class="text-gold">Slightly Mad Mushroom</span></span>
+          <span class="lang-sk hidden">Sprievodca vytvorený<br>trochu <span class="text-gold">bláznivou hubkou</span></span>
         </h2>
         <p style="color:var(--text-secondary);margin-top:14px;line-height:1.75">
-          <span class="lang-fr">Ce site fan a été créé pour combler le vide entre les pages wiki éparpillées et les infobulles vagues du jeu. Les formules sont issues de recherches communautaires et de tests en jeu — ce que vous voyez correspond à ce que le jeu calcule réellement.</span>
-          <span class="lang-en hidden">This fan site was created to fill the gap between scattered wiki pages and vague in-game tooltips. The formulas are derived from community research and in-game testing — what you see is what the game actually computes.</span>
-          <span class="lang-sk hidden">Tento fanúšikovský web bol vytvorený na zaplnenie medzery medzi roztrúsenými wiki stránkami a neurčitými hernými nápovedam. Vzorce vychádzajú z komunitného výskumu a testovania v hre — čo vidíte, to hra skutočne počíta.</span>
-        </p>
-        <p style="color:var(--text-secondary);margin-top:12px;line-height:1.75">
-          <span class="lang-fr">Les guides sont écrits à partir d'une vraie expérience de jeu sur les trois classes principales. Le calculateur implémente la formule de dégâts officielle LoM étape par étape pour comprendre <em>pourquoi</em> vos dégâts changent — pas seulement voir le chiffre final.</span>
-          <span class="lang-en hidden">Guides are written from real gameplay experience across all three main classes. The calculator implements the official LoM damage formula step by step so you can understand <em>why</em> your damage changes — not just see the final number.</span>
-          <span class="lang-sk hidden">Sprievodcovia sú písaní zo skutočných herných skúseností naprieč všetkými tromi hlavnými triedami. Kalkulačka implementuje oficiálnu LoM vzorec poškodenia krok za krokom, aby ste pochopili <em>prečo</em> sa vaše poškodenie mení — nielen videli finálne číslo.</span>
+          <span class="lang-fr">Ce site fan a été créé pour combler le vide entre les pages wiki éparpillées et les infobulles vagues du jeu. Les formules sont issues de recherches communautaires et de tests en jeu — ce que vous voyez correspond à ce que le jeu calcule. Les guides sont écrits à partir d'une vraie expérience de jeu pour les différents contenus.</span>
+          <span class="lang-en hidden">This fan site was created to fill the gap between scattered wiki pages and vague in-game tooltips. The formulas are derived from community research and in-game testing — what you see is what the game computes. Guides are written from real gameplay experience across different content.</span>
+          <span class="lang-sk hidden">Tento fanúšikovský web bol vytvorený na zaplnenie medzery medzi roztrúsenými wiki stránkami a neurčitými hernými nápovedam. Vzorce vychádzajú z komunitného výskumu a testovania v hre — čo vidíte, to hra počíta. Sprievodcovia sú písaní zo skutočných herných skúseností pre rôzny obsah.</span>
         </p>
         <div class="stat-row" style="margin-top:28px">
           <div class="stat-badge">
@@ -287,14 +336,14 @@
       <div>
         <div class="author-name">Stray</div>
         <div class="author-role">
-          <span class="lang-fr">Joueur de Legend of Mushroom &amp; Créateur de Guide</span>
-          <span class="lang-en hidden">Legend of Mushroom Player &amp; Guide Creator</span>
-          <span class="lang-sk hidden">Hráč Legend of Mushroom &amp; Tvorca sprievodcu</span>
+          <span class="lang-fr">Joueur de Legend of Mushroom &amp; Créateur de Contenus</span>
+          <span class="lang-en hidden">Legend of Mushroom Player &amp; Content Creator</span>
+          <span class="lang-sk hidden">Hráč Legend of Mushroom &amp; Tvorca obsahu</span>
         </div>
         <p class="author-bio">
-          <span class="lang-fr">Salut ! Je suis Stray — un joueur passionné de Legend of Mushroom qui en avait assez de chercher des infos fiables éparpillées sur Discord et Reddit. Alors j'ai créé ce site. Je joue principalement Épée et Hache, je passe trop de temps à théoriser les formules de dégâts, et j'adore aider les autres joueurs à comprendre les mécaniques derrière les chiffres. Ce guide est ma façon de rendre à la communauté.</span>
-          <span class="lang-en hidden">Hey! I'm Stray — a dedicated Legend of Mushroom player who got tired of hunting for reliable info scattered across Discord servers and Reddit threads. So I built this site. I play mainly Sword and Axe, spend way too much time theorycrafting damage formulas, and genuinely enjoy helping other players understand the mechanics behind the numbers. This guide is my way of giving back to the community.</span>
-          <span class="lang-sk hidden">Ahoj! Som Stray — oddaný hráč Legend of Mushroom, ktorý sa unavil hľadaním spoľahlivých informácií rozsypaných po Discord serveroch a Reddit vláknach. Tak som vytvoril tento web. Hrám hlavne Meč a Sekeru, trávim príliš veľa času teóriou vzorcov poškodenia a úprimne rád pomáham ostatným hráčom pochopiť mechaniky za číslami. Tento sprievodca je moja cesta ako niečo vrátiť komunite.</span>
+          <span class="lang-fr">Salut ! Je suis Stray — un joueur passionné de Legend of Mushroom qui veut utiliser les données recueillies dans divers sites et guides notamment sur Discord. Alors j'ai créé ce site. Je joue principalement Saint Martiale mais je suis polyvalent, je passe trop de temps à théoriser les formules de dégâts, et j'adore aider les autres joueurs à comprendre les mécaniques derrière les chiffres. Ce guide est ma façon de rendre à la communauté.</span>
+          <span class="lang-en hidden">Hey! I'm Stray — a dedicated Legend of Mushroom player who wants to compile data gathered from various sites and guides, especially on Discord. So I built this site. I mainly play Holy Martial but I'm versatile, spend way too much time theorycrafting damage formulas, and genuinely enjoy helping other players understand the mechanics behind the numbers. This guide is my way of giving back to the community.</span>
+          <span class="lang-sk hidden">Ahoj! Som Stray — oddaný hráč Legend of Mushroom, ktorý chce využívať dáta zozbierané z rôznych stránok a sprievodcov, najmä na Discorde. Tak som vytvoril tento web. Hrám hlavne Holy Martial, ale som všestranný, trávim príliš veľa času teóriou vzorcov poškodenia a rád pomáham hráčom pochopiť mechaniky za číslami. Tento sprievodca je moja cesta ako niečo vrátiť komunite.</span>
         </p>
         <div class="author-tags">
           <span class="tag">⚔️ Sword Main</span>
@@ -319,7 +368,8 @@
   <p style="margin-top:10px">
     <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
     <a href="guide.html">Guides</a> &nbsp;·&nbsp;
-    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data.html">Data</a>
   </p>
 </footer>
 
@@ -328,6 +378,68 @@
   document.getElementById('hamburger').addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
   });
+
+  const ANCHOR=new Date(2026,4,25);
+  const EVTS=[
+    ['Soul Rush',0,[0,1,2,3,4,5,6],'#20d4a8'],
+    ['Pal Rush',0,[1,2],'#818cf8'],
+    ['Star Hero Rush',0,[2,3,4],'#e87820'],
+    ['Relique Rush',1,[0,1,2,3,4,5,6],'#8b5cf6'],
+    ['Skill Rush',1,[1,2],'#06b6d4'],
+    ['Divining Tree & Rush Gardien',1,[2,3,4],'#f59e0b'],
+    ['Rush Prière & Family Rush',2,[0,1,2,3,4,5,6],'#e87820'],
+    ['Accessoire Dorsale',2,[2,3,4],'#ec4899'],
+    ['Rush Technologique',3,[0,1,2,3,4,5,6],'#e8c040'],
+    ['Rush Monture',3,[1,2],'#10b981'],
+    ['Guerre des bateaux',-1,null,'#e04040']
+  ];
+  function wkOfCycle(d){const m=new Date(d),w=m.getDay(),o=w?1-w:-6;m.setDate(m.getDate()+o);return((Math.floor((m-ANCHOR)/6048e5)%4)+4)%4}
+  function dow(d){const w=d.getDay();return w?w-1:6}
+  function getLang(){return localStorage.getItem('siteLang')||'fr';}
+  function monthFmt(yr,mo){
+    const loc={fr:'fr-FR',en:'en-US',sk:'sk-SK'}[getLang()]||'fr-FR';
+    const s=new Date(yr,mo).toLocaleDateString(loc,{month:'long',year:'numeric'});
+    return s.charAt(0).toUpperCase()+s.slice(1);
+  }
+  const DL_MAP={fr:['L','M','M','J','V','S','D'],en:['M','T','W','T','F','S','S'],sk:['P','U','S','Š','P','S','N']};
+  function buildGantt(yr,mo){
+    const nd=new Date(yr,mo+1,0).getDate(),first=dow(new Date(yr,mo,1));
+    const DL=DL_MAP[getLang()]||DL_MAP.fr;
+    const t=new Date(),ty=t.getFullYear(),tm=t.getMonth(),td=t.getDate();
+    let h='<div class="cal-grid">';
+    DL.forEach(d=>{h+=`<div class="cal-day-hdr">${d}</div>`;});
+    for(let i=0;i<first;i++)h+='<div class="cal-cell g-empty"></div>';
+    for(let d=1;d<=nd;d++){
+      const dt=new Date(yr,mo,d),dw=dow(dt),isT=yr===ty&&mo===tm&&d===td;
+      const evs=EVTS.filter(([,wk,ds])=>wk<0?d<=7:wkOfCycle(dt)===wk&&ds.includes(dw));
+      h+=`<div class="cal-cell${isT?' g-today':''}${dw>4?' g-we':''}"><div class="cal-day-num">${d}</div>`;
+      evs.forEach(([n,,,c])=>{h+=`<div class="cal-evt" style="background:${c}" title="${n}">${n}</div>`;});
+      h+='</div>';
+    }
+    return h+'</div>';
+  }
+  const CAL=[
+    {yr:2026,mo:3,img:'assets/image/calendrier/april-2026.png'},
+    {yr:2026,mo:4,img:'assets/image/calendrier/may-2026.png'}
+  ];
+  let cIdx=CAL.length-1;
+  function setCal(){
+    document.getElementById('calImg').src=CAL[cIdx].img;
+    document.getElementById('calMonth').textContent=monthFmt(CAL[cIdx].yr,CAL[cIdx].mo);
+    document.getElementById('calPrev').hidden=cIdx===0;
+    document.getElementById('calNext').hidden=cIdx===CAL.length-1;
+  }
+  document.getElementById('calPrev').onclick=()=>{cIdx--;setCal();};
+  document.getElementById('calNext').onclick=()=>{cIdx++;setCal();};
+  setCal();
+  let gYr=2026,gMo=4;
+  function setGantt(){
+    document.getElementById('ganttMonth').textContent=monthFmt(gYr,gMo);
+    document.getElementById('ganttChart').innerHTML=buildGantt(gYr,gMo);
+  }
+  document.getElementById('ganttPrev').onclick=()=>{if(--gMo<0){gMo=11;gYr--;}setGantt();};
+  document.getElementById('ganttNext').onclick=()=>{if(++gMo>11){gMo=0;gYr++;}setGantt();};
+  setGantt();
 </script>
 </body>
 </html>
