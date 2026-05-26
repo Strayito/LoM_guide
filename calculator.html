@@ -93,6 +93,57 @@
     .bsc-detail.hidden { display:none; }
 
     .input-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Yuko Formula Calculator ── */
+    .yk-type-btns, .yk-crit-btns, .yk-ctx-btns {
+      display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .yk-type-btn, .yk-crit-btn, .yk-ctx-btn {
+      flex: 1; min-width: 80px; padding: 10px 8px;
+      border-radius: var(--r); border: 1px solid var(--border);
+      background: var(--bg-secondary); color: var(--text-secondary);
+      font-size: 0.86rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .yk-type-btn.active, .yk-crit-btn.active, .yk-ctx-btn.active {
+      background: var(--teal); color: #0d1117; border-color: var(--teal);
+    }
+    .yk-inline-result {
+      display: flex; align-items: center; gap: 8px; margin-top: 6px; margin-bottom: 4px;
+      font-family: 'Courier New', monospace; font-size: 0.85rem;
+    }
+    .yk-inline-result .yk-il { color: var(--text-muted); }
+    .yk-inline-result .yk-iv { color: var(--teal); font-weight: 700; }
+    .yk-history-entry {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--r); margin-bottom: 8px;
+    }
+    .yk-history-entry.yk-pinned { border-color: var(--gold); }
+    .yk-entry-info { flex: 1; min-width: 0; }
+    .yk-entry-label { font-size: 0.82rem; font-weight: 700; color: var(--text-primary); display: block; }
+    .yk-entry-date { font-size: 0.72rem; color: var(--text-muted); }
+    .yk-entry-val { font-size: 0.95rem; font-weight: 700; color: var(--teal); white-space: nowrap; }
+    .yk-entry-actions { display: flex; gap: 4px; }
+    .yk-action-btn {
+      background: none; border: none; cursor: pointer; font-size: 1rem;
+      padding: 2px 4px; border-radius: 4px; transition: background 0.1s;
+    }
+    .yk-compare-panel {
+      background: var(--bg-secondary); border: 1px solid var(--gold);
+      border-radius: var(--r-lg); padding: 16px; margin-top: 16px;
+    }
+    .yk-compare-header {
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gold); font-weight: 700; margin-bottom: 12px;
+    }
+    .yk-compare-grid { display: flex; align-items: center; gap: 12px; }
+    .yk-compare-col { flex: 1; }
+    .yk-compare-lbl {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--text-muted); margin-bottom: 4px;
+    }
+
     .section-chip {
       display: inline-block;
       padding: 2px 10px;
@@ -123,6 +174,7 @@
     <a href="calculator.html" class="nav-link active">
       <span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span>
     </a>
+    <a href="data.html" class="nav-link">Data</a>
   </div>
   <div class="lang-switcher" id="langSwitcher">
     <button data-lang="fr">FR</button>
@@ -158,21 +210,11 @@
       ⚔️ <span class="lang-fr">Calculateur de Dégâts</span><span class="lang-en hidden">Damage Calculator</span><span class="lang-sk hidden">Kalkulačka poškodenia</span>
     </button>
     <button class="tab-btn" data-tab="hp">
-      📐 <span class="lang-fr">Stats Basiques</span><span class="lang-en hidden">Basic Stats</span><span class="lang-sk hidden">Základné štatistiky</span>
+      📐 <span class="lang-fr">Statistiques</span><span class="lang-en hidden">Statistics</span><span class="lang-sk hidden">Štatistiky</span>
     </button>
-  </div>
-
-  <!-- Formula Reference -->
-  <div class="formula-ref">
-    <h4>
-      <span class="lang-fr">Référence des Formules</span><span class="lang-en hidden">Formula Reference</span><span class="lang-sk hidden">Referencia vzorcov</span>
-    </h4>
-    <div class="formula-line"><span class="step">STEP 1</span><span class="v">ATK/DEF</span> = (FinalBase × (<span class="n">100</span> + Parking%) ÷ <span class="n">100</span>) × (<span class="n">100</span> + Buff%) ÷ <span class="n">100</span> + Exclusive</div>
-    <div class="formula-line"><span class="step">STEP 2</span><span class="v">FinalMult</span> = (Skill% + BuffAdd%) ÷ <span class="n">100</span> × (<span class="n">100</span> + BuffMult%) ÷ <span class="n">100</span> + BuffExcl% ÷ <span class="n">100</span></div>
-    <div class="formula-line"><span class="step">STEP 3</span><span class="v">A</span> = (ATK − DEF) × <span class="v">FinalMult</span> × DMGMult% ÷ <span class="n">100</span></div>
-    <div class="formula-line"><span class="step">STEP 4</span><span class="v">B(Crit)</span> = A × CritMult ÷ CritRES &nbsp;|&nbsp; <span class="v">B(SkillCrit)</span> = {A × (<span class="n">1</span> + SkillCritMult)}<sup><span class="n">0.98</span></sup></div>
-    <div class="formula-line"><span class="step">STEP 5</span><span class="v">C</span> = (A or B) × (<span class="n">100</span>−RES%) ÷ <span class="n">100</span> × (<span class="n">100</span>−DMGRES%) ÷ <span class="n">100</span> × (<span class="n">100</span>+BuffFinal%) ÷ <span class="n">100</span></div>
-    <div class="formula-line"><span class="step">STEP 6</span><span class="v">PvP</span> = C ÷ PvPDecrease &nbsp;|&nbsp; <span class="v">PvE</span> = C × PvEBonus (Sword <span class="n">1.1</span> / Ax <span class="n">1.05</span>) &nbsp;|&nbsp; <span class="v">ToBoss</span> = PvE × (<span class="n">100</span>+Boss%) ÷ <span class="n">100</span></div>
+    <button class="tab-btn" data-tab="yuko">
+      🧮 <span class="lang-fr">Formules de combat</span><span class="lang-en hidden">Combat Formulas</span><span class="lang-sk hidden">Bojové vzorce</span>
+    </button>
   </div>
 
   <!-- ===== STAT CALCULATOR ===== -->
@@ -296,6 +338,29 @@
               <span class="lang-sk hidden">Tieto hodnoty vstupujú do kroku 3 vzorca: <strong>A = (ATK − DEF) × FinalMult × DMG%/100</strong></span>
             </span>
           </div>
+
+          <button type="button" id="sc-save-btn" style="width:100%;margin-top:16px;padding:12px;border-radius:var(--r);border:1px solid var(--teal);background:rgba(32,212,168,0.1);color:var(--teal);font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.15s">
+            💾 <span class="lang-fr">Sauvegarder ce résultat</span><span class="lang-en hidden">Save this result</span><span class="lang-sk hidden">Uložiť tento výsledok</span>
+          </button>
+
+          <!-- Comparison panel (shown when pinned) -->
+          <div id="sc-compare-panel" class="yk-compare-panel" style="display:none"></div>
+
+          <!-- History -->
+          <div style="margin-top:20px">
+            <div class="result-step-label" style="margin-bottom:8px">
+              📋 <span class="lang-fr">Historique (max 10)</span><span class="lang-en hidden">History (max 10)</span><span class="lang-sk hidden">História (max 10)</span>
+            </div>
+            <div id="sc-history-list"></div>
+          </div>
+
+          <div class="info-box" style="margin-top:12px;font-size:0.8rem">
+            💡 <span>
+              <span class="lang-fr">Épinglez 📌 une entrée pour comparer avec vos valeurs actuelles.</span>
+              <span class="lang-en hidden">Pin 📌 a history entry to compare against current values.</span>
+              <span class="lang-sk hidden">Pripnite 📌 záznam histórie na porovnanie s aktuálnymi hodnotami.</span>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -396,7 +461,7 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="dc-skillMult">
-            <span class="lang-fr">Multiplicateur de base Compétence/Combo/Riposte (%)</span><span class="lang-en hidden">Base Skill/Combo/Counter Multiplier (%)</span><span class="lang-sk hidden">Základný multiplikátor Schopnosti/Komba/Protiútoku (%)</span>
+            <span class="lang-fr">Multiplicateur de base Compétence/Combo/Contre-attaque (%)</span><span class="lang-en hidden">Base Skill/Combo/Counter Multiplier (%)</span><span class="lang-sk hidden">Základný multiplikátor Schopnosti/Komba/Protiútoku (%)</span>
           </label>
           <input class="form-input" type="number" id="dc-skillMult" value="200" min="0" step="1">
           <div class="input-hint">
@@ -696,7 +761,7 @@
         <!-- Formula mini-ref -->
         <div class="formula-ref" style="margin-bottom:20px">
           <h4>
-            <span class="lang-fr">Formule — Stats Basiques</span><span class="lang-en hidden">Basic Stat Formula</span><span class="lang-sk hidden">Vzorec — Základné štatistiky</span>
+            <span class="lang-fr">Formule — Statistiques</span><span class="lang-en hidden">Statistics Formula</span><span class="lang-sk hidden">Vzorec — Štatistiky</span>
           </h4>
           <div class="formula-line"><span class="step">STEP 1</span><span class="v">Stat_Flat</span> = Initial + Equip + Adv + Enchant + Avian</div>
           <div class="formula-line"><span class="step">STEP 2</span><span class="v">BaseFactor</span> = <span class="n">1</span> + (Pal + Skill + Tech + Relic + Mount + Artifact + Parking + BackAcc + Ring + Sail + StarHero + SacredTree) ÷ <span class="n">100</span></div>
@@ -1014,6 +1079,418 @@
     </div>
   </div>
 
+  <!-- ===== YUKO FORMULA CALCULATOR ===== -->
+  <div class="tab-content" id="tab-yuko">
+    <div class="calc-layout">
+      <form id="yk-form" onsubmit="return false">
+
+        <!-- Mini formula reference -->
+        <div class="formula-ref" style="margin-bottom:20px">
+          <h4>
+            <span class="lang-fr">Formules de combat (vérifiées)</span>
+            <span class="lang-en hidden">Combat Formulas (verified)</span>
+            <span class="lang-sk hidden">Bojové vzorce (overené)</span>
+          </h4>
+          <div class="formula-line"><span class="step">STAT</span><span class="v">Final</span> = Flat × (1 + Base%/<span class="n">100</span>) × (1 + Global%/<span class="n">100</span>)</div>
+          <div class="formula-line"><span class="step">MULT</span><span class="v">FinalMult</span> = Mult% ÷ <span class="n">100</span> × (1 + DMGBonus%/<span class="n">100</span>) × (1 + GlobalDMG%/<span class="n">100</span>)</div>
+          <div class="formula-line"><span class="step">BASE</span><span class="v">BaseDMG</span> = max(1, ATK − DEF) × <span class="v">FinalMult</span></div>
+          <div class="formula-line"><span class="step">CRIT</span><span class="v">CritDMG</span> = BaseDMG × CritDMG% ÷ max(50, CritRES%) &nbsp;|&nbsp; <span class="v">SkillCrit</span> = {BaseDMG × (1+Bonus%)}<sup>0.98</sup></div>
+          <div class="formula-line"><span class="step">RES</span><span class="v">AfterRES</span> = DMG × (1 − TypeRES%/<span class="n">100</span>) × (1 − DMGRES%/<span class="n">100</span>) — cap <span class="n">80%</span></div>
+          <div class="formula-line"><span class="step">CTX</span><span class="v">PvP</span> = AfterRES ÷ PvPFactor &nbsp;|&nbsp; <span class="v">Boss</span> = AfterRES × (1 + Boss%/<span class="n">100</span>)</div>
+        </div>
+
+        <!-- ── Attacker ATK ── -->
+        <div class="section-chip">
+          <span class="lang-fr">ATQ de l'Attaquant</span><span class="lang-en hidden">Attacker ATK</span><span class="lang-sk hidden">ATK útočníka</span>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label" for="yk-atk-flat">
+              <span class="lang-fr">ATQ Fixe</span><span class="lang-en hidden">ATK Flat</span><span class="lang-sk hidden">ATK Flat</span>
+            </label>
+            <input class="form-input" type="number" id="yk-atk-flat" value="20000000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yk-atk-base">
+              <span class="lang-fr">ATQ Base (%)</span><span class="lang-en hidden">ATK Base (%)</span><span class="lang-sk hidden">ATK Základ (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-atk-base" value="0" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yk-atk-global">
+              <span class="lang-fr">ATQ Global (%)</span><span class="lang-en hidden">ATK Global (%)</span><span class="lang-sk hidden">ATK Global (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-atk-global" value="0" min="0" step="0.01">
+          </div>
+        </div>
+        <div class="yk-inline-result">
+          <span class="yk-il">Final ATK =</span>
+          <span class="yk-iv" id="yk-atk-preview">—</span>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Damage Type ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Type de Dégâts</span><span class="lang-en hidden">Damage Type</span><span class="lang-sk hidden">Typ poškodenia</span>
+        </div>
+        <div class="yk-type-btns">
+          <button type="button" class="yk-type-btn active" data-type="basic">
+            <span class="lang-fr">ATQ Basique</span><span class="lang-en hidden">Basic ATK</span><span class="lang-sk hidden">Základný ATK</span>
+          </button>
+          <button type="button" class="yk-type-btn" data-type="combo">
+            <span class="lang-fr">Combo</span><span class="lang-en hidden">Combo</span><span class="lang-sk hidden">Kombo</span>
+          </button>
+          <button type="button" class="yk-type-btn" data-type="counter">
+            <span class="lang-fr">Contre-attaque</span><span class="lang-en hidden">Counter</span><span class="lang-sk hidden">Protiútok</span>
+          </button>
+          <button type="button" class="yk-type-btn" data-type="skill">
+            <span class="lang-fr">Compétence</span><span class="lang-en hidden">Skill</span><span class="lang-sk hidden">Schopnosť</span>
+          </button>
+        </div>
+
+        <!-- Basic ATK inputs -->
+        <div class="yk-type-section" id="yk-sec-basic">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="yk-basic-mult">
+                <span class="lang-fr">Mult. ATQ Basique (%)</span><span class="lang-en hidden">Basic ATK Mult (%)</span><span class="lang-sk hidden">Mult. Základného ATK (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-basic-mult" value="100" min="0" step="0.01">
+              <div class="input-hint">
+                <span class="lang-fr">En général 100% pour l'ATQ Basique</span>
+                <span class="lang-en hidden">Usually 100% for Basic ATK</span>
+                <span class="lang-sk hidden">Zvyčajne 100% pre Základný ATK</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-basic-dmg-bonus">
+                <span class="lang-fr">Bonus DMG ATQ B. (%)</span><span class="lang-en hidden">Basic ATK DMG Bonus (%)</span><span class="lang-sk hidden">Bonus DMG Zákl. ATK (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-basic-dmg-bonus" value="0" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-basic-global">
+                <span class="lang-fr">Global DMG ATQ B. (%)</span><span class="lang-en hidden">Global Basic DMG (%)</span><span class="lang-sk hidden">Globálny DMG Zákl. ATK (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-basic-global" value="0" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <!-- Combo inputs -->
+        <div class="yk-type-section hidden" id="yk-sec-combo">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="yk-combo-mult">
+                <span class="lang-fr">Mult. Combo (%)</span><span class="lang-en hidden">Combo Mult (%)</span><span class="lang-sk hidden">Mult. Komba (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-combo-mult" value="150" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-combo-dmg-bonus">
+                <span class="lang-fr">Bonus DMG Combo (%)</span><span class="lang-en hidden">Combo DMG Bonus (%)</span><span class="lang-sk hidden">Bonus DMG Komba (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-combo-dmg-bonus" value="0" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-combo-global">
+                <span class="lang-fr">Global DMG Combo (%)</span><span class="lang-en hidden">Global Combo DMG (%)</span><span class="lang-sk hidden">Globálny DMG Komba (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-combo-global" value="0" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <!-- Counter inputs -->
+        <div class="yk-type-section hidden" id="yk-sec-counter">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="yk-counter-mult">
+                <span class="lang-fr">Mult. Contre-attaque (%)</span><span class="lang-en hidden">Counter Mult (%)</span><span class="lang-sk hidden">Mult. Protiútoku (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-counter-mult" value="120" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-counter-dmg-bonus">
+                <span class="lang-fr">Bonus DMG Contre-attaque (%)</span><span class="lang-en hidden">Counter DMG Bonus (%)</span><span class="lang-sk hidden">Bonus DMG Protiútoku (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-counter-dmg-bonus" value="0" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-counter-global">
+                <span class="lang-fr">Global DMG Contre-attaque (%)</span><span class="lang-en hidden">Global Counter DMG (%)</span><span class="lang-sk hidden">Globálny DMG Protiútoku (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-counter-global" value="0" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <!-- Skill inputs -->
+        <div class="yk-type-section hidden" id="yk-sec-skill">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="yk-skill-mult">
+                <span class="lang-fr">DMG Compétence (%)</span><span class="lang-en hidden">Skill DMG (%)</span><span class="lang-sk hidden">DMG Schopnosti (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-skill-mult" value="300" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-skill-player-dmg">
+                <span class="lang-fr">DMG Comp. Joueur (%)</span><span class="lang-en hidden">Player Skill DMG (%)</span><span class="lang-sk hidden">DMG Schopnosti hráča (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-skill-player-dmg" value="100" min="0" step="0.01">
+              <div class="input-hint">
+                <span class="lang-fr">Depuis vos stats passives</span>
+                <span class="lang-en hidden">From your passive skill stats</span>
+                <span class="lang-sk hidden">Z vašich pasívnych štatistík</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-skill-global">
+                <span class="lang-fr">Global DMG Comp. (%)</span><span class="lang-en hidden">Global Skill DMG (%)</span><span class="lang-sk hidden">Globálny DMG Schopnosti (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-skill-global" value="0" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Crit Type ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Type de Critique</span><span class="lang-en hidden">Crit Type</span><span class="lang-sk hidden">Typ kritu</span>
+        </div>
+        <div class="yk-crit-btns">
+          <button type="button" class="yk-crit-btn active" data-crit="none">
+            <span class="lang-fr">Sans Crit</span><span class="lang-en hidden">No Crit</span><span class="lang-sk hidden">Bez kritu</span>
+          </button>
+          <button type="button" class="yk-crit-btn" data-crit="normal">
+            <span class="lang-fr">Coup Critique</span><span class="lang-en hidden">Normal Crit</span><span class="lang-sk hidden">Kritický úder</span>
+          </button>
+          <button type="button" class="yk-crit-btn" data-crit="skill">
+            <span class="lang-fr">Crit Compétence</span><span class="lang-en hidden">Skill Crit</span><span class="lang-sk hidden">Krit. schopnosť</span>
+          </button>
+        </div>
+
+        <div id="yk-crit-normal-inputs" class="hidden">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="yk-crit-dmg">
+                <span class="lang-fr">DMG Critique (%)</span><span class="lang-en hidden">Crit DMG (%)</span><span class="lang-sk hidden">Krit. DMG (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-crit-dmg" value="200" min="0" step="0.01">
+              <div class="input-hint">
+                <span class="lang-fr">Multiplicateur Crit DMG total (%)</span>
+                <span class="lang-en hidden">Total Crit DMG multiplier (%)</span>
+                <span class="lang-sk hidden">Celkový Krit. DMG multiplikátor (%)</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="yk-crit-res">
+                <span class="lang-fr">RES Critique Ennemi (%)</span><span class="lang-en hidden">Enemy Crit RES (%)</span><span class="lang-sk hidden">Krit. odolnosť nepriateľa (%)</span>
+              </label>
+              <input class="form-input" type="number" id="yk-crit-res" value="100" min="50" step="0.01">
+              <div class="input-hint">CritDMG = BaseDMG × CritDMG% ÷ max(50, CritRES%)</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="yk-crit-skill-inputs" class="hidden">
+          <div class="form-group">
+            <label class="form-label" for="yk-skill-crit-dmg">
+              <span class="lang-fr">Bonus Crit Compétence (%)</span><span class="lang-en hidden">Skill Crit DMG Bonus (%)</span><span class="lang-sk hidden">Bonus Krit. schopnosti (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-skill-crit-dmg" value="200" min="0" step="0.01">
+            <div class="input-hint">
+              SkillCrit = {BaseDMG × (1 + Bonus%/100)}<sup>0.98</sup> — <span class="lang-fr">non affecté par CritRES</span><span class="lang-en hidden">unaffected by CritRES</span><span class="lang-sk hidden">neovplyvnené CritRES</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Enemy DEF ── -->
+        <div class="section-chip">
+          <span class="lang-fr">DEF de l'Ennemi</span><span class="lang-en hidden">Enemy DEF</span><span class="lang-sk hidden">DEF nepriateľa</span>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label" for="yk-def-flat">
+              <span class="lang-fr">DEF Fixe</span><span class="lang-en hidden">DEF Flat</span><span class="lang-sk hidden">DEF Flat</span>
+            </label>
+            <input class="form-input" type="number" id="yk-def-flat" value="10000000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yk-def-base">
+              <span class="lang-fr">DEF Base (%)</span><span class="lang-en hidden">DEF Base (%)</span><span class="lang-sk hidden">DEF Základ (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-def-base" value="0" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yk-def-global">
+              <span class="lang-fr">DEF Global (%)</span><span class="lang-en hidden">DEF Global (%)</span><span class="lang-sk hidden">DEF Global (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-def-global" value="0" min="0" step="0.01">
+          </div>
+        </div>
+        <div class="yk-inline-result">
+          <span class="yk-il">Final DEF =</span>
+          <span class="yk-iv" id="yk-def-preview">—</span>
+        </div>
+
+        <div class="form-row" style="margin-top:16px">
+          <div class="form-group">
+            <label class="form-label" for="yk-type-res">
+              <span class="lang-fr">RES Type Spécifique (%)</span><span class="lang-en hidden">Type-specific RES (%)</span><span class="lang-sk hidden">RES špecif. typu (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-type-res" value="0" min="0" max="80" step="0.01">
+            <div class="input-hint">
+              <span class="lang-fr">RES pour ce type d'attaque (plafonné à 80%)</span>
+              <span class="lang-en hidden">RES for this attack type (capped 80%)</span>
+              <span class="lang-sk hidden">RES pre tento typ útoku (max 80%)</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="yk-dmg-res">
+              <span class="lang-fr">RES Dégâts Global (%)</span><span class="lang-en hidden">Global DMG RES (%)</span><span class="lang-sk hidden">Globálny DMG RES (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-dmg-res" value="0" min="0" max="80" step="0.01">
+            <div class="input-hint">
+              <span class="lang-fr">RES global de l'ennemi (plafonné à 80%)</span>
+              <span class="lang-en hidden">Enemy global DMG RES (capped 80%)</span>
+              <span class="lang-sk hidden">Globálny DMG RES nepriateľa (max 80%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- ── Combat Context ── -->
+        <div class="section-chip">
+          <span class="lang-fr">Contexte de Combat</span><span class="lang-en hidden">Combat Context</span><span class="lang-sk hidden">Kontext boja</span>
+        </div>
+        <div class="yk-ctx-btns">
+          <button type="button" class="yk-ctx-btn active" data-ctx="pve">PvE</button>
+          <button type="button" class="yk-ctx-btn" data-ctx="pvp">PvP</button>
+          <button type="button" class="yk-ctx-btn" data-ctx="boss">Boss</button>
+        </div>
+
+        <div id="yk-pvp-inputs" class="hidden">
+          <div class="form-group">
+            <label class="form-label" for="yk-pvp-factor">
+              <span class="lang-fr">Facteur de Réduction PvP</span><span class="lang-en hidden">PvP Reduction Factor</span><span class="lang-sk hidden">PvP redukčný faktor</span>
+            </label>
+            <input class="form-input" type="number" id="yk-pvp-factor" value="485.1" min="1" step="0.01">
+            <div class="input-hint">
+              <span class="lang-fr">Basé sur le niveau moyen des deux joueurs (ex: Lv.182 = 485.10, Lv.220 = 754.00). Final = AfterRES ÷ Facteur</span>
+              <span class="lang-en hidden">Based on average level of both players (e.g. Lv.182 = 485.10, Lv.220 = 754.00). Final = AfterRES ÷ Factor</span>
+              <span class="lang-sk hidden">Podľa priemernej úrovne oboch hráčov (napr. Lv.182 = 485.10, Lv.220 = 754.00). Final = AfterRES ÷ Faktor</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="yk-boss-inputs" class="hidden">
+          <div class="form-group">
+            <label class="form-label" for="yk-boss-dmg">
+              <span class="lang-fr">Bonus Dégâts Boss (%)</span><span class="lang-en hidden">Boss DMG Bonus (%)</span><span class="lang-sk hidden">Bonus DMG Bossa (%)</span>
+            </label>
+            <input class="form-input" type="number" id="yk-boss-dmg" value="0" min="0" step="0.01">
+            <div class="input-hint">
+              <span class="lang-fr">Votre stat Boss DMG%. Final = AfterRES × (1 + Boss%/100)</span>
+              <span class="lang-en hidden">Your Boss DMG% stat. Final = AfterRES × (1 + Boss%/100)</span>
+              <span class="lang-sk hidden">Vaša Boss DMG% štatistika. Final = AfterRES × (1 + Boss%/100)</span>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Yuko Results Panel -->
+      <div class="results-panel sticky-results">
+        <div class="results-header">
+          🧮 <span class="lang-fr">Résultats</span><span class="lang-en hidden">Results</span><span class="lang-sk hidden">Výsledky</span>
+        </div>
+        <div class="results-body">
+
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">ATQ Final</span><span class="lang-en hidden">Final ATK</span><span class="lang-sk hidden">Finálny ATK</span></span>
+            <span class="val atk" id="yk-r-final-atk">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">DEF Finale Ennemi</span><span class="lang-en hidden">Enemy Final DEF</span><span class="lang-sk hidden">Finálny DEF nepriateľa</span></span>
+            <span class="val def" id="yk-r-final-def">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">ATQ − DEF (écart)</span><span class="lang-en hidden">ATK − DEF (spread)</span><span class="lang-sk hidden">ATK − DEF (rozdiel)</span></span>
+            <span class="val" id="yk-r-spread">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Multiplicateur Final</span><span class="lang-en hidden">Final Multiplier</span><span class="lang-sk hidden">Finálny multiplikátor</span></span>
+            <span class="val" id="yk-r-mult">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Dégâts de Base</span><span class="lang-en hidden">Base Damage</span><span class="lang-sk hidden">Základné poškodenie</span></span>
+            <span class="val" id="yk-r-base">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Après Critique</span><span class="lang-en hidden">After Crit</span><span class="lang-sk hidden">Po kritike</span></span>
+            <span class="val gold" id="yk-r-after-crit">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><span class="lang-fr">Après Résistances</span><span class="lang-en hidden">After Resistances</span><span class="lang-sk hidden">Po odolnostiach</span></span>
+            <span class="val" id="yk-r-after-res">—</span>
+          </div>
+
+          <div class="result-final">
+            <div class="lbl">
+              <span class="lang-fr">Dégâts Finaux</span><span class="lang-en hidden">Final Damage</span><span class="lang-sk hidden">Finálne poškodenie</span>
+            </div>
+            <div class="val" id="yk-r-final">—</div>
+          </div>
+
+          <button type="button" id="yk-save-btn" style="width:100%;margin-top:16px;padding:12px;border-radius:var(--r);border:1px solid var(--teal);background:rgba(32,212,168,0.1);color:var(--teal);font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.15s">
+            💾 <span class="lang-fr">Sauvegarder ce résultat</span><span class="lang-en hidden">Save this result</span><span class="lang-sk hidden">Uložiť tento výsledok</span>
+          </button>
+
+          <!-- Comparison panel (shown when an entry is pinned) -->
+          <div id="yk-compare-panel" class="yk-compare-panel" style="display:none"></div>
+
+          <!-- History -->
+          <div style="margin-top:20px">
+            <div class="result-step-label" style="margin-bottom:8px">
+              📋 <span class="lang-fr">Historique (max 10)</span><span class="lang-en hidden">History (max 10)</span><span class="lang-sk hidden">História (max 10)</span>
+            </div>
+            <div id="yk-history-list"></div>
+          </div>
+
+          <div class="info-box" style="margin-top:12px;font-size:0.8rem">
+            💡 <span>
+              <span class="lang-fr">Épinglez 📌 une entrée pour comparer avec vos valeurs actuelles. Les résultats sont stockés localement (localStorage).</span>
+              <span class="lang-en hidden">Pin 📌 a history entry to compare it against your current values. Results are stored locally (localStorage).</span>
+              <span class="lang-sk hidden">Pripnite 📌 záznam histórie na porovnanie s aktuálnymi hodnotami. Výsledky sa uchovávajú lokálne (localStorage).</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Formula Reference — en bas de page -->
+  <div class="formula-ref" style="margin-top:32px">
+    <h4>
+      <span class="lang-fr">Référence des Formules</span><span class="lang-en hidden">Formula Reference</span><span class="lang-sk hidden">Referencia vzorcov</span>
+    </h4>
+    <div class="formula-line"><span class="step">STEP 1</span><span class="v">ATK/DEF</span> = (FinalBase × (<span class="n">100</span> + Parking%) ÷ <span class="n">100</span>) × (<span class="n">100</span> + Buff%) ÷ <span class="n">100</span> + Exclusive</div>
+    <div class="formula-line"><span class="step">STEP 2</span><span class="v">FinalMult</span> = (Skill% + BuffAdd%) ÷ <span class="n">100</span> × (<span class="n">100</span> + BuffMult%) ÷ <span class="n">100</span> + BuffExcl% ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 3</span><span class="v">A</span> = (ATK − DEF) × <span class="v">FinalMult</span> × DMGMult% ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 4</span><span class="v">B(Crit)</span> = A × CritMult ÷ CritRES &nbsp;|&nbsp; <span class="v">B(SkillCrit)</span> = {A × (<span class="n">1</span> + SkillCritMult)}<sup><span class="n">0.98</span></sup></div>
+    <div class="formula-line"><span class="step">STEP 5</span><span class="v">C</span> = (A or B) × (<span class="n">100</span>−RES%) ÷ <span class="n">100</span> × (<span class="n">100</span>−DMGRES%) ÷ <span class="n">100</span> × (<span class="n">100</span>+BuffFinal%) ÷ <span class="n">100</span></div>
+    <div class="formula-line"><span class="step">STEP 6</span><span class="v">PvP</span> = C ÷ PvPDecrease &nbsp;|&nbsp; <span class="v">PvE</span> = C × PvEBonus (Sword <span class="n">1.1</span> / Ax <span class="n">1.05</span>) &nbsp;|&nbsp; <span class="v">ToBoss</span> = PvE × (<span class="n">100</span>+Boss%) ÷ <span class="n">100</span></div>
+  </div>
+
 </div>
 
 <footer>
@@ -1027,7 +1504,8 @@
   <p style="margin-top:10px">
     <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
     <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
-    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data.html">Data</a>
   </p>
 </footer>
 
