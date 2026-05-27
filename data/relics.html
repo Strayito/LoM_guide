@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<base href="../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relic — LoM Fan Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="assets/css/data.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link active">Data</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="data-page">
+  <a href="data/index.html" class="back-link">← Game Data</a>
+  <h1 class="page-title">🏺 Relic</h1>
+  <div class="acc">
+    <div class="acc-item open" id="acc-rel-e">
+      <button class="acc-head" data-acc="rel-e">
+        <span class="acc-icon">🏺</span>
+        <span class="acc-title">Enhancement</span>
+        <span class="acc-badge">Lv 0→149</span>
+        <span class="acc-chev">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="info-note">
+          Each level increases the <strong>Passive Effect</strong> by +16%.
+          Values marked <span class="val-dim">*</span> are estimated — data above Lv 110 is incomplete.
+        </div>
+        <div class="toolbar" style="margin-top:.6rem">
+          <input type="search" placeholder="Filter…" data-tbl="rel-e">
+          <span class="tbl-cnt" id="cnt-rel-e"></span>
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-rel-e">
+          <thead><tr>
+            <th data-col="0">Lv</th>
+            <th data-col="1" class="r">Required</th>
+            <th data-col="2" class="r">Passive Effect</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="acc-item open" id="acc-rel-p">
+      <button class="acc-head" data-acc="rel-p">
+        <span class="acc-icon">✨</span>
+        <span class="acc-title">Primeval Breath</span>
+        <span class="acc-badge">★PB</span>
+        <span class="acc-chev">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="info-note">
+          Milestone levels (0→1, 9→10, 19→20…) require <strong class="val-gold">★PB stones</strong> instead of regular currency.
+        </div>
+        <div class="toolbar" style="margin-top:.6rem">
+          <input type="search" placeholder="Filter…" data-tbl="rel-p">
+          <span class="tbl-cnt" id="cnt-rel-p"></span>
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-rel-p">
+          <thead><tr>
+            <th data-col="0">Lv</th>
+            <th data-col="1" class="r">Required</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;·&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+<script src="assets/js/data-engine.js"></script>
+<script src="assets/js/data/relic.js"></script>
+<script>initTable('rel-e', relicEnhance); initTable('rel-p', relicPB); wireControls();</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<base href="../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Basic Info — LoM Fan Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="assets/css/data.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link active">Data</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="data-page">
+  <a href="data/index.html" class="back-link">← Game Data</a>
+  <h1 class="page-title">📊 Basic Info</h1>
+  <div class="acc">
+    <div class="acc-item open" id="acc-bi">
+      <button class="acc-head" data-acc="bi">
+        <span class="acc-icon">📊</span>
+        <span class="acc-title">Stats &amp; Attributes</span>
+        <span class="acc-badge">32 stats</span>
+        <span class="acc-chev">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="toolbar">
+          <input type="search" placeholder="Filter stat or category…" data-tbl="bi">
+          <span class="tbl-cnt" id="cnt-bi"></span>
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-bi">
+          <thead><tr>
+            <th data-col="0">Stat</th>
+            <th data-col="1">Category</th>
+            <th data-col="2">Effect</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;·&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+<script src="assets/js/data-engine.js"></script>
+<script src="assets/js/data/basicinfo.js"></script>
+<script>initTable('bi', basicinfo); wireControls();</script>
+</body>
+</html>
