@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <base href="../">
@@ -36,18 +36,92 @@
 <div class="data-page">
   <a href="data/index.html" class="back-link">← Game Data</a>
   <h1 class="page-title">🔥 Magic Furnace</h1>
+
   <div class="acc">
-    <div class="acc-item open" id="acc-mf">
-      <button class="acc-head" data-acc="mf">
-        <span class="acc-icon">🔥</span>
-        <span class="acc-title">Magic Furnace</span>
-        <span class="acc-badge">Coming soon</span>
+
+    <!-- ── Magic Enhance Level ── -->
+    <div class="acc-item open" id="acc-enhance">
+      <button class="acc-head" data-acc="enhance">
+        <span class="acc-icon">⬆️</span>
+        <span class="acc-title">Magic Enhance Level</span>
+        <span class="acc-badge">Lv 0→150</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
-        <div class="placeholder-box">Data not yet available.</div>
+        <div class="info-note">
+          <strong>Arcane Stones</strong> = cost per slot per enhance attempt.
+          <strong>×10 Slots</strong> = cost assuming 10 equipment slots enhanced simultaneously.
+          <strong>Total</strong> = cumulative ×10 cost from Lv 0.
+          <strong>※</strong> = requires Breakthrough to unlock.
+        </div>
+        <div class="toolbar" style="margin-top:.6rem">
+          <input type="search" placeholder="Filter…" data-tbl="enhance">
+          <span class="tbl-cnt" id="cnt-enhance"></span>
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-enhance">
+          <thead><tr>
+            <th>Lv</th>
+            <th data-col="1" class="r">Effect</th>
+            <th data-col="2" class="r">Arcane Stones</th>
+            <th data-col="3" class="r">×10 Slots</th>
+            <th data-col="4" class="r">Total (×10)</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
       </div>
     </div>
+
+    <!-- ── Breakthrough ── -->
+    <div class="acc-item" id="acc-breakthrough">
+      <button class="acc-head" data-acc="breakthrough">
+        <span class="acc-icon">💎</span>
+        <span class="acc-title">Breakthrough</span>
+        <span class="acc-badge">Lv 0–25</span>
+        <span class="acc-chev">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="info-note">
+          <strong>Max Enhance Lv</strong> = enhance level cap unlocked at this breakthrough.
+          <strong>Pierce / Block / Pal Inspire / Pal RES</strong> = cumulative stat total granted.
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-breakthrough">
+          <thead><tr>
+            <th data-col="0">Lv</th>
+            <th data-col="1" class="r">Divine Crystals</th>
+            <th data-col="2" class="r">Max Enhance Lv</th>
+            <th data-col="3" class="r">Pierce</th>
+            <th data-col="4" class="r">Block</th>
+            <th data-col="5" class="r">Pal Inspire</th>
+            <th data-col="6" class="r">Pal RES</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ── Gear Resonance ── -->
+    <div class="acc-item" id="acc-resonance">
+      <button class="acc-head" data-acc="resonance">
+        <span class="acc-icon">🔗</span>
+        <span class="acc-title">Gear Resonance</span>
+        <span class="acc-badge">Lv 2–36</span>
+        <span class="acc-chev">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="info-note">
+          Resonance bonuses at even levels only. Values are cumulative totals at the given resonance level.
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-resonance">
+          <thead><tr>
+            <th data-col="0">Resonance Lv</th>
+            <th data-col="1" class="r">Final DMG Boost</th>
+            <th data-col="2" class="r">Final DMG RES</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -67,6 +141,14 @@
   document.getElementById('hamburger').addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
   });
+</script>
+<script src="assets/js/data-engine.js"></script>
+<script src="assets/js/data/magic-furnace.js"></script>
+<script>
+  initTable('enhance', magicEnhance);
+  initTable('breakthrough', magicBreakthrough);
+  initTable('resonance', magicResonance);
+  wireControls();
 </script>
 </body>
 </html>
