@@ -284,6 +284,7 @@
     <button class="sim-tab-btn active" data-tab="combat">⚔️ Combat</button>
     <button class="sim-tab-btn" data-tab="compare">⚖️ Compare A/B</button>
     <button class="sim-tab-btn" data-tab="pal">👾 Familier</button>
+    <button class="sim-tab-btn" data-tab="palcmp">⚖️ Pal A/B</button>
     <button class="sim-tab-btn" data-tab="hpdmg">❤️ HP Dmg</button>
     <button class="sim-tab-btn" data-tab="sailing">⛵ Sailing</button>
     <button class="sim-tab-btn" data-tab="mechanics">🎯 Mécaniques</button>
@@ -663,6 +664,16 @@
         </div>
 
         <label class="checkbox-row">
+          <input type="checkbox" id="pal-boss"> Boss DMG
+        </label>
+        <div id="pal-boss-opts" class="toggle-section" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="pal-bossdmg">Boss DMG bonus (%)</label>
+            <input class="form-input" type="number" id="pal-bossdmg" value="0" min="0" step="0.1">
+          </div>
+        </div>
+
+        <label class="checkbox-row">
           <input type="checkbox" id="pal-pvp"> Mode PvP
         </label>
         <div id="pal-pvp-opts" class="toggle-section" style="display:none">
@@ -692,6 +703,155 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- ═══════════ TAB: PAL COMPARE A/B ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-palcmp">
+
+    <!-- Shared options -->
+    <div class="formula-ref" style="margin-bottom:16px">
+      <h4>Options partagées (Pal A et B)</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+        <div>
+          <div class="form-group">
+            <label class="form-label" for="cpal-mult">Mult. Pal de base (%)</label>
+            <input class="form-input" type="number" id="cpal-mult" value="100" min="0" step="1">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label class="form-label" for="cpal-palres">Pal DMG RES cible (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="cpal-palres" value="0" min="0" max="80" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cpal-globalres">Global DMG RES cible (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="cpal-globalres" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cpal-crit"> Crit
+        </label>
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cpal-combo"> Combo
+        </label>
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cpal-boss"> Boss
+        </label>
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cpal-pvp"> PvP
+        </label>
+      </div>
+      <div id="cpal-crit-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">PalCritDMG A (%)</label>
+            <input class="form-input" type="number" id="cpal-a-critdmg" value="150" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">PalCritDMG B (%)</label>
+            <input class="form-input" type="number" id="cpal-b-critdmg" value="150" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cpal-critres">PalCritRES cible (%)</label>
+          <input class="form-input" type="number" id="cpal-critres" value="100" min="1" step="0.1">
+        </div>
+      </div>
+      <div id="cpal-combo-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-group">
+          <label class="form-label" for="cpal-combomult">Pal Combo Mult (%)</label>
+          <input class="form-input" type="number" id="cpal-combomult" value="150" min="0" step="0.1">
+        </div>
+      </div>
+      <div id="cpal-boss-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-group">
+          <label class="form-label" for="cpal-bossdmg">Boss DMG (%)</label>
+          <input class="form-input" type="number" id="cpal-bossdmg" value="0" min="0" step="0.1">
+        </div>
+      </div>
+      <div id="cpal-pvp-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cpal-pvpMyLv">Mon niveau</label>
+            <input class="form-input" type="number" id="cpal-pvpMyLv" value="100" min="1" max="220" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cpal-pvpELv">Niveau ennemi</label>
+            <input class="form-input" type="number" id="cpal-pvpELv" value="100" min="1" max="220" step="1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pal A | Pal B -->
+    <div class="cmp-layout">
+
+      <!-- Pal A -->
+      <div>
+        <div class="results-panel">
+          <div class="results-header" style="color:var(--blue)">🔵 Pal A</div>
+          <div class="results-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cpal-a-atk">ATK A</label>
+                <input class="form-input" type="number" id="cpal-a-atk" value="50000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cpal-a-def">DEF cible A</label>
+                <input class="form-input" type="number" id="cpal-a-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cpal-a-dmgpct">Pal DMG% A</label>
+              <input class="form-input" type="number" id="cpal-a-dmgpct" value="100" min="0" step="0.1">
+            </div>
+            <div class="sim-steps" id="cpal-a-steps" style="margin-top:12px"></div>
+            <div class="result-final" style="border-color:rgba(64,144,216,.3);background:rgba(64,144,216,.06)">
+              <div class="lbl">Dégâts Pal A</div>
+              <div class="val" style="color:var(--blue)" id="cpal-a-final">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pal B -->
+      <div>
+        <div class="results-panel">
+          <div class="results-header" style="color:var(--gold)">🟡 Pal B</div>
+          <div class="results-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cpal-b-atk">ATK B</label>
+                <input class="form-input" type="number" id="cpal-b-atk" value="55000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cpal-b-def">DEF cible B</label>
+                <input class="form-input" type="number" id="cpal-b-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cpal-b-dmgpct">Pal DMG% B</label>
+              <input class="form-input" type="number" id="cpal-b-dmgpct" value="120" min="0" step="0.1">
+            </div>
+            <div class="sim-steps" id="cpal-b-steps" style="margin-top:12px"></div>
+            <div class="result-final" style="border-color:rgba(232,192,64,.3);background:rgba(232,192,64,.06)">
+              <div class="lbl">Dégâts Pal B</div>
+              <div class="val" style="color:var(--gold)" id="cpal-b-final">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cmp-diff-row">
+      <div class="cmp-diff-label">Différence B − A</div>
+      <div id="cpal-diff">—</div>
+    </div>
+
   </div>
 
   <!-- ═══════════ TAB: HP DAMAGE ═══════════ -->
