@@ -1672,7 +1672,7 @@
                   <div class="gcombat-stat-base" id="cb-p-tpen-base">—</div>
                 </div>
                 <div>
-                  <div class="gcombat-stat-lbl">+ Variable TPEN</div>
+                  <div class="gcombat-stat-lbl">+ Remold TPEN</div>
                   <input class="gcombat-stat-bonus" type="number" id="cb-p-tpen-var" min="0" value="0" step="1" placeholder="0">
                 </div>
               </div>
@@ -1692,7 +1692,7 @@
                   <div class="gcombat-stat-base" id="cb-p-ten-base">—</div>
                 </div>
                 <div>
-                  <div class="gcombat-stat-lbl">+ Variable Ténacité</div>
+                  <div class="gcombat-stat-lbl">+ Remold Ténacité</div>
                   <input class="gcombat-stat-bonus" type="number" id="cb-p-ten-var" min="0" value="0" step="1" placeholder="0">
                 </div>
               </div>
@@ -1727,7 +1727,7 @@
                   <div class="gcombat-stat-base" id="cb-e-tpen-base">—</div>
                 </div>
                 <div>
-                  <div class="gcombat-stat-lbl">+ Variable TPEN</div>
+                  <div class="gcombat-stat-lbl">+ Remold TPEN</div>
                   <input class="gcombat-stat-bonus" type="number" id="cb-e-tpen-var" min="0" value="0" step="1" placeholder="0">
                 </div>
               </div>
@@ -1747,7 +1747,7 @@
                   <div class="gcombat-stat-base" id="cb-e-ten-base">—</div>
                 </div>
                 <div>
-                  <div class="gcombat-stat-lbl">+ Variable Ténacité</div>
+                  <div class="gcombat-stat-lbl">+ Remold Ténacité</div>
                   <input class="gcombat-stat-bonus" type="number" id="cb-e-ten-var" min="0" value="0" step="1" placeholder="0">
                 </div>
               </div>
@@ -2077,7 +2077,7 @@
       return parseInt((el.textContent || '').replace(/[\s,]/g, '')) || 0;
     }
 
-    /* Total = (Base_data + Variable) x (1 + Global%/100) */
+    /* Total = (Gardien + Remold) x (1 + Global%/100) */
     function setTotal(totEl, baseEl, varEl, bonEl, color) {
       var b = readBase(baseEl);
       var v = Math.round(parseFloat(varEl.value) || 0);
@@ -2171,7 +2171,7 @@
         + '</div>'
         + '<div class="gcombat-verdict" style="color:' + vColor + ';border-color:' + vColor + ';background:rgba(0,0,0,.18)">' + verdict + '</div>'
         + '<div class="info-note" style="margin-bottom:.75rem;font-size:.72rem">'
-        + '📐 Total = (Base + Variable) × (1 + Global%) · '
+        + '📐 TPEN = (Gardien + Remold) × (1 + Global TPEN/100) · Ténacité = (Gardien + Remold) × (1 + Global Tén./100) · '
         + 'Survie = min(10 s, Ténacité / TPEN Ennemi) · '
         + 'Dégâts = TPEN × Survie'
         + '</div>';
