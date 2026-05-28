@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <base href="../">
@@ -148,6 +148,27 @@
   flex-shrink: 0;
 }
 
+/* ── Star selector on cards ─────────────────────────────────────────────── */
+.g-stars {
+  display: flex;
+  gap: .22rem;
+  margin: .25rem 0 .2rem;
+  flex-wrap: wrap;
+}
+.g-star-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: .58rem;
+  font-weight: 700;
+  padding: .15rem .3rem;
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.g-star-btn:hover  { border-color: var(--gold); color: var(--gold); }
+.g-star-btn.active { background: rgba(232,192,64,.15); border-color: var(--gold); color: var(--gold); }
+
 @media (max-width: 600px) {
   .g-grid { grid-template-columns: 1fr; }
 }
@@ -216,7 +237,7 @@
       <button class="acc-head" data-acc="stars">
         <span class="acc-icon">⭐</span>
         <span class="acc-title">Progression ★1 → ★5</span>
-        <span class="acc-badge">Wrath · Spirit · Sage</span>
+        <span class="acc-badge">Wrath · Spirit · Sage · Hero</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
@@ -283,10 +304,20 @@
       html += '<div class="g-card-name">' + g.name + '</div>';
       html += '<span class="g-badge">' + rarity + '</span>';
       if (hasStar) html += ' <span class="g-badge" style="opacity:.55;font-size:.55rem">★1-5</span>';
+      var starData = GUARDIAN_STARS[g.name];
+      var dispTpen = starData ? starData[0][1] : g.tpen;
+      var dispTen  = starData ? starData[0][2] : g.ten;
       html += '<div class="g-stats">';
-      html += '<span class="g-stat">TPEN <b>' + fmt(g.tpen) + '</b></span>';
-      html += '<span class="g-stat">Ten. <b>' + fmt(g.ten) + '</b></span>';
+      html += '<span class="g-stat g-tpen">TPEN <b>' + fmt(dispTpen) + '</b></span>';
+      html += '<span class="g-stat g-ten">Ten. <b>' + fmt(dispTen) + '</b></span>';
       html += '</div>';
+      if (starData) {
+        html += '<div class="g-stars" data-name="' + g.name + '">';
+        for (var s = 1; s <= 5; s++) {
+          html += '<button class="g-star-btn' + (s === 1 ? ' active' : '') + '" data-s="' + s + '">★' + s + '</button>';
+        }
+        html += '</div>';
+      }
       html += '<div class="g-skill">' + g.skill + '</div>';
       html += '</div></div>';
     });
@@ -324,7 +355,7 @@
       var dTpen = i > 0 ? '+' + fmt(tpen - rows[i-1][1]) : '—';
       var dTen  = i > 0 ? '+' + fmt(ten  - rows[i-1][2]) : '—';
       var powN  = parseInt(pow);
-      var dPow  = i > 0 ? '+' + (powN - parseInt(rows[i-1][3])) + '%' : '—';
+      var dPow  = (i > 0 && !isNaN(powN)) ? '+' + (powN - parseInt(rows[i-1][3])) + '%' : '—';
 
       stHtml += '<tr>';
       stHtml += '<td class="hi">★' + star + '</td>';
@@ -341,6 +372,23 @@
     stHtml += '</div></div>';
   });
   starsEl.innerHTML = stHtml;
+
+  // ── Star selector in overview cards ──────────────────────────────────────
+  overviewEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('.g-star-btn');
+    if (!btn) return;
+    var starsDiv = btn.closest('.g-stars');
+    var name = starsDiv.getAttribute('data-name');
+    var star = parseInt(btn.getAttribute('data-s'), 10);
+    var rows = GUARDIAN_STARS[name];
+    if (!rows) return;
+    var row = rows[star - 1];
+    var card = starsDiv.closest('.g-card');
+    card.querySelector('.g-tpen b').textContent = fmt(row[1]);
+    card.querySelector('.g-ten b').textContent  = fmt(row[2]);
+    starsDiv.querySelectorAll('.g-star-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  });
 
   // ── Hamburger ────────────────────────────────────────────────────────────
   document.getElementById('hamburger').addEventListener('click', function () {
