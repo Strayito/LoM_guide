@@ -216,6 +216,9 @@
     <button class="tab-btn" data-tab="yuko">
       🧮 <span class="lang-fr">Formules de combat</span><span class="lang-en hidden">Combat Formulas</span><span class="lang-sk hidden">Bojové vzorce</span>
     </button>
+    <button class="tab-btn" data-tab="mount">
+      🏇 <span class="lang-fr">Monture</span><span class="lang-en hidden">Mount</span><span class="lang-sk hidden">Jazdec</span>
+    </button>
   </div>
 
   <!-- ===== STAT CALCULATOR ===== -->
@@ -1479,6 +1482,81 @@
     </div>
   </div>
 
+  <!-- ===== MOUNT CALCULATOR ===== -->
+  <div class="tab-content" id="tab-mount">
+    <div class="calc-layout">
+
+      <form id="mount-form" onsubmit="return false">
+
+        <div class="section-chip">
+          <span class="lang-fr">Rangs</span><span class="lang-en hidden">Ranks</span><span class="lang-sk hidden">Rangy</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mount-start">
+              <span class="lang-fr">▶ Rang de départ</span><span class="lang-en hidden">▶ Starting Rank</span><span class="lang-sk hidden">▶ Počiatočný rank</span>
+            </label>
+            <select class="form-select" id="mount-start"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mount-end">
+              <span class="lang-fr">◀ Rang d'arrivée</span><span class="lang-en hidden">◀ Target Rank</span><span class="lang-sk hidden">◀ Cieľový rank</span>
+            </label>
+            <select class="form-select" id="mount-end"></select>
+          </div>
+        </div>
+
+        <div id="mount-warn" class="info-box" style="display:none;border-color:var(--red);color:var(--red);background:rgba(224,64,64,0.08)">
+          ⚠️ <span class="lang-fr">Le rang d'arrivée doit être supérieur au rang de départ.</span>
+          <span class="lang-en hidden">Target rank must be higher than starting rank.</span>
+          <span class="lang-sk hidden">Cieľový rank musí byť vyšší ako počiatočný.</span>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="mount-owned">
+            ⚙️ <span class="lang-fr">Clock-winders déjà possédés</span><span class="lang-en hidden">Clock-winders already owned</span><span class="lang-sk hidden">Už vlastnené Clock-windery</span>
+          </label>
+          <input class="form-input" type="number" id="mount-owned" min="0" value="0" placeholder="0" style="max-width:200px">
+          <div class="input-hint">
+            <span class="lang-fr">Optionnel — calcule ce qu'il reste à acquérir</span>
+            <span class="lang-en hidden">Optional — computes what's still needed</span>
+            <span class="lang-sk hidden">Voliteľné — vypočíta, čo ešte treba získať</span>
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="mount-gems">
+          <label for="mount-gems">
+            💎 <span class="lang-fr">Convertir en Gemmes (1 ⚙️ = 35 💎)</span>
+            <span class="lang-en hidden">Convert to Gems (1 ⚙️ = 35 💎)</span>
+            <span class="lang-sk hidden">Previesť na Drahokamy (1 ⚙️ = 35 💎)</span>
+          </label>
+        </div>
+
+        <div class="info-box" style="margin-top:20px;font-size:0.82rem">
+          💡 <span>
+            <span class="lang-fr">Les données Clock-winder couvrent R1★1 → R24★9. Consultez la <a href="data/clock-winder.html">table complète</a> pour les détails par étoile.</span>
+            <span class="lang-en hidden">Clock-winder data covers R1★1 → R24★9. See the <a href="data/clock-winder.html">full table</a> for per-star details.</span>
+            <span class="lang-sk hidden">Dáta Clock-winder pokrývajú R1★1 → R24★9. Pozri <a href="data/clock-winder.html">celú tabuľku</a> pre detaily.</span>
+          </span>
+        </div>
+
+      </form>
+
+      <div class="results-panel sticky-results">
+        <div class="results-header">
+          🏇 <span class="lang-fr">Coût d'Amélioration</span><span class="lang-en hidden">Upgrade Cost</span><span class="lang-sk hidden">Náklady na vylepšenie</span>
+        </div>
+        <div class="results-body" id="mount-results-body">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Formula Reference — en bas de page -->
   <div class="formula-ref" style="margin-top:32px">
     <h4>
@@ -1512,6 +1590,8 @@
 
 <script src="assets/js/main.js"></script>
 <script src="js/calculator.js"></script>
+<script src="assets/js/data/clockwinder.js"></script>
+<script src="assets/js/mount-calc.js"></script>
 <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
