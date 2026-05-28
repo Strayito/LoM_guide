@@ -418,6 +418,63 @@
           plafonné à <strong>+80%</strong> (8 invocations).
         </div>
 
+        <!-- ─ Duel TPEN vs Ténacité ─ -->
+        <hr style="border:none;border-top:1px solid rgba(32,212,168,.15);margin:1rem 0">
+        <div class="dsub-title">⚔️ Duel TPEN vs Ténacité</div>
+
+        <div class="sim-row">
+          <div>
+            <div class="sim-label" style="color:var(--teal)">👤 Mon Gardien</div>
+            <select class="sim-select" id="duel-p-guardian">
+              <option value="">— Saisie manuelle —</option>
+            </select>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.5rem">
+              <div>
+                <div class="sim-label">TPEN Base</div>
+                <input class="sim-number" type="number" id="duel-p-tpen" min="0" value="0">
+              </div>
+              <div>
+                <div class="sim-label">Ténacité Base</div>
+                <input class="sim-number" type="number" id="duel-p-ten" min="0" value="0">
+              </div>
+            </div>
+            <div style="margin-top:.5rem">
+              <div class="sim-label">Bonus Global TPEN (%)</div>
+              <input class="sim-number" type="number" id="duel-p-tpen-bonus" min="0" value="0" step="0.1">
+            </div>
+            <div style="margin-top:.4rem">
+              <div class="sim-label">Bonus Global Ténacité (%)</div>
+              <input class="sim-number" type="number" id="duel-p-ten-bonus" min="0" value="0" step="0.1">
+            </div>
+          </div>
+          <div>
+            <div class="sim-label" style="color:var(--red,#e04040)">⚔️ Gardien Ennemi</div>
+            <select class="sim-select" id="duel-e-guardian">
+              <option value="">— Saisie manuelle —</option>
+            </select>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.5rem">
+              <div>
+                <div class="sim-label">TPEN Base</div>
+                <input class="sim-number" type="number" id="duel-e-tpen" min="0" value="0">
+              </div>
+              <div>
+                <div class="sim-label">Ténacité Base</div>
+                <input class="sim-number" type="number" id="duel-e-ten" min="0" value="0">
+              </div>
+            </div>
+            <div style="margin-top:.5rem">
+              <div class="sim-label">Bonus Global TPEN (%)</div>
+              <input class="sim-number" type="number" id="duel-e-tpen-bonus" min="0" value="0" step="0.1">
+            </div>
+            <div style="margin-top:.4rem">
+              <div class="sim-label">Bonus Global Ténacité (%)</div>
+              <input class="sim-number" type="number" id="duel-e-ten-bonus" min="0" value="0" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div id="duel-results" style="margin-top:.85rem"><!-- JS --></div>
+
       </div>
     </div>
 
@@ -644,6 +701,85 @@
   simDuration.addEventListener('input', renderTiming);
 
   renderSim();
+
+  // ── 4. DUEL TPEN vs TÉNACITÉ ─────────────────────────────────────────────
+  var duelPSel    = document.getElementById('duel-p-guardian');
+  var duelESel    = document.getElementById('duel-e-guardian');
+  var duelPTpen   = document.getElementById('duel-p-tpen');
+  var duelPTen    = document.getElementById('duel-p-ten');
+  var duelETpen   = document.getElementById('duel-e-tpen');
+  var duelETen    = document.getElementById('duel-e-ten');
+  var duelPTpenB  = document.getElementById('duel-p-tpen-bonus');
+  var duelPTenB   = document.getElementById('duel-p-ten-bonus');
+  var duelETpenB  = document.getElementById('duel-e-tpen-bonus');
+  var duelETenB   = document.getElementById('duel-e-ten-bonus');
+  var duelResults = document.getElementById('duel-results');
+
+  GUARDIAN_LIST.forEach(function (g) {
+    [duelPSel, duelESel].forEach(function (sel) {
+      var opt = document.createElement('option');
+      opt.value = g.name;
+      opt.textContent = g.name + ' (' + g.rarity + ')';
+      sel.appendChild(opt);
+    });
+  });
+
+  function fillDuel(sel, tIn, tenIn) {
+    var g = GUARDIAN_LIST.find(function (x) { return x.name === sel.value; });
+    if (g) { tIn.value = g.tpen; tenIn.value = g.ten; }
+  }
+
+  function renderDuel() {
+    var pTpenBase = parseFloat(duelPTpen.value)  || 0;
+    var pTenBase  = parseFloat(duelPTen.value)   || 0;
+    var eTpenBase = parseFloat(duelETpen.value)  || 0;
+    var eTenBase  = parseFloat(duelETen.value)   || 0;
+    var pTpenBon  = parseFloat(duelPTpenB.value) || 0;
+    var pTenBon   = parseFloat(duelPTenB.value)  || 0;
+    var eTpenBon  = parseFloat(duelETpenB.value) || 0;
+    var eTenBon   = parseFloat(duelETenB.value)  || 0;
+
+    var pTPEN = pTpenBase * (1 + pTpenBon / 100);
+    var pTEN  = pTenBase  * (1 + pTenBon  / 100);
+    var eTPEN = eTpenBase * (1 + eTpenBon / 100);
+    var eTEN  = eTenBase  * (1 + eTenBon  / 100);
+
+    var dmgTo   = Math.max(0, pTPEN - eTEN);
+    var dmgFrom = Math.max(0, eTPEN - pTEN);
+
+    var verdict, vColor;
+    if      (dmgTo > 0 && dmgFrom === 0)       { verdict = '🏆 Victoire — votre TPEN perce la ténacité ennemie'; vColor = 'var(--teal)'; }
+    else if (dmgFrom > 0 && dmgTo === 0)        { verdict = '💀 Défaite — TPEN ennemi perce votre ténacité';      vColor = '#e04040'; }
+    else if (dmgTo === 0 && dmgFrom === 0)      { verdict = '🛡️ Égalité — les deux ténacités absorbent tout';     vColor = 'var(--gold)'; }
+    else if (dmgTo > dmgFrom)                   { verdict = '⚔️ Avantage Joueur — vous infligez plus';            vColor = 'var(--teal)'; }
+    else if (dmgFrom > dmgTo)                   { verdict = '⚔️ Avantage Ennemi — l\'ennemi inflige plus';        vColor = '#e04040'; }
+    else                                        { verdict = '⚔️ Duel équilibré — dégâts égaux';                   vColor = 'var(--gold)'; }
+
+    duelResults.innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.65rem">'
+        + '<div style="background:rgba(32,212,168,.05);border:1px solid rgba(32,212,168,.2);border-radius:9px;padding:.65rem">'
+          + '<div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);font-weight:700;margin-bottom:.45rem">👤 Mon Gardien</div>'
+          + '<div style="display:flex;justify-content:space-between;padding:.28rem 0;border-bottom:1px solid var(--border);font-size:.77rem"><span style="color:var(--text-secondary)">TPEN Total</span><span style="font-weight:700;color:var(--teal)">' + fmt(Math.round(pTPEN)) + '</span></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem"><span style="color:var(--text-secondary)">Ténacité Totale</span><span style="font-weight:700;color:var(--blue,#5599ff)">' + fmt(Math.round(pTEN)) + '</span></div>'
+          + '<div style="margin-top:.5rem;padding:.35rem .5rem;background:rgba(232,120,32,.08);border-radius:6px;font-size:.73rem;color:var(--text-secondary)">Dégâts infligés : <strong style="color:var(--orange,#e87820)">' + fmt(Math.round(dmgTo)) + '</strong></div>'
+        + '</div>'
+        + '<div style="background:rgba(224,64,64,.05);border:1px solid rgba(224,64,64,.2);border-radius:9px;padding:.65rem">'
+          + '<div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:#e04040;font-weight:700;margin-bottom:.45rem">⚔️ Gardien Ennemi</div>'
+          + '<div style="display:flex;justify-content:space-between;padding:.28rem 0;border-bottom:1px solid var(--border);font-size:.77rem"><span style="color:var(--text-secondary)">TPEN Total</span><span style="font-weight:700;color:#e04040">' + fmt(Math.round(eTPEN)) + '</span></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:.28rem 0;font-size:.77rem"><span style="color:var(--text-secondary)">Ténacité Totale</span><span style="font-weight:700;color:var(--blue,#5599ff)">' + fmt(Math.round(eTEN)) + '</span></div>'
+          + '<div style="margin-top:.5rem;padding:.35rem .5rem;background:rgba(224,64,64,.08);border-radius:6px;font-size:.73rem;color:var(--text-secondary)">Dégâts reçus : <strong style="color:#e04040">' + fmt(Math.round(dmgFrom)) + '</strong></div>'
+        + '</div>'
+      + '</div>'
+      + '<div style="padding:.65rem 1rem;border-radius:9px;border:1px solid ' + vColor + ';background:rgba(0,0,0,.2);text-align:center;font-weight:700;font-size:.85rem;color:' + vColor + '">' + verdict + '</div>'
+      + '<div class="info-note" style="margin-top:.6rem;font-size:.73rem">📐 TPEN_Total = Base × (1 + Bonus%) — Dégâts = max(0, TPEN_Total_Joueur − Ténacité_Totale_Ennemi)</div>';
+  }
+
+  duelPSel.addEventListener('change', function () { fillDuel(duelPSel, duelPTpen, duelPTen); renderDuel(); });
+  duelESel.addEventListener('change', function () { fillDuel(duelESel, duelETpen, duelETen); renderDuel(); });
+  [duelPTpen, duelPTen, duelETpen, duelETen, duelPTpenB, duelPTenB, duelETpenB, duelETenB].forEach(function (el) {
+    el.addEventListener('input', renderDuel);
+  });
+  renderDuel();
 
   // ── Hamburger ────────────────────────────────────────────────────────────
   document.getElementById('hamburger').addEventListener('click', function () {
