@@ -378,6 +378,98 @@
       .gsim-cards  { grid-template-columns: 1fr; }
       .gtiming-row { grid-template-columns: 1fr; }
     }
+
+    /* ── Combat 1v1 ── */
+    .gcombat-panels {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+    }
+    .gcombat-panel {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 12px; padding: .9rem;
+    }
+    .gcombat-panel-p { border-color: rgba(32,212,168,.35); }
+    .gcombat-panel-e { border-color: rgba(224,64,64,.35); }
+    .gcombat-panel-title {
+      font-size: .7rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: .7rem;
+    }
+    .gcombat-avatar {
+      display: flex; align-items: center; gap: .55rem;
+      margin-bottom: .65rem; min-height: 64px;
+    }
+    .gcombat-img {
+      width: 64px; height: 64px; border-radius: 9px; object-fit: cover;
+      background: var(--bg-primary); border: 1.5px solid var(--border);
+      flex-shrink: 0; transition: opacity .2s;
+    }
+    .gcombat-avatar-name {
+      font-weight: 700; font-size: .85rem; color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .gcombat-avatar-rarity { font-size: .65rem; color: var(--text-muted); margin-top: .1rem; }
+    .gcombat-stat-pair {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; margin-bottom: .4rem;
+    }
+    .gcombat-stat-lbl {
+      font-size: .6rem; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .05em; margin-bottom: .18rem;
+    }
+    .gcombat-stat-base {
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: 6px; padding: .32rem .55rem;
+      font-size: .78rem; font-weight: 700; color: var(--text-secondary);
+    }
+    .gcombat-stat-bonus {
+      width: 100%; box-sizing: border-box;
+      background: var(--bg-input); border: 1px solid var(--border);
+      color: var(--text-primary); border-radius: 6px; padding: .32rem .55rem;
+      font-size: .78rem; outline: none; transition: border-color .15s;
+    }
+    .gcombat-stat-bonus:focus { border-color: var(--teal); }
+    .gcombat-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .28rem .55rem; border-radius: 6px; font-size: .75rem; margin-bottom: .35rem;
+    }
+    .gcombat-results {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-bottom: .75rem;
+    }
+    .gcombat-res-box { border-radius: 9px; padding: .6rem .5rem; text-align: center; }
+    .gcombat-res-box-lbl { font-size: .57rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .22rem; }
+    .gcombat-res-box-val { font-size: 1.1rem; font-weight: 900; }
+    .gcombat-res-box-sub { font-size: .6rem; color: var(--text-muted); margin-top: .1rem; }
+    .gcombat-verdict {
+      padding: .7rem 1rem; border-radius: 9px; text-align: center;
+      font-weight: 700; font-size: .88rem; margin-bottom: .65rem; border: 1px solid;
+    }
+    .gcombat-chart {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 10px; padding: .85rem 1rem;
+    }
+    .gcombat-chart-title {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--text-secondary); margin-bottom: .65rem;
+    }
+    .gcombat-lane { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; }
+    .gcombat-lane-lbl { font-size: .62rem; font-weight: 700; width: 58px; flex-shrink: 0; text-align: right; }
+    .gcombat-lane-bar {
+      flex: 1; height: 26px; background: var(--bg-primary);
+      border: 1px solid var(--border); border-radius: 5px; position: relative; overflow: hidden;
+    }
+    .gcombat-seg {
+      position: absolute; top: 0; bottom: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .5rem; font-weight: 800; color: #0d1117;
+      border-radius: 3px; overflow: hidden; letter-spacing: 0;
+    }
+    .gcombat-axis {
+      display: flex; justify-content: space-between;
+      font-size: .57rem; color: var(--text-muted);
+      padding-left: 62px; margin-top: .25rem;
+    }
+    @media (max-width: 620px) {
+      .gcombat-panels  { grid-template-columns: 1fr; }
+      .gcombat-results { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -1548,6 +1640,134 @@
         </div>
       </div>
 
+      <!-- Combat 1v1 -->
+      <div class="acc-item open" id="gacc-combat">
+        <button class="acc-head">
+          <span class="acc-icon">⚔️</span>
+          <span class="acc-title">Combat 1v1</span>
+          <span class="acc-badge">TPEN vs Ténacité</span>
+          <span class="acc-chev">▼</span>
+        </button>
+        <div class="acc-body">
+
+          <div class="gcombat-panels">
+
+            <!-- Joueur -->
+            <div class="gcombat-panel gcombat-panel-p">
+              <div class="gcombat-panel-title" style="color:var(--teal)">👤 Mon Gardien</div>
+              <div class="gcombat-avatar">
+                <img class="gcombat-img" id="cb-p-img" src="" alt="" style="opacity:.15" onerror="this.style.opacity=.08">
+                <div style="min-width:0">
+                  <div class="gcombat-avatar-name" id="cb-p-name">— Aucun —</div>
+                  <div class="gcombat-avatar-rarity" id="cb-p-rarity"></div>
+                </div>
+              </div>
+              <select class="gsim-select" id="cb-p-guardian" style="margin-bottom:.7rem">
+                <option value="">— Choisir un gardien —</option>
+              </select>
+
+              <div class="gcombat-stat-pair">
+                <div>
+                  <div class="gcombat-stat-lbl">TPEN brut (data)</div>
+                  <div class="gcombat-stat-base" id="cb-p-tpen-base">—</div>
+                </div>
+                <div>
+                  <div class="gcombat-stat-lbl">Bonus TPEN (%)</div>
+                  <input class="gcombat-stat-bonus" type="number" id="cb-p-tpen-bonus" min="0" value="0" step="0.1">
+                </div>
+              </div>
+              <div class="gcombat-total-row" id="cb-p-tpen-total"
+                style="background:rgba(32,212,168,.05);border:1px solid rgba(32,212,168,.15)">
+                <span style="color:var(--text-muted)">TPEN Total</span>
+                <span style="font-weight:800;color:var(--teal)">—</span>
+              </div>
+
+              <div class="gcombat-stat-pair" style="margin-top:.45rem">
+                <div>
+                  <div class="gcombat-stat-lbl">Ténacité brute (data)</div>
+                  <div class="gcombat-stat-base" id="cb-p-ten-base">—</div>
+                </div>
+                <div>
+                  <div class="gcombat-stat-lbl">Bonus Ténacité (%)</div>
+                  <input class="gcombat-stat-bonus" type="number" id="cb-p-ten-bonus" min="0" value="0" step="0.1">
+                </div>
+              </div>
+              <div class="gcombat-total-row" id="cb-p-ten-total"
+                style="background:rgba(80,140,255,.05);border:1px solid rgba(80,140,255,.15)">
+                <span style="color:var(--text-muted)">Ténacité Totale</span>
+                <span style="font-weight:800;color:#5599ff">—</span>
+              </div>
+            </div>
+
+            <!-- Ennemi -->
+            <div class="gcombat-panel gcombat-panel-e">
+              <div class="gcombat-panel-title" style="color:#e04040">⚔️ Gardien Ennemi</div>
+              <div class="gcombat-avatar">
+                <img class="gcombat-img" id="cb-e-img" src="" alt="" style="opacity:.15" onerror="this.style.opacity=.08">
+                <div style="min-width:0">
+                  <div class="gcombat-avatar-name" id="cb-e-name">— Aucun —</div>
+                  <div class="gcombat-avatar-rarity" id="cb-e-rarity"></div>
+                </div>
+              </div>
+              <select class="gsim-select" id="cb-e-guardian" style="margin-bottom:.7rem">
+                <option value="">— Choisir un gardien —</option>
+              </select>
+
+              <div class="gcombat-stat-pair">
+                <div>
+                  <div class="gcombat-stat-lbl">TPEN brut (data)</div>
+                  <div class="gcombat-stat-base" id="cb-e-tpen-base">—</div>
+                </div>
+                <div>
+                  <div class="gcombat-stat-lbl">Bonus TPEN (%)</div>
+                  <input class="gcombat-stat-bonus" type="number" id="cb-e-tpen-bonus" min="0" value="0" step="0.1">
+                </div>
+              </div>
+              <div class="gcombat-total-row" id="cb-e-tpen-total"
+                style="background:rgba(224,64,64,.05);border:1px solid rgba(224,64,64,.15)">
+                <span style="color:var(--text-muted)">TPEN Total</span>
+                <span style="font-weight:800;color:#e04040">—</span>
+              </div>
+
+              <div class="gcombat-stat-pair" style="margin-top:.45rem">
+                <div>
+                  <div class="gcombat-stat-lbl">Ténacité brute (data)</div>
+                  <div class="gcombat-stat-base" id="cb-e-ten-base">—</div>
+                </div>
+                <div>
+                  <div class="gcombat-stat-lbl">Bonus Ténacité (%)</div>
+                  <input class="gcombat-stat-bonus" type="number" id="cb-e-ten-bonus" min="0" value="0" step="0.1">
+                </div>
+              </div>
+              <div class="gcombat-total-row" id="cb-e-ten-total"
+                style="background:rgba(80,140,255,.05);border:1px solid rgba(80,140,255,.15)">
+                <span style="color:var(--text-muted)">Ténacité Totale</span>
+                <span style="font-weight:800;color:#5599ff">—</span>
+              </div>
+            </div>
+
+          </div><!-- /gcombat-panels -->
+
+          <!-- Durée -->
+          <div style="display:flex;align-items:flex-end;gap:.75rem;margin-bottom:1rem">
+            <div>
+              <div class="gsim-label">Durée du combat</div>
+              <div style="display:flex;align-items:center;gap:.4rem">
+                <input class="gsim-number" type="number" id="cb-duration" min="1" max="600" value="60" style="width:90px">
+                <span style="font-size:.78rem;color:var(--text-muted)">secondes</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Résultats JS -->
+          <div id="cb-results"><!-- JS --></div>
+
+          <!-- Graphique JS -->
+          <div class="gcombat-chart" id="cb-chart"><!-- JS --></div>
+
+        </div>
+      </div>
+
       <!-- Simulateur -->
       <div class="acc-item open" id="gacc-sim">
         <button class="acc-head">
@@ -1796,6 +2016,178 @@
   gToSel.addEventListener('change', renderGSim);
   gDuration.addEventListener('input', renderGTiming);
   renderGSim();
+
+  /* ── 4. Combat 1v1 ── */
+  (function () {
+    var cbPSel   = document.getElementById('cb-p-guardian');
+    var cbESel   = document.getElementById('cb-e-guardian');
+    var cbPImg   = document.getElementById('cb-p-img');
+    var cbEImg   = document.getElementById('cb-e-img');
+    var cbPName  = document.getElementById('cb-p-name');
+    var cbEName  = document.getElementById('cb-e-name');
+    var cbPRar   = document.getElementById('cb-p-rarity');
+    var cbERar   = document.getElementById('cb-e-rarity');
+    var cbPTpenB = document.getElementById('cb-p-tpen-base');
+    var cbETpenB = document.getElementById('cb-e-tpen-base');
+    var cbPTenB  = document.getElementById('cb-p-ten-base');
+    var cbETenB  = document.getElementById('cb-e-ten-base');
+    var cbPTpenN = document.getElementById('cb-p-tpen-bonus');
+    var cbETpenN = document.getElementById('cb-e-tpen-bonus');
+    var cbPTenN  = document.getElementById('cb-p-ten-bonus');
+    var cbETenN  = document.getElementById('cb-e-ten-bonus');
+    var cbPTpenT = document.getElementById('cb-p-tpen-total');
+    var cbETpenT = document.getElementById('cb-e-tpen-total');
+    var cbPTenT  = document.getElementById('cb-p-ten-total');
+    var cbETenT  = document.getElementById('cb-e-ten-total');
+    var cbDur    = document.getElementById('cb-duration');
+    var cbRes    = document.getElementById('cb-results');
+    var cbChrt   = document.getElementById('cb-chart');
+    if (!cbPSel) return;
+
+    GUARDIAN_LIST.forEach(function (g) {
+      [cbPSel, cbESel].forEach(function (sel) {
+        var o = document.createElement('option');
+        o.value = g.name;
+        o.textContent = g.name + ' (' + g.rarity + ')';
+        sel.appendChild(o);
+      });
+    });
+
+    function readBase(el) {
+      return parseInt((el.textContent || '').replace(/[\s, ]/g, '')) || 0;
+    }
+
+    function setTotal(totEl, baseEl, bonEl, color) {
+      var b = readBase(baseEl);
+      var v = b ? Math.round(b * (1 + (parseFloat(bonEl.value) || 0) / 100)) : 0;
+      totEl.querySelector('span:last-child').textContent = b ? fmt(v) : '—';
+      totEl.querySelector('span:last-child').style.color = color;
+      return v;
+    }
+
+    function fillPanel(sel, imgEl, nameEl, rarEl, tpenBEl, tenBEl) {
+      var g = GUARDIAN_LIST.find(function (x) { return x.name === sel.value; });
+      if (g) {
+        imgEl.src = imgSrc(g.img);
+        imgEl.style.opacity = '1';
+        nameEl.textContent  = g.name;
+        rarEl.textContent   = g.rarity;
+        tpenBEl.textContent = fmt(g.tpen);
+        tenBEl.textContent  = fmt(g.ten);
+      } else {
+        imgEl.src = '';
+        imgEl.style.opacity = '.15';
+        nameEl.textContent  = '— Aucun —';
+        rarEl.textContent   = '';
+        tpenBEl.textContent = '—';
+        tenBEl.textContent  = '—';
+      }
+    }
+
+    function renderCombat() {
+      var D = Math.max(1, parseInt(cbDur.value) || 60);
+
+      var pTPEN = setTotal(cbPTpenT, cbPTpenB, cbPTpenN, 'var(--teal)');
+      var pTEN  = setTotal(cbPTenT,  cbPTenB,  cbPTenN,  '#5599ff');
+      var eTPEN = setTotal(cbETpenT, cbETpenB, cbETpenN, '#e04040');
+      var eTEN  = setTotal(cbETenT,  cbETenB,  cbETenN,  '#5599ff');
+
+      var summons = [];
+      for (var t = 2; t <= D; t += 15) summons.push(t);
+      var count  = summons.length;
+      var stacks = Math.min(8, count);
+      var boost  = stacks * 10;
+
+      var dmgP = Math.max(0, pTPEN - eTEN);
+      var dmgE = Math.max(0, eTPEN - pTEN);
+      var totP = dmgP * count;
+      var totE = dmgE * count;
+
+      var noData = !readBase(cbPTpenB) && !readBase(cbETpenB);
+
+      var verdict, vColor;
+      if (noData)                         { verdict = 'Sélectionnez deux gardiens pour commencer'; vColor = 'var(--text-muted)'; }
+      else if (dmgP > 0 && dmgE === 0)   { verdict = '🏆 Victoire — votre TPEN perce la ténacité ennemie'; vColor = 'var(--teal)'; }
+      else if (dmgE > 0 && dmgP === 0)   { verdict = '💀 Défaite — TPEN ennemi perce votre ténacité';      vColor = '#e04040'; }
+      else if (dmgP === 0 && dmgE === 0) { verdict = '🛡️ Égalité — les deux ténacités absorbent tout';     vColor = 'var(--gold)'; }
+      else if (totP > totE)              { verdict = '⚔️ Avantage Joueur — dégâts totaux supérieurs';      vColor = 'var(--teal)'; }
+      else if (totE > totP)              { verdict = '⚔️ Avantage Ennemi — l\'ennemi inflige plus';        vColor = '#e04040'; }
+      else                               { verdict = '⚔️ Duel équilibré — dégâts totaux égaux';            vColor = 'var(--gold)'; }
+
+      function rbox(lbl, val, sub, col) {
+        var rgb = col === 'var(--teal)' ? '32,212,168' : col === '#e04040' ? '224,64,64' : '232,192,64';
+        return '<div class="gcombat-res-box" style="background:rgba(' + rgb + ',.07);border:1px solid rgba(' + rgb + ',.22)">'
+          + '<div class="gcombat-res-box-lbl" style="color:' + col + '">' + lbl + '</div>'
+          + '<div class="gcombat-res-box-val" style="color:' + col + '">' + val + '</div>'
+          + '<div class="gcombat-res-box-sub">' + sub + '</div>'
+          + '</div>';
+      }
+
+      cbRes.innerHTML =
+        '<div class="gcombat-results">'
+          + rbox('Invocations', count + '×', 'sur ' + D + 's', 'var(--teal)')
+          + rbox('Stacks Boost', stacks + '/8', '+' + boost + '% Final DMG', 'var(--gold)')
+          + rbox('Dégâts/inv. (Vous)', noData ? '—' : fmt(dmgP), 'TPEN ' + fmt(pTPEN) + ' − Ten. ' + fmt(eTEN), 'var(--teal)')
+          + rbox('Dégâts/inv. (Ennemi)', noData ? '—' : fmt(dmgE), 'TPEN ' + fmt(eTPEN) + ' − Ten. ' + fmt(pTEN), '#e04040')
+          + rbox('Total (Vous)', noData ? '—' : fmt(totP), count + ' invocation' + (count > 1 ? 's' : ''), 'var(--teal)')
+          + rbox('Total (Ennemi)', noData ? '—' : fmt(totE), count + ' invocation' + (count > 1 ? 's' : ''), '#e04040')
+        + '</div>'
+        + '<div class="gcombat-verdict" style="color:' + vColor + ';border-color:' + vColor + ';background:rgba(0,0,0,.18)">' + verdict + '</div>'
+        + '<div class="info-note" style="margin-bottom:.75rem;font-size:.72rem">📐 TPEN_Total = Base × (1 + Bonus%) · Dégâts/invocation = max(0, TPEN_Total − Ténacité_Totale_Ennemi)</div>';
+
+      renderCombatChart(summons, D, dmgP, dmgE);
+    }
+
+    function renderCombatChart(summons, D, dmgP, dmgE) {
+      function buildLane(dmg, bgFull, bgDim) {
+        return summons.map(function (t, i) {
+          var t1   = Math.min(t + 10, D);
+          var pct0 = (t / D * 100).toFixed(2) + '%';
+          var pctW = ((t1 - t) / D * 100).toFixed(2) + '%';
+          var bg   = dmg > 0 ? bgFull : bgDim;
+          var lbl  = dmg > 0 ? (dmg >= 10000 ? (dmg / 1000).toFixed(0) + 'k' : fmt(dmg)) : '✕';
+          var tip  = 'Invocation ' + (i + 1) + ' · t=' + t + 's→' + t1 + 's · Dégâts: ' + fmt(dmg);
+          return '<div class="gcombat-seg" style="left:' + pct0 + ';width:' + pctW + ';background:' + bg + '" title="' + tip + '">'
+            + lbl + '</div>';
+        }).join('');
+      }
+
+      var count  = summons.length;
+      var tickN  = Math.min(8, Math.max(2, count + 1));
+      var ticks  = [];
+      for (var i = 0; i <= tickN; i++) ticks.push(Math.round(D * i / tickN) + 's');
+
+      cbChrt.innerHTML =
+        '<div class="gcombat-chart-title">📊 Timeline des invocations · ' + count + '× sur ' + D + 's</div>'
+        + '<div style="display:flex;gap:1rem;font-size:.64rem;color:var(--text-muted);margin-bottom:.65rem">'
+          + '<span><span style="display:inline-block;width:10px;height:8px;background:rgba(32,212,168,.85);border-radius:2px;vertical-align:middle;margin-right:3px"></span>Dégâts infligés</span>'
+          + '<span><span style="display:inline-block;width:10px;height:8px;background:rgba(32,212,168,.18);border-radius:2px;vertical-align:middle;margin-right:3px"></span>Absorbé (0)</span>'
+          + '<span style="margin-left:auto;font-size:.6rem">Survol = détail par invocation</span>'
+        + '</div>'
+        + '<div class="gcombat-lane">'
+          + '<div class="gcombat-lane-lbl" style="color:var(--teal)">👤 Vous</div>'
+          + '<div class="gcombat-lane-bar">' + buildLane(dmgP, 'rgba(32,212,168,.85)', 'rgba(32,212,168,.17)') + '</div>'
+        + '</div>'
+        + '<div class="gcombat-lane">'
+          + '<div class="gcombat-lane-lbl" style="color:#e04040">⚔️ Ennemi</div>'
+          + '<div class="gcombat-lane-bar">' + buildLane(dmgE, 'rgba(224,64,64,.85)', 'rgba(224,64,64,.17)') + '</div>'
+        + '</div>'
+        + '<div class="gcombat-axis">' + ticks.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
+    }
+
+    cbPSel.addEventListener('change', function () {
+      fillPanel(cbPSel, cbPImg, cbPName, cbPRar, cbPTpenB, cbPTenB);
+      renderCombat();
+    });
+    cbESel.addEventListener('change', function () {
+      fillPanel(cbESel, cbEImg, cbEName, cbERar, cbETpenB, cbETenB);
+      renderCombat();
+    });
+    [cbPTpenN, cbPTenN, cbETpenN, cbETenN, cbDur].forEach(function (el) {
+      el.addEventListener('input', renderCombat);
+    });
+    renderCombat();
+  })();
 })();
 </script>
 </body>
