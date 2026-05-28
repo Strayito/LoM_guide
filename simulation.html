@@ -276,7 +276,7 @@
     <strong>Formules:</strong> Basic/Combo/Counter = (ATK−DEF)×Mult% × RES × GlobalRES.
     Crit = ×max(1.5, CritDMG÷CritRES). SkillCrit = ×(1+x%)^0.98.
     Boss = ×(1+BossDMG%). PvP = ÷ReductionFactor(avgLv).
-    <span style="color:var(--gold)">PvP table = approximative — vérifier avec PDF Yuko v1.2.</span>
+    Table PvP = valeurs exactes Yuko v1.2 (04/2025, 220 niveaux).
   </div>
 
   <!-- ═══════════ TABS ═══════════ -->
@@ -286,6 +286,8 @@
     <button class="sim-tab-btn" data-tab="pal">👾 Familier</button>
     <button class="sim-tab-btn" data-tab="hpdmg">❤️ HP Dmg</button>
     <button class="sim-tab-btn" data-tab="sailing">⛵ Sailing</button>
+    <button class="sim-tab-btn" data-tab="mechanics">🎯 Mécaniques</button>
+    <button class="sim-tab-btn" data-tab="stats">📊 Stats</button>
   </div>
 
   <!-- ═══════════ TAB: COMBAT ═══════════ -->
@@ -413,7 +415,7 @@
               <input class="form-input" type="number" id="sc-pvpELv" value="100" min="1" max="220" step="1">
             </div>
           </div>
-          <div class="input-hint">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv × table approximative)</div>
+          <div class="input-hint">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv · table exacte Yuko v1.2)</div>
         </div>
 
       </form>
@@ -699,26 +701,32 @@
       <form onsubmit="return false">
 
         <div class="formula-ref">
-          <h4>HP-Based Damage — 6 étapes</h4>
-          <div class="formula-line">① <span class="v">Raw</span> = EnemyHP × HP%/100</div>
+          <h4>HP-Based Damage — 6 étapes (Yuko v1.2)</h4>
+          <div class="formula-line">① <span class="v">Raw</span> = TargetHP × HP%/100</div>
           <div class="formula-line">② <span class="v">Adjusted</span> = Raw × PvPFactor  <em>(si PvP)</em></div>
-          <div class="formula-line">③ <span class="v">ATKRef</span> = PlayerATK × BasicMult%/100</div>
-          <div class="formula-line">④ <span class="v">Min</span> = ATKRef × MinFactor%,  <span class="v">Max</span> = ATKRef × MaxFactor%</div>
+          <div class="formula-line">③ <span class="v">ATKRef</span> = (ATK−DEF) × BasicMult%/100  <em>(sans RES ni crit)</em></div>
+          <div class="formula-line">④ <span class="v">Min</span> = ATKRef×<span class="o">0.8</span>,  <span class="v">Max</span> = ATKRef×<span class="o">50</span> (HP courant) ou ×<span class="o">100</span> (HP max)</div>
           <div class="formula-line">⑤ <span class="v">Clamped</span> = clamp(Adjusted, Min, Max)</div>
-          <div class="formula-line">⑥ <span class="v">Final</span> = (Clamped ÷ PvPFactor) × (1−TypeRES%) × (1−GlobalRES%)</div>
+          <div class="formula-line">⑥ <span class="v">Final</span> = Clamped ÷ PvPFactor  <em>(pas de RES, pas de crit)</em></div>
         </div>
 
         <div class="section-chip">HP de l'ennemi</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="hp-enemy-hp">HP max ennemi</label>
-            <input class="form-input" type="number" id="hp-enemy-hp" value="1000000" min="1" step="1000">
+            <label class="form-label" for="hp-target-hp">HP cible</label>
+            <input class="form-input" type="number" id="hp-target-hp" value="1000000" min="1" step="1000">
           </div>
           <div class="form-group">
             <label class="form-label" for="hp-pct">HP% de l'attaque</label>
             <input class="form-input" type="number" id="hp-pct" value="30" min="0" step="0.1">
-            <div class="input-hint">Le % de HP max que cette attaque fait.</div>
           </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="hp-type">Type de HP utilisé</label>
+          <select class="form-input" id="hp-type">
+            <option value="max">HP max (Max Factor ×100)</option>
+            <option value="current">HP courant (Max Factor ×50)</option>
+          </select>
         </div>
 
         <hr class="form-divider">
@@ -729,34 +737,14 @@
             <input class="form-input" type="number" id="hp-player-atk" value="50000" min="0" step="1">
           </div>
           <div class="form-group">
-            <label class="form-label" for="hp-basic-mult">Basic ATK Mult (%)</label>
-            <input class="form-input" type="number" id="hp-basic-mult" value="100" min="0" step="1">
+            <label class="form-label" for="hp-enemy-def">DEF Cible</label>
+            <input class="form-input" type="number" id="hp-enemy-def" value="0" min="0" step="1">
+            <div class="input-hint">0 en PvE (EnemyDEF = 0).</div>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="hp-min-factor">Min Factor (% de ATKRef)</label>
-            <input class="form-input" type="number" id="hp-min-factor" value="50" min="0" step="1">
-            <div class="input-hint">Plancher : HP dmg ne peut pas être en dessous.</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="hp-max-factor">Max Factor (% de ATKRef)</label>
-            <input class="form-input" type="number" id="hp-max-factor" value="300" min="0" step="1">
-            <div class="input-hint">Plafond : HP dmg ne peut pas dépasser.</div>
-          </div>
-        </div>
-
-        <hr class="form-divider">
-        <div class="section-chip">Résistances</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="hp-typeRES">TypeRES (%) <span class="cap-note">cap 80</span></label>
-            <input class="form-input" type="number" id="hp-typeRES" value="0" min="0" max="80" step="0.1">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="hp-globalRES">GlobalRES (%) <span class="cap-note">cap 80</span></label>
-            <input class="form-input" type="number" id="hp-globalRES" value="0" min="0" max="80" step="0.1">
-          </div>
+        <div class="form-group">
+          <label class="form-label" for="hp-basic-mult">Basic ATK Mult (%)</label>
+          <input class="form-input" type="number" id="hp-basic-mult" value="100" min="0" step="1">
         </div>
 
         <hr class="form-divider">
@@ -787,7 +775,7 @@
             <div class="val" id="hp-final">—</div>
           </div>
           <div class="info-box" style="margin-top:12px;font-size:.76rem">
-            <strong>Note:</strong> Min/Max Factor = valeurs approximatives (50%/300%). Vérifier avec PDF Yuko pour les valeurs exactes par capacité.
+            <strong>Note:</strong> Pas de RES, pas de critique. Min=ATKRef×0.8, Max=ATKRef×50 (HP courant) / ×100 (HP max). Source: Yuko v1.2.
           </div>
         </div>
       </div>
@@ -802,44 +790,77 @@
       <form onsubmit="return false">
 
         <div class="formula-ref">
-          <h4>Formule Sailing / Canon</h4>
-          <div class="formula-line"><span class="v">A</span> = (CannonATK − DEF) × Mult% × (1 + CannonDMG%/100)</div>
-          <div class="formula-line"><span class="v">Final</span> = A × (1 − CannonRES<span class="o"> cap 60%</span>) × (1 − GlobalRES<span class="o"> cap 80%</span>)</div>
+          <h4>Formule Sailing / Canon (Yuko v1.2 p.13-14)</h4>
+          <div class="formula-line"><span class="v">FinalMult</span> = CaptBasicATKDMG%/100 × <span class="o">(1+CaptDMGRES%)</span> × (1+Ship%+Hull%)</div>
+          <div class="formula-line"><span class="v">Basic</span> = (CaptATK−EnemyDEF) × FinalMult × (1−CannonRES<span class="o"> cap60</span>) × (1−CaptDMGRES<span class="o"> cap80</span>)</div>
+          <div class="formula-line"><span class="v">Combo</span> = Basic × CannonCombo%/100 × (1−CaptComboDMGRES%)</div>
+          <div class="formula-line" style="color:var(--gold);font-size:.72rem">CaptBasicATKDMGRES augmente les dégâts (mécanique inverse, confirmé PDF).</div>
         </div>
 
-        <div class="section-chip">Canon</div>
+        <div class="section-chip">Capitaine</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="sail-atk">Cannon ATK</label>
-            <input class="form-input" type="number" id="sail-atk" value="30000" min="0" step="1">
+            <label class="form-label" for="sail-capt-atk">ATK Capitaine</label>
+            <input class="form-input" type="number" id="sail-capt-atk" value="30000" min="0" step="1">
           </div>
           <div class="form-group">
-            <label class="form-label" for="sail-def">DEF cible</label>
-            <input class="form-input" type="number" id="sail-def" value="10000" min="0" step="1">
+            <label class="form-label" for="sail-enemy-def">DEF Capitaine ennemi</label>
+            <input class="form-input" type="number" id="sail-enemy-def" value="10000" min="0" step="1">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="sail-mult">Mult. Canon (%)</label>
-            <input class="form-input" type="number" id="sail-mult" value="100" min="0" step="1">
+            <label class="form-label" for="sail-capt-basic-dmg">CaptBasicATKDMG (%)</label>
+            <input class="form-input" type="number" id="sail-capt-basic-dmg" value="100" min="0" step="0.1">
+            <div class="input-hint">Stat "Captain Basic ATK DMG".</div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="sail-dmgpct">Cannon DMG bonus (%)</label>
-            <input class="form-input" type="number" id="sail-dmgpct" value="0" min="0" step="0.1">
+            <label class="form-label" for="sail-capt-basic-dmgres">CaptBasicATKDMGRES (%)</label>
+            <input class="form-input" type="number" id="sail-capt-basic-dmgres" value="0" min="0" step="0.1">
+            <div class="input-hint">Augmente les dégâts (mécanique inverse).</div>
           </div>
         </div>
 
         <hr class="form-divider">
-        <div class="section-chip">Résistances</div>
+        <div class="section-chip">Canon</div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="sail-res">Cannon DMG RES (%) <span class="cap-note">cap 60%</span></label>
-            <input class="form-input" type="number" id="sail-res" value="0" min="0" max="60" step="0.1">
-            <div class="input-hint">Plafonné à 60% (cap spécial canon).</div>
+            <label class="form-label" for="sail-ship-cannon-dmg">Ship Cannon DMG (%)</label>
+            <input class="form-input" type="number" id="sail-ship-cannon-dmg" value="0" min="0" step="0.1">
           </div>
           <div class="form-group">
-            <label class="form-label" for="sail-globalres">Global DMG RES (%) <span class="cap-note">cap 80%</span></label>
-            <input class="form-input" type="number" id="sail-globalres" value="0" min="0" max="80" step="0.1">
+            <label class="form-label" for="sail-hull-cannon-dmg">Hull Cannon DMG (%)</label>
+            <input class="form-input" type="number" id="sail-hull-cannon-dmg" value="0" min="0" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Résistances ennemies</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sail-cannon-res">Cannon DMG RES (%) <span class="cap-note">cap 60%</span></label>
+            <input class="form-input" type="number" id="sail-cannon-res" value="0" min="0" max="60" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sail-capt-dmgres">CaptainDMG RES (%) <span class="cap-note">cap 80%</span></label>
+            <input class="form-input" type="number" id="sail-capt-dmgres" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <label class="checkbox-row">
+          <input type="checkbox" id="sail-combo"> Canon Combo
+        </label>
+        <div id="sail-combo-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="sail-combo-mult">Cannon Combo DMG (%)</label>
+              <input class="form-input" type="number" id="sail-combo-mult" value="100" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sail-combo-res">CaptComboDMG RES (%) <span class="cap-note">cap 80%</span></label>
+              <input class="form-input" type="number" id="sail-combo-res" value="0" min="0" max="80" step="0.1">
+            </div>
           </div>
         </div>
 
@@ -852,6 +873,331 @@
           <div class="result-final">
             <div class="lbl">Dégâts Canon Finaux</div>
             <div class="val" id="sail-final">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB: MÉCANIQUES ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-mechanics">
+    <div class="calc-layout">
+
+      <form onsubmit="return false">
+
+        <div class="formula-ref">
+          <h4>Formules Mécaniques (Yuko v1.2)</h4>
+          <div class="formula-line">Evasion%, Stun% <span class="o">→</span> max(0, Player−EnemyIgnore)^<span class="o">0.9</span></div>
+          <div class="formula-line">Combo%, Counter%, Launch%, Crit% <span class="o">→</span> max(0, Player−EnemyIgnore) [linéaire]</div>
+          <div class="formula-line">StunDur = StunTime×(1−StunRES%)×(1−ControlRES%)  |  PvP: <span class="o">0.4</span>×(1−ControlRES%)</div>
+          <div class="formula-line">Pierce/Block net = max(0,P−I)×<span class="o">0.01%</span> de RES ignoré/gagné <em>(proc 30%)</em></div>
+          <div class="formula-line">Regen net = max(0, Player−EnemyIgnore)  |  PvP: ×<span class="o">30%</span></div>
+        </div>
+
+        <!-- Taux de combat -->
+        <div class="section-chip">Taux de combat</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-combo">Combo% joueur <span class="cap-note">cap 100</span></label>
+            <input class="form-input" type="number" id="mec-combo" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-combo">Ignore Combo% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-combo" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-counter">Counter% joueur <span class="cap-note">cap 100</span></label>
+            <input class="form-input" type="number" id="mec-counter" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-counter">Ignore Counter% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-counter" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-crit">Crit Rate% joueur <span class="cap-note">cap 100</span></label>
+            <input class="form-input" type="number" id="mec-crit" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-crit">Ignore Crit% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-crit" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-evasion">Evasion% ennemi <span class="cap-note">^0.9</span></label>
+            <input class="form-input" type="number" id="mec-evasion" value="0" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-evasion">Ignore Evasion% joueur</label>
+            <input class="form-input" type="number" id="mec-ign-evasion" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-launch">Launch% joueur <span class="cap-note">cap 100</span></label>
+            <input class="form-input" type="number" id="mec-launch" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-launch">Ignore Launch% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-launch" value="0" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-stun">Stun% joueur <span class="cap-note">^0.9</span></label>
+            <input class="form-input" type="number" id="mec-stun" value="0" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-stun">Ignore Stun% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-stun" value="0" min="0" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+
+        <!-- Durée de Stun -->
+        <div class="section-chip">Durée de Stun</div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="mec-stun-pvp"> Mode PvP (StunTime=1, StunRES=60% fixe)
+        </label>
+        <div id="mec-stun-pve">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="mec-stun-time">Stun Time (sec)</label>
+              <input class="form-input" type="number" id="mec-stun-time" value="1" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mec-stun-res">Stun RES ennemi (%)</label>
+              <input class="form-input" type="number" id="mec-stun-res" value="0" min="0" max="100" step="0.1">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="mec-control-res">Control RES ennemi (%)</label>
+          <input class="form-input" type="number" id="mec-control-res" value="0" min="0" max="100" step="0.1">
+        </div>
+
+        <hr class="form-divider">
+
+        <!-- Pierce / Block / Pal Inspire / Pal RES -->
+        <div class="section-chip">Pierce / Block / Pal Inspire / Pal RES</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-pierce">Pierce joueur</label>
+            <input class="form-input" type="number" id="mec-pierce" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-pierce">Ignore Pierce ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-pierce" value="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-block">Block joueur</label>
+            <input class="form-input" type="number" id="mec-block" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-block">Ignore Block ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-block" value="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-palinsp">Pal Inspire joueur</label>
+            <input class="form-input" type="number" id="mec-palinsp" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-palinsp">Ignore Pal Inspire ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-palinsp" value="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-palres">Pal RES joueur</label>
+            <input class="form-input" type="number" id="mec-palres" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-palres">Ignore Pal RES ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-palres" value="0" min="0" step="1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+
+        <!-- Régénération -->
+        <div class="section-chip">Régénération</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="mec-regen">Regen% joueur</label>
+            <input class="form-input" type="number" id="mec-regen" value="0" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mec-ign-regen">Ignore Regen% ennemi</label>
+            <input class="form-input" type="number" id="mec-ign-regen" value="0" min="0" step="0.01">
+          </div>
+        </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="mec-regen-pvp"> Mode PvP (×30%)
+        </label>
+
+      </form>
+
+      <!-- Results panel -->
+      <div class="results-panel sticky-results">
+        <div class="results-header">🎯 Résultats Mécaniques</div>
+        <div class="results-body">
+
+          <div class="section-chip" style="margin-top:0">Taux effectifs</div>
+          <div class="sim-steps">
+            <div class="sim-step"><span class="sim-step-lbl">Combo% net</span><span class="sim-step-val" id="mec-combo-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Counter% net</span><span class="sim-step-val" id="mec-counter-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Crit Rate% net</span><span class="sim-step-val" id="mec-crit-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Evasion% effective (^0.9)</span><span class="sim-step-val" id="mec-eva-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Launch% net</span><span class="sim-step-val" id="mec-launch-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Stun% effective (^0.9)</span><span class="sim-step-val" id="mec-stun-out">—</span></div>
+          </div>
+
+          <div class="result-final" style="margin-top:12px">
+            <div class="lbl">Durée Stun</div>
+            <div class="val" id="mec-stun-dur">—</div>
+          </div>
+
+          <hr class="form-divider">
+
+          <div class="section-chip">Pierce / Block / Pal</div>
+          <div class="sim-steps">
+            <div class="sim-step"><span class="sim-step-lbl">Pierce</span><span class="sim-step-val" id="mec-pierce-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Block</span><span class="sim-step-val" id="mec-block-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Pal Inspire</span><span class="sim-step-val" id="mec-palinsp-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Pal RES</span><span class="sim-step-val" id="mec-palres-out">—</span></div>
+          </div>
+
+          <hr class="form-divider">
+
+          <div class="section-chip">Régénération</div>
+          <div class="result-final">
+            <div class="lbl">Regen nette</div>
+            <div class="val" id="mec-regen-out">—</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB: STATS ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-stats">
+
+    <div class="formula-ref" style="margin-bottom:20px">
+      <h4>Formules Stats (Yuko v1.2)</h4>
+      <div class="formula-line">FinalStat = Initial × <span class="o">(1+Base%/100)</span> × <span class="o">(1+Global%/100)</span></div>
+      <div class="formula-line">FinalMult = Base × <span class="o">(1+Bonus%/100)</span> × <span class="o">(1+Global%/100)</span></div>
+      <div class="formula-line">CritRatio = max(<span class="o">1.5</span>, CritDMG% / max(<span class="o">50%</span>, CritRES%))</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+
+      <!-- ATK/HP/DEF -->
+      <div class="results-panel">
+        <div class="results-header">📈 ATK / HP / DEF</div>
+        <div class="results-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="stat-initial">Valeur initiale</label>
+              <input class="form-input" type="number" id="stat-initial" value="10000" min="0" step="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="stat-base">Bonus Base (%)</label>
+              <input class="form-input" type="number" id="stat-base" value="0" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stat-global">Bonus Global (%)</label>
+            <input class="form-input" type="number" id="stat-global" value="0" min="0" step="0.1">
+          </div>
+          <div class="sim-steps" style="margin-top:12px">
+            <div class="sim-step"><span class="sim-step-lbl">Facteur Base</span><span class="sim-step-val" id="stat-bfactor">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">Facteur Global</span><span class="sim-step-val" id="stat-gfactor">—</span></div>
+          </div>
+          <div class="result-final" style="margin-top:12px">
+            <div class="lbl">Stat Finale</div>
+            <div class="val" id="stat-final">—</div>
+          </div>
+          <div class="info-box" style="margin-top:10px;font-size:.76rem" id="stat-formula">—</div>
+        </div>
+      </div>
+
+      <!-- Multiplicateurs -->
+      <div class="results-panel">
+        <div class="results-header">✖️ Multiplicateurs</div>
+        <div class="results-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="stat-mult-base">Mult. base (%)</label>
+              <input class="form-input" type="number" id="stat-mult-base" value="100" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="stat-mult-bonus">Bonus Mult (%)</label>
+              <input class="form-input" type="number" id="stat-mult-bonus" value="0" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stat-mult-global">Global Mult bonus (%)</label>
+            <input class="form-input" type="number" id="stat-mult-global" value="0" min="0" step="0.1">
+          </div>
+          <div class="result-final" style="margin-top:12px">
+            <div class="lbl">Mult. Final</div>
+            <div class="val" id="stat-mult-out">—</div>
+          </div>
+          <div class="info-box" style="margin-top:10px;font-size:.76rem" id="stat-mult-formula">—</div>
+        </div>
+      </div>
+
+      <!-- CritDMG / CritRES / Ratio -->
+      <div class="results-panel">
+        <div class="results-header">💥 Crit DMG / Crit RES</div>
+        <div class="results-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="stat-cdmg">CritDMG base (%)</label>
+              <input class="form-input" type="number" id="stat-cdmg" value="150" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="stat-cdmg-bonus">CritDMG bonus (%)</label>
+              <input class="form-input" type="number" id="stat-cdmg-bonus" value="0" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stat-cdmg-global">CritDMG global (%)</label>
+            <input class="form-input" type="number" id="stat-cdmg-global" value="0" min="0" step="0.1">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="stat-cres">CritRES base (%)</label>
+              <input class="form-input" type="number" id="stat-cres" value="100" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="stat-cres-bonus">CritRES bonus (%)</label>
+              <input class="form-input" type="number" id="stat-cres-bonus" value="0" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stat-cres-global">CritRES global (%)</label>
+            <input class="form-input" type="number" id="stat-cres-global" value="0" min="0" step="0.1">
+          </div>
+          <div class="sim-steps" style="margin-top:12px">
+            <div class="sim-step"><span class="sim-step-lbl">CritDMG final</span><span class="sim-step-val" id="stat-cdmg-out">—</span></div>
+            <div class="sim-step"><span class="sim-step-lbl">CritRES final (min 50%)</span><span class="sim-step-val" id="stat-cres-out">—</span></div>
+          </div>
+          <div class="result-final" style="margin-top:12px">
+            <div class="lbl">Ratio Crit (min 1.5)</div>
+            <div class="val" id="stat-cratio-out">—</div>
           </div>
         </div>
       </div>
