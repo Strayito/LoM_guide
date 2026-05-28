@@ -9,7 +9,7 @@
   function fmt(x){var a=Math.abs(x);if(a>=1e6)return(x/1e6).toFixed(2)+'B';if(a>=1e3)return(x/1e3).toFixed(2)+'K';return x.toFixed(2);}
   function fmtDec(x, d) { return x.toFixed(d === undefined ? 2 : d); }
 
-  // ── i18n ─────────────────────────────────────────────────────────────────────
+  // ── i18n ─────────────────────────────────────────────────────────────────
   function getLang() { return localStorage.getItem('siteLang') || 'fr'; }
   var i18n = {
     noEntries:  { fr: 'Aucune entrée sauvegardée', en: 'No saved entries', sk: 'Žiadne uložené záznamy' },
@@ -31,152 +31,19 @@
 
   // ── Tab switching ─────────────────────────────────────────────────────────
   function initTabs() {
-    const tabs = document.getElementById('calcTabs');
+    var tabs = document.getElementById('calcTabs');
     if (!tabs) return;
     tabs.addEventListener('click', function (e) {
-      const btn = e.target.closest('.tab-btn');
+      var btn = e.target.closest('.tab-btn');
       if (!btn) return;
-      const tab = btn.dataset.tab;
+      var tab = btn.dataset.tab;
       tabs.querySelectorAll('.tab-btn').forEach(function (b) {
         b.classList.toggle('active', b === btn);
       });
-      document.querySelectorAll('.tab-content').forEach(function (t) {
-        t.classList.toggle('active', t.id === 'tab-' + tab);
+      document.querySelectorAll('.tab-content').forEach(function (tc) {
+        tc.classList.toggle('active', tc.id === 'tab-' + tab);
       });
     });
-  }
-
-  // ── Stat Calculator (sc-*) ────────────────────────────────────────────────
-  function calcStats() {
-    var base = v('sc-finalATK');
-    var defBase = v('sc-finalDEF');
-    var parking = isChecked('sc-parking');
-    var parkPct = parking ? v('sc-parkingPct') : 0;
-    var buff = v('sc-buffDebuff');
-    var exclATK = v('sc-exclATK');
-    var exclDEF = v('sc-exclDEF');
-
-    var atk = (base * (1 + parkPct / 100)) * (1 + buff / 100) + exclATK;
-    var def = (defBase * (1 + parkPct / 100)) * (1 + buff / 100) + exclDEF;
-
-    n('sc-out-atk').textContent = fmt(atk);
-    n('sc-out-def').textContent = fmt(def);
-
-    scCurrentResult = { atk: Math.round(atk), def: Math.round(def), ts: Date.now() };
-    scRenderCompare();
-
-    var brkATK = fmt(base);
-    if (parkPct) brkATK += ' × ' + fmtDec(1 + parkPct / 100, 4);
-    if (buff !== 0) brkATK += ' × ' + fmtDec(1 + buff / 100, 4);
-    if (exclATK) brkATK += ' + ' + fmt(exclATK);
-    brkATK += ' = ' + fmt(atk);
-    n('sc-breakdown-atk').textContent = brkATK;
-
-    var brkDEF = fmt(defBase);
-    if (parkPct) brkDEF += ' × ' + fmtDec(1 + parkPct / 100, 4);
-    if (buff !== 0) brkDEF += ' × ' + fmtDec(1 + buff / 100, 4);
-    if (exclDEF) brkDEF += ' + ' + fmt(exclDEF);
-    brkDEF += ' = ' + fmt(def);
-    n('sc-breakdown-def').textContent = brkDEF;
-  }
-
-  // ── Stat Calculator — Save / Compare ─────────────────────────────────────
-  var SC_KEY = 'sc_history';
-  var SC_MAX = 10;
-  var scPinned = null;
-  var scCurrentResult = null;
-
-  function scLoadHistory() {
-    try { return JSON.parse(localStorage.getItem(SC_KEY)) || []; } catch (e) { return []; }
-  }
-
-  function scSave() {
-    if (!scCurrentResult) return;
-    var entry = Object.assign({}, scCurrentResult, { ts: Date.now() });
-    var hist = scLoadHistory();
-    hist.unshift(entry);
-    if (hist.length > SC_MAX) hist.pop();
-    localStorage.setItem(SC_KEY, JSON.stringify(hist));
-    scRenderHistory();
-  }
-
-  function scRenderHistory() {
-    var list = n('sc-history-list');
-    if (!list) return;
-    var hist = scLoadHistory();
-    if (!hist.length) {
-      list.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:16px 0">' + t('noEntries') + '</div>';
-      return;
-    }
-    list.innerHTML = hist.map(function (e, i) {
-      var ds = fmtDate(e.ts);
-      var pinned = scPinned && scPinned.ts === e.ts;
-      return '<div class="yk-history-entry' + (pinned ? ' yk-pinned' : '') + '">'
-        + '<div class="yk-entry-info"><span class="yk-entry-label">ATK ' + fmt(e.atk) + ' / DEF ' + fmt(e.def) + '</span><span class="yk-entry-date">' + ds + '</span></div>'
-        + '<div class="yk-entry-actions">'
-        + '<button class="yk-action-btn sc-pin-btn" data-i="' + i + '" title="' + (pinned ? t('unpin') : t('pin')) + '">📌</button>'
-        + '<button class="yk-action-btn sc-del-btn" data-i="' + i + '" title="' + t('delete') + '">🗑️</button>'
-        + '</div></div>';
-    }).join('');
-
-    list.querySelectorAll('.sc-pin-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var idx = parseInt(this.dataset.i);
-        var h = scLoadHistory();
-        scPinned = (scPinned && scPinned.ts === h[idx].ts) ? null : h[idx];
-        scRenderHistory();
-        scRenderCompare();
-      });
-    });
-    list.querySelectorAll('.sc-del-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var idx = parseInt(this.dataset.i);
-        var h = scLoadHistory();
-        if (scPinned && scPinned.ts === h[idx].ts) scPinned = null;
-        h.splice(idx, 1);
-        localStorage.setItem(SC_KEY, JSON.stringify(h));
-        scRenderHistory();
-        scRenderCompare();
-      });
-    });
-  }
-
-  function scRenderCompare() {
-    var panel = n('sc-compare-panel');
-    if (!panel) return;
-    if (!scPinned || !scCurrentResult) { panel.style.display = 'none'; return; }
-    panel.style.display = '';
-    var cur = scCurrentResult;
-    var pin = scPinned;
-    var dAtk = cur.atk - pin.atk, dDef = cur.def - pin.def;
-    var dAtkPct = pin.atk ? fmtDec(dAtk / pin.atk * 100, 1) : '—';
-    var dDefPct = pin.def ? fmtDec(dDef / pin.def * 100, 1) : '—';
-    function row(lbl, pv, cv, d, dp) {
-      var col = d >= 0 ? 'var(--teal)' : '#e05c6f';
-      var sign = d >= 0 ? '+' : '';
-      return '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.84rem">'
-        + '<span style="color:var(--text-muted)">' + lbl + '</span>'
-        + '<span>📌 <strong>' + fmt(pv) + '</strong> → 🔵 <strong>' + fmt(cv) + '</strong>'
-        + ' <span style="color:' + col + ';margin-left:6px">' + sign + fmt(d) + ' (' + sign + dp + '%)</span></span>'
-        + '</div>';
-    }
-    panel.innerHTML = '<div class="yk-compare-header">' + t('comparison') + '</div>'
-      + row('ATK', pin.atk, cur.atk, dAtk, dAtkPct)
-      + row('DEF', pin.def, cur.def, dDef, dDefPct);
-  }
-
-  function initStatCalc() {
-    var form = document.getElementById('stat-calc-form');
-    if (!form) return;
-    n('sc-parking').addEventListener('change', function () {
-      n('sc-parking-section').classList.toggle('hidden', !this.checked);
-      calcStats();
-    });
-    var saveBtn = n('sc-save-btn');
-    if (saveBtn) saveBtn.addEventListener('click', scSave);
-    form.addEventListener('input', calcStats);
-    scRenderHistory();
-    calcStats();
   }
 
   // ── Damage Calculator (dc-*) ──────────────────────────────────────────────
@@ -300,87 +167,6 @@
 
     form.addEventListener('input', calcDamage);
     calcDamage();
-  }
-
-  // ── Basic Stats Calculator (bsc-*) ────────────────────────────────────────
-  function sumInputs(selector) {
-    return Array.from(document.querySelectorAll(selector))
-      .reduce(function (s, el) { return s + parseK(el.value); }, 0);
-  }
-
-  function updateBasicStats() {
-    var flatExp = n('bsc-flat-section').classList.contains('expanded');
-    var baseExp = n('bsc-base-section').classList.contains('expanded');
-    var globalExp = n('bsc-global-section').classList.contains('expanded');
-
-    var flat, basePct, globalPct;
-    if (flatExp) {
-      flat = sumInputs('.bsc-flat-input');
-      n('bsc-flat-quick').value = Math.round(flat);
-    } else {
-      flat = v('bsc-flat-quick');
-    }
-    if (baseExp) {
-      basePct = sumInputs('.bsc-base-input');
-      n('bsc-base-quick').value = fmtDec(basePct, 2);
-    } else {
-      basePct = v('bsc-base-quick');
-    }
-    if (globalExp) {
-      globalPct = sumInputs('.bsc-global-input');
-      n('bsc-global-quick').value = fmtDec(globalPct, 2);
-    } else {
-      globalPct = v('bsc-global-quick');
-    }
-
-    var baseFactor = 1 + basePct / 100;
-    var globalFactor = 1 + globalPct / 100;
-    var result = flat * baseFactor * globalFactor;
-
-    n('bsc-r-flat').textContent = fmt(flat);
-    n('bsc-r-basepct').textContent = fmtDec(basePct, 2) + '%';
-    n('bsc-r-basefactor').textContent = fmtDec(baseFactor, 4) + '×';
-    n('bsc-r-globalpct').textContent = fmtDec(globalPct, 2) + '%';
-    n('bsc-r-globalfactor').textContent = fmtDec(globalFactor, 4) + '×';
-    n('bsc-r-final').textContent = fmt(result);
-    n('bsc-r-breakdown').textContent =
-      fmt(flat) + ' × ' + fmtDec(baseFactor, 4) + ' × ' + fmtDec(globalFactor, 4) + ' = ' + fmt(result);
-  }
-
-  function initBscCalc() {
-    var form = document.getElementById('bsc-form');
-    if (!form) return;
-
-    var statIcons = { atk: '⚔️', hp: '❤️', def: '🛡️' };
-    var statLabels = { atk: 'ATK', hp: 'HP', def: 'DEF' };
-
-    document.querySelectorAll('.bsc-type-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.bsc-type-btn').forEach(function (b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        var stat = this.dataset.stat;
-        n('bsc-stat-label').textContent = statLabels[stat] || stat.toUpperCase();
-      });
-    });
-
-    var detailMap = {
-      'bsc-flat-section': 'bsc-flat-detail',
-      'bsc-base-section': 'bsc-base-detail',
-      'bsc-global-section': 'bsc-global-detail'
-    };
-    document.querySelectorAll('.bsc-expand-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var sectionId = this.dataset.target;
-        var section = n(sectionId);
-        var expanded = section.classList.toggle('expanded');
-        var detailId = detailMap[sectionId];
-        if (detailId) n(detailId).classList.toggle('hidden', !expanded);
-        updateBasicStats();
-      });
-    });
-
-    form.addEventListener('input', updateBasicStats);
-    updateBasicStats();
   }
 
   // ── Yuko Formula Calculator (yk-*) ────────────────────────────────────────
@@ -545,7 +331,7 @@
         var h = ykLoadHistory();
         if (ykPinned && ykPinned.ts === h[idx].ts) ykPinned = null;
         h.splice(idx, 1);
-        localStorage.setItem(YK_KEY, JSON.stringify(h));
+        localStorage.setItem(YK_KEY, JSON.stringify(hist));
         ykRenderHistory();
         ykRenderCompare();
       });
@@ -588,7 +374,6 @@
     var tab = document.getElementById('tab-yuko');
     if (!tab) return;
 
-    // Damage type buttons
     tab.querySelectorAll('.yk-type-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         tab.querySelectorAll('.yk-type-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -601,7 +386,6 @@
       });
     });
 
-    // Crit type buttons
     tab.querySelectorAll('.yk-crit-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         tab.querySelectorAll('.yk-crit-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -613,7 +397,6 @@
       });
     });
 
-    // Context buttons
     tab.querySelectorAll('.yk-ctx-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         tab.querySelectorAll('.yk-ctx-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -635,9 +418,7 @@
   // ── Bootstrap ─────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initTabs();
-    initStatCalc();
     initDamageCalc();
-    initBscCalc();
     initYukoCalc();
   });
 
