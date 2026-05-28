@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur — LoM Fan Guide</title>
+  <meta name="description" content="Simulateur de combat complet LoM — formules Yuko v1.2, comparateur A/B, PvP, Pal, HP, Sailing.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Layout ── */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .cmp-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 700px) { .cmp-layout { grid-template-columns: 1fr; } }
+
+    /* ── Results panel ── */
+    .results-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+    .results-header {
+      padding: 12px 16px;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-bottom: 1px solid var(--border);
+      background: rgba(32,212,168,.05);
+    }
+    .results-body { padding: 14px 16px; }
+    .result-final {
+      margin-top: 16px;
+      padding: 14px;
+      background: rgba(32,212,168,.08);
+      border: 1px solid rgba(32,212,168,.2);
+      border-radius: var(--r);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .result-final .lbl { font-size: .82rem; color: var(--text-secondary); }
+    .result-final .val { font-size: 1.3rem; font-weight: 800; color: var(--teal); }
+
+    .sticky-results { position: sticky; top: calc(var(--nav-h) + 16px); }
+    @media (max-width: 900px) { .sticky-results { position: static; } }
+
+    /* ── Step log ── */
+    .sim-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .sim-step {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 8px;
+    }
+    .sim-step:last-child { border-bottom: none; }
+    .sim-step-lbl { font-size: .77rem; color: var(--text-secondary); line-height: 1.3; flex: 1; }
+    .sim-step-val { font-size: .82rem; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .sim-tab-btn {
+      padding: 9px 14px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: .83rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .sim-tab-btn.active {
+      background: var(--teal);
+      color: #0d1117;
+      border-color: var(--teal);
+    }
+    .sim-tab-content { display: none; }
+    .sim-tab-content.active { display: block; }
+
+    /* ── Type buttons ── */
+    .sim-type-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .sim-type-btn {
+      flex: 1;
+      min-width: 70px;
+      padding: 8px 6px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+      text-align: center;
+    }
+    .sim-type-btn.active {
+      background: var(--orange);
+      color: #0d1117;
+      border-color: var(--orange);
+    }
+
+    /* ── Form elements ── */
+    .form-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .form-group { margin-bottom: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-label { display: block; font-size: .78rem; color: var(--text-secondary); margin-bottom: 4px; font-weight: 600; }
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: var(--r);
+      padding: 7px 10px;
+      font-size: .85rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus { border-color: var(--teal); }
+    .input-hint { font-size: .72rem; color: var(--text-muted); margin-top: 3px; }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: .82rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .checkbox-row input[type=checkbox] { accent-color: var(--teal); width: 15px; height: 15px; cursor: pointer; }
+    .toggle-section { margin-top: 8px; padding: 12px; background: var(--bg-secondary); border-radius: var(--r); border: 1px solid var(--border); margin-bottom: 8px; }
+
+    /* ── Section chip ── */
+    .section-chip {
+      display: inline-block;
+      padding: 2px 10px;
+      background: rgba(32,212,168,.1);
+      border: 1px solid rgba(32,212,168,.2);
+      border-radius: 99px;
+      font-size: .72rem;
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ── Info box ── */
+    .info-box {
+      background: rgba(32,212,168,.05);
+      border: 1px solid rgba(32,212,168,.15);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      font-size: .8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .info-box strong { color: var(--teal); }
+
+    /* ── Formula reference ── */
+    .formula-ref {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+    .formula-ref h4 { color: var(--gold); margin-bottom: 10px; font-size: .83rem; text-transform: uppercase; letter-spacing: .08em; }
+    .formula-line {
+      font-family: 'Courier New', monospace;
+      font-size: .77rem;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.5;
+    }
+    .formula-line:last-child { border-bottom: none; }
+    .formula-line .v { color: var(--teal); }
+    .formula-line .o { color: var(--gold); }
+
+    /* ── Compare diff ── */
+    .cmp-diff-row {
+      text-align: center;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: var(--r);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+    .cmp-diff-label { font-size: .72rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .06em; }
+
+    /* ── Cap badges ── */
+    .cap-note {
+      display: inline-block;
+      font-size: .66rem;
+      color: var(--gold);
+      background: rgba(232,192,64,.1);
+      border: 1px solid rgba(232,192,64,.2);
+      border-radius: 4px;
+      padding: .1rem .4rem;
+      margin-left: 4px;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .sim-type-btn { min-width: 55px; font-size: .73rem; padding: 7px 4px; }
+      .sim-tab-btn  { font-size: .75rem; padding: 7px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation.html" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="label">Simulation</span>
+    <h1>⚔️ Simulateur de Combat LoM</h1>
+    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+  </div>
+
+  <div class="info-box" style="margin-bottom:20px">
+    <strong>Formules:</strong> Basic/Combo/Counter = (ATK−DEF)×Mult% × RES × GlobalRES.
+    Crit = ×max(1.5, CritDMG÷CritRES). SkillCrit = ×(1+x%)^0.98.
+    Boss = ×(1+BossDMG%). PvP = ÷ReductionFactor(avgLv).
+    <span style="color:var(--gold)">PvP table = approximative — vérifier avec PDF Yuko v1.2.</span>
+  </div>
+
+  <!-- ═══════════ TABS ═══════════ -->
+  <div class="tabs">
+    <button class="sim-tab-btn active" data-tab="combat">⚔️ Combat</button>
+    <button class="sim-tab-btn" data-tab="compare">⚖️ Compare A/B</button>
+    <button class="sim-tab-btn" data-tab="pal">👾 Familier</button>
+    <button class="sim-tab-btn" data-tab="hpdmg">❤️ HP Dmg</button>
+    <button class="sim-tab-btn" data-tab="sailing">⛵ Sailing</button>
+  </div>
+
+  <!-- ═══════════ TAB: COMBAT ═══════════ -->
+  <div class="sim-tab-content active" id="sim-tab-combat">
+    <div class="calc-layout">
+
+      <form onsubmit="return false">
+
+        <!-- Formula ref -->
+        <div class="formula-ref">
+          <h4>Formule de combat</h4>
+          <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × Mult%/100 [× (1+SkillDMG%) pour Skill]</div>
+          <div class="formula-line"><span class="v">B</span> = A × max(<span class="o">1.5</span>, CritDMG÷CritRES)  <em>ou</em>  A × (1+SkillCrit%)^<span class="o">0.98</span></div>
+          <div class="formula-line"><span class="v">C</span> = B × (1−TypeRES%) × (1−GlobalRES%)</div>
+          <div class="formula-line"><span class="v">D</span> = C × (1+BossDMG%)  <em>(si Boss)</em></div>
+          <div class="formula-line"><span class="v">Final</span> = D ÷ PvPDiv(avgLv)  <em>(si PvP)</em></div>
+        </div>
+
+        <!-- Attack type -->
+        <div class="section-chip">Type d'attaque</div>
+        <div class="sim-type-btns" id="sc-type-btns">
+          <button type="button" class="sim-type-btn active" data-type="basic">Basic ATK</button>
+          <button type="button" class="sim-type-btn" data-type="combo">Combo</button>
+          <button type="button" class="sim-type-btn" data-type="counter">Counter</button>
+          <button type="button" class="sim-type-btn" data-type="skill">Skill</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="section-chip">Attaquant / Cible</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sc-atk">ATK Final</label>
+            <input class="form-input" type="number" id="sc-atk" value="50000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sc-def">DEF Cible</label>
+            <input class="form-input" type="number" id="sc-def" value="20000" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sc-mult">Multiplicateur de base (%)</label>
+          <input class="form-input" type="number" id="sc-mult" value="100" min="0" step="1">
+          <div class="input-hint">Ex: 100 pour Basic ATK, 300 pour une compétence puissante.</div>
+        </div>
+
+        <!-- Skill bonus (shown for skill type) -->
+        <div id="sc-skill-opts" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="sc-skillbonus">Skill DMG bonus (%) <span class="cap-note">votre stat</span></label>
+            <input class="form-input" type="number" id="sc-skillbonus" value="0" min="0" step="0.1">
+            <div class="input-hint">Votre stat "Skill DMG%" personnelle — multiplie le dégât de compétence.</div>
+          </div>
+        </div>
+
+        <hr class="form-divider">
+
+        <!-- Resistances -->
+        <div class="section-chip">Résistances</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sc-typeRES">RES spécifique (%) <span class="cap-note">cap 80%</span></label>
+            <input class="form-input" type="number" id="sc-typeRES" value="0" min="0" max="80" step="0.1">
+            <div class="input-hint">BasicATK RES / Combo RES / Counter RES / Skill RES selon le type.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sc-globalRES">Global DMG RES (%) <span class="cap-note">cap 80%</span></label>
+            <input class="form-input" type="number" id="sc-globalRES" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+
+        <!-- Options -->
+        <div class="section-chip">Options</div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="sc-crit"> Coup Critique
+        </label>
+        <div id="sc-crit-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="sc-critDMG">Crit DMG (%)</label>
+              <input class="form-input" type="number" id="sc-critDMG" value="150" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sc-critRES">Crit RES cible (%)</label>
+              <input class="form-input" type="number" id="sc-critRES" value="100" min="1" step="0.1">
+              <div class="input-hint">Ratio = max(1.5, CritDMG ÷ CritRES)</div>
+            </div>
+          </div>
+        </div>
+
+        <label class="checkbox-row" id="sc-skillcrit-row">
+          <input type="checkbox" id="sc-skillcrit"> Skill Critique (Skill uniquement)
+        </label>
+        <div id="sc-skillcrit-opts" class="toggle-section" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="sc-skillCritMult">Skill Crit Mult (%)</label>
+            <input class="form-input" type="number" id="sc-skillCritMult" value="50" min="0" step="0.1">
+            <div class="input-hint">DMG × (1 + x%)^0.98</div>
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="sc-boss"> Boss DMG
+        </label>
+        <div id="sc-boss-opts" class="toggle-section" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="sc-bossDMG">Boss DMG bonus (%)</label>
+            <input class="form-input" type="number" id="sc-bossDMG" value="0" min="0" step="0.1">
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="sc-pvp"> Mode PvP
+        </label>
+        <div id="sc-pvp-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="sc-pvpMyLv">Mon niveau</label>
+              <input class="form-input" type="number" id="sc-pvpMyLv" value="100" min="1" max="220" step="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sc-pvpELv">Niveau ennemi</label>
+              <input class="form-input" type="number" id="sc-pvpELv" value="100" min="1" max="220" step="1">
+            </div>
+          </div>
+          <div class="input-hint">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv × table approximative)</div>
+        </div>
+
+      </form>
+
+      <!-- Results -->
+      <div class="results-panel sticky-results">
+        <div class="results-header">⚔️ Résultat étape par étape</div>
+        <div class="results-body">
+          <div class="sim-steps" id="sc-steps"></div>
+          <div class="result-final">
+            <div class="lbl">Dégâts Finaux</div>
+            <div class="val" id="sc-final">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB: COMPARE ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-compare">
+
+    <!-- Shared options -->
+    <div class="formula-ref" style="margin-bottom:16px">
+      <h4>Options partagées (A et B)</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+        <div>
+          <div class="sim-type-btns" id="cmp-type-btns" style="margin-bottom:8px">
+            <button type="button" class="sim-type-btn active" data-type="basic">Basic</button>
+            <button type="button" class="sim-type-btn" data-type="combo">Combo</button>
+            <button type="button" class="sim-type-btn" data-type="counter">Counter</button>
+            <button type="button" class="sim-type-btn" data-type="skill">Skill</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cmp-mult">Multiplicateur (%)</label>
+            <input class="form-input" type="number" id="cmp-mult" value="100" min="0" step="1">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label class="form-label" for="cmp-typeRES">TypeRES cible (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="cmp-typeRES" value="0" min="0" max="80" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cmp-globalRES">GlobalRES cible (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="cmp-globalRES" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <!-- Skill option -->
+      <div id="cmp-skill-opts" style="display:none;margin-top:8px">
+        <div class="form-group">
+          <label class="form-label">Skill DMG bonus partagé (%)</label>
+          <input class="form-input" type="number" id="cmp-skillbonus" value="0" min="0" step="0.1">
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cmp-crit"> Crit
+        </label>
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cmp-boss"> Boss
+        </label>
+        <label class="checkbox-row" style="margin:0">
+          <input type="checkbox" id="cmp-pvp"> PvP
+        </label>
+      </div>
+      <div id="cmp-crit-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CritDMG A (%)</label>
+            <input class="form-input" type="number" id="cmp-a-critDMG" value="150" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CritDMG B (%)</label>
+            <input class="form-input" type="number" id="cmp-b-critDMG" value="150" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cmp-critRES">CritRES cible (%)</label>
+          <input class="form-input" type="number" id="cmp-critRES" value="100" min="1" step="0.1">
+        </div>
+      </div>
+      <div id="cmp-boss-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-group">
+          <label class="form-label" for="cmp-bossDMG">Boss DMG (%)</label>
+          <input class="form-input" type="number" id="cmp-bossDMG" value="0" min="0" step="0.1">
+        </div>
+      </div>
+      <div id="cmp-pvp-opts" class="toggle-section" style="display:none;margin-top:8px">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cmp-pvpMyLv">Mon niveau</label>
+            <input class="form-input" type="number" id="cmp-pvpMyLv" value="100" min="1" max="220" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cmp-pvpELv">Niveau ennemi</label>
+            <input class="form-input" type="number" id="cmp-pvpELv" value="100" min="1" max="220" step="1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Build A | Build B -->
+    <div class="cmp-layout">
+
+      <!-- Build A -->
+      <div>
+        <div class="results-panel">
+          <div class="results-header" style="color:var(--blue)">🔵 Build A</div>
+          <div class="results-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cmp-a-atk">ATK A</label>
+                <input class="form-input" type="number" id="cmp-a-atk" value="50000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cmp-a-def">DEF cible A</label>
+                <input class="form-input" type="number" id="cmp-a-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="sim-steps" id="cmp-a-steps" style="margin-top:12px"></div>
+            <div class="result-final" style="border-color:rgba(64,144,216,.3);background:rgba(64,144,216,.06)">
+              <div class="lbl">Dégâts A</div>
+              <div class="val" style="color:var(--blue)" id="cmp-a-final">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Build B -->
+      <div>
+        <div class="results-panel">
+          <div class="results-header" style="color:var(--gold)">🟡 Build B</div>
+          <div class="results-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cmp-b-atk">ATK B</label>
+                <input class="form-input" type="number" id="cmp-b-atk" value="55000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cmp-b-def">DEF cible B</label>
+                <input class="form-input" type="number" id="cmp-b-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="sim-steps" id="cmp-b-steps" style="margin-top:12px"></div>
+            <div class="result-final" style="border-color:rgba(232,192,64,.3);background:rgba(232,192,64,.06)">
+              <div class="lbl">Dégâts B</div>
+              <div class="val" style="color:var(--gold)" id="cmp-b-final">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cmp-diff-row">
+      <div class="cmp-diff-label">Différence B − A</div>
+      <div id="cmp-diff">—</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════ TAB: PAL ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-pal">
+    <div class="calc-layout">
+
+      <form onsubmit="return false">
+
+        <div class="formula-ref">
+          <h4>Formule Familier</h4>
+          <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × PalMult% × PalDMG%/100</div>
+          <div class="formula-line"><span class="v">B</span> = A × max(1.5, PalCritDMG÷PalCritRES)  <em>(si Crit)</em></div>
+          <div class="formula-line"><span class="v">B</span> = B × PalComboMult%/100  <em>(si Combo)</em></div>
+          <div class="formula-line"><span class="v">C</span> = B × (1−PalDMGRES%) × (1−GlobalDMGRES%)</div>
+          <div class="formula-line"><span class="v">Final</span> = C ÷ PvPDiv  <em>(si PvP)</em></div>
+        </div>
+
+        <div class="section-chip">Stats</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="pal-atk">ATK Final</label>
+            <input class="form-input" type="number" id="pal-atk" value="50000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pal-def">DEF Cible</label>
+            <input class="form-input" type="number" id="pal-def" value="20000" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="pal-mult">Mult. Pal de base (%)</label>
+            <input class="form-input" type="number" id="pal-mult" value="100" min="0" step="1">
+            <div class="input-hint">Multiplicateur de l'attaque familier.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pal-dmgpct">Pal DMG bonus (%)</label>
+            <input class="form-input" type="number" id="pal-dmgpct" value="100" min="0" step="0.1">
+            <div class="input-hint">Votre stat "Pal DMG" (100 = neutre).</div>
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Résistances</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="pal-res">Pal DMG RES (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="pal-res" value="0" min="0" max="80" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pal-globalres">Global DMG RES (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="pal-globalres" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Options</div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="pal-crit"> Pal Critique
+        </label>
+        <div id="pal-crit-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="pal-critdmg">Pal Crit DMG (%)</label>
+              <input class="form-input" type="number" id="pal-critdmg" value="150" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pal-critres">Pal Crit RES cible (%)</label>
+              <input class="form-input" type="number" id="pal-critres" value="100" min="1" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="pal-combo"> Pal Combo
+        </label>
+        <div id="pal-combo-opts" class="toggle-section" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="pal-combomult">Pal Combo Mult (%)</label>
+            <input class="form-input" type="number" id="pal-combomult" value="150" min="0" step="0.1">
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="pal-pvp"> Mode PvP
+        </label>
+        <div id="pal-pvp-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="pal-pvpMyLv">Mon niveau</label>
+              <input class="form-input" type="number" id="pal-pvpMyLv" value="100" min="1" max="220" step="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pal-pvpELv">Niveau ennemi</label>
+              <input class="form-input" type="number" id="pal-pvpELv" value="100" min="1" max="220" step="1">
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <div class="results-panel sticky-results">
+        <div class="results-header">👾 Dégâts Familier</div>
+        <div class="results-body">
+          <div class="sim-steps" id="pal-steps"></div>
+          <div class="result-final">
+            <div class="lbl">Dégâts Finaux</div>
+            <div class="val" id="pal-final">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB: HP DAMAGE ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-hpdmg">
+    <div class="calc-layout">
+
+      <form onsubmit="return false">
+
+        <div class="formula-ref">
+          <h4>HP-Based Damage — 6 étapes</h4>
+          <div class="formula-line">① <span class="v">Raw</span> = EnemyHP × HP%/100</div>
+          <div class="formula-line">② <span class="v">Adjusted</span> = Raw × PvPFactor  <em>(si PvP)</em></div>
+          <div class="formula-line">③ <span class="v">ATKRef</span> = PlayerATK × BasicMult%/100</div>
+          <div class="formula-line">④ <span class="v">Min</span> = ATKRef × MinFactor%,  <span class="v">Max</span> = ATKRef × MaxFactor%</div>
+          <div class="formula-line">⑤ <span class="v">Clamped</span> = clamp(Adjusted, Min, Max)</div>
+          <div class="formula-line">⑥ <span class="v">Final</span> = (Clamped ÷ PvPFactor) × (1−TypeRES%) × (1−GlobalRES%)</div>
+        </div>
+
+        <div class="section-chip">HP de l'ennemi</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="hp-enemy-hp">HP max ennemi</label>
+            <input class="form-input" type="number" id="hp-enemy-hp" value="1000000" min="1" step="1000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hp-pct">HP% de l'attaque</label>
+            <input class="form-input" type="number" id="hp-pct" value="30" min="0" step="0.1">
+            <div class="input-hint">Le % de HP max que cette attaque fait.</div>
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Référence ATK (clamp)</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="hp-player-atk">ATK Final (joueur)</label>
+            <input class="form-input" type="number" id="hp-player-atk" value="50000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hp-basic-mult">Basic ATK Mult (%)</label>
+            <input class="form-input" type="number" id="hp-basic-mult" value="100" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="hp-min-factor">Min Factor (% de ATKRef)</label>
+            <input class="form-input" type="number" id="hp-min-factor" value="50" min="0" step="1">
+            <div class="input-hint">Plancher : HP dmg ne peut pas être en dessous.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hp-max-factor">Max Factor (% de ATKRef)</label>
+            <input class="form-input" type="number" id="hp-max-factor" value="300" min="0" step="1">
+            <div class="input-hint">Plafond : HP dmg ne peut pas dépasser.</div>
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Résistances</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="hp-typeRES">TypeRES (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="hp-typeRES" value="0" min="0" max="80" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hp-globalRES">GlobalRES (%) <span class="cap-note">cap 80</span></label>
+            <input class="form-input" type="number" id="hp-globalRES" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <label class="checkbox-row">
+          <input type="checkbox" id="hp-pvp"> Mode PvP
+        </label>
+        <div id="hp-pvp-opts" class="toggle-section" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="hp-pvpMyLv">Mon niveau</label>
+              <input class="form-input" type="number" id="hp-pvpMyLv" value="100" min="1" max="220" step="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="hp-pvpELv">Niveau ennemi</label>
+              <input class="form-input" type="number" id="hp-pvpELv" value="100" min="1" max="220" step="1">
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <div class="results-panel sticky-results">
+        <div class="results-header">❤️ HP-Based Damage</div>
+        <div class="results-body">
+          <div class="sim-steps" id="hp-steps"></div>
+          <div class="result-final">
+            <div class="lbl">Dégâts Finaux</div>
+            <div class="val" id="hp-final">—</div>
+          </div>
+          <div class="info-box" style="margin-top:12px;font-size:.76rem">
+            <strong>Note:</strong> Min/Max Factor = valeurs approximatives (50%/300%). Vérifier avec PDF Yuko pour les valeurs exactes par capacité.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB: SAILING ═══════════ -->
+  <div class="sim-tab-content" id="sim-tab-sailing">
+    <div class="calc-layout">
+
+      <form onsubmit="return false">
+
+        <div class="formula-ref">
+          <h4>Formule Sailing / Canon</h4>
+          <div class="formula-line"><span class="v">A</span> = (CannonATK − DEF) × Mult% × (1 + CannonDMG%/100)</div>
+          <div class="formula-line"><span class="v">Final</span> = A × (1 − CannonRES<span class="o"> cap 60%</span>) × (1 − GlobalRES<span class="o"> cap 80%</span>)</div>
+        </div>
+
+        <div class="section-chip">Canon</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sail-atk">Cannon ATK</label>
+            <input class="form-input" type="number" id="sail-atk" value="30000" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sail-def">DEF cible</label>
+            <input class="form-input" type="number" id="sail-def" value="10000" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sail-mult">Mult. Canon (%)</label>
+            <input class="form-input" type="number" id="sail-mult" value="100" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sail-dmgpct">Cannon DMG bonus (%)</label>
+            <input class="form-input" type="number" id="sail-dmgpct" value="0" min="0" step="0.1">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="section-chip">Résistances</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="sail-res">Cannon DMG RES (%) <span class="cap-note">cap 60%</span></label>
+            <input class="form-input" type="number" id="sail-res" value="0" min="0" max="60" step="0.1">
+            <div class="input-hint">Plafonné à 60% (cap spécial canon).</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sail-globalres">Global DMG RES (%) <span class="cap-note">cap 80%</span></label>
+            <input class="form-input" type="number" id="sail-globalres" value="0" min="0" max="80" step="0.1">
+          </div>
+        </div>
+
+      </form>
+
+      <div class="results-panel sticky-results">
+        <div class="results-header">⛵ Dégâts Sailing</div>
+        <div class="results-body">
+          <div class="sim-steps" id="sail-steps"></div>
+          <div class="result-final">
+            <div class="lbl">Dégâts Canon Finaux</div>
+            <div class="val" id="sail-final">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;·&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;·&nbsp;
+    <a href="simulation.html">Simulation</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/simulation.js"></script>
+<script>SIM.init();</script>
+</body>
+</html>
