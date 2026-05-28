@@ -1,5 +1,5 @@
 // @ts-check
-// Effect = lv × 1500%. Costs for Lv 41-99 cycle from Lv 31-40.
+// Effect = lv × 1500%. Costs for Lv 41-999 cycle from Lv 31-40.
 var ores = (function() {
   var _base = [
     [1,57250,32,32,390],[2,60110,34,8,409],[3,63120,35,52,430],[4,66270,37,40,452],[5,69590,39,32,474],
@@ -14,7 +14,7 @@ var ores = (function() {
   var _cycle = _base.slice(30);
   var _cumul = 0;
   var _rows = [];
-  for (var lv = 1; lv <= 99; lv++) {
+  for (var lv = 1; lv <= 999; lv++) {
     var b = lv <= 40 ? _base[lv - 1] : _cycle[(lv - 41) % 10];
     _cumul += b[1];
     var mm = String(b[3]).padStart(2, '0');
