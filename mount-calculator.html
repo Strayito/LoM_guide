@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mount Upgrade Calculator — Legend of Mushroom</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold:  { 300:'#fde68a', 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706' },
+            gem:   { 300:'#c4b5fd', 400:'#a78bfa', 500:'#8b5cf6' },
+            cw:    { 300:'#6ee7b7', 400:'#34d399', 500:'#10b981' },
+          },
+          animation: {
+            'pop': 'pop .25s ease-out',
+          },
+          keyframes: {
+            pop: { '0%':{ opacity:0, transform:'scale(.96) translateY(6px)' }, '100%':{ opacity:1, transform:'scale(1) translateY(0)' } },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+
+    /* custom select arrow */
+    .sel {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+      background-position: right .6rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25em 1.25em;
+      padding-right: 2.5rem;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select option, optgroup { background: #1e293b; color: #f1f5f9; }
+
+    /* toggle switch */
+    .toggle { position:relative; display:inline-block; width:42px; height:24px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider {
+      position:absolute; inset:0; border-radius:99px;
+      background:#334155; cursor:pointer;
+      transition:background .2s;
+    }
+    .toggle-slider::before {
+      content:''; position:absolute;
+      width:18px; height:18px;
+      left:3px; top:3px;
+      background:white; border-radius:50%;
+      transition:transform .2s;
+      box-shadow:0 1px 3px rgba(0,0,0,.4);
+    }
+    .toggle input:checked + .toggle-slider { background:#8b5cf6; }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(18px); }
+
+    /* table striping */
+    .bd-table tbody tr:nth-child(even) { background:rgba(255,255,255,.025); }
+    .bd-table tbody tr:hover { background:rgba(251,191,36,.05); }
+
+    /* scrollbar */
+    .overflow-y-auto::-webkit-scrollbar { width:5px; }
+    .overflow-y-auto::-webkit-scrollbar-track { background:transparent; }
+    .overflow-y-auto::-webkit-scrollbar-thumb { background:#475569; border-radius:99px; }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased">
+
+  <!-- BG decoration -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-gem-500/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-2xl mx-auto px-4 py-10">
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center gap-2 mb-3 text-4xl select-none">
+        🍄 <span class="text-3xl">⚙️</span> 🍄
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-gold-400 drop-shadow-lg">
+        Mount Upgrade Calculator
+      </h1>
+      <p class="text-slate-400 mt-2 text-sm">
+        Legend of Mushroom · Clock-winder cost between any two rank stages
+      </p>
+    </div>
+
+    <!-- ── Main Card ──────────────────────────────────────────────────────── -->
+    <div class="bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden">
+
+      <!-- Card header band -->
+      <div class="bg-gradient-to-r from-gold-600/20 via-gold-500/10 to-transparent px-6 py-3 border-b border-slate-700/80 flex items-center gap-2">
+        <span class="text-gold-400 text-xs font-bold uppercase tracking-widest">Rank Selection</span>
+      </div>
+
+      <div class="p-6 space-y-6">
+
+        <!-- ── Rank Selects ── -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div class="space-y-1.5">
+            <label for="startRank" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              ▶ Starting Rank
+            </label>
+            <select id="startRank"
+              class="sel w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-slate-100
+                     focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 cursor-pointer
+                     transition-colors duration-150">
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="endRank" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              ◀ Ending Rank
+            </label>
+            <select id="endRank"
+              class="sel w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-slate-100
+                     focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 cursor-pointer
+                     transition-colors duration-150">
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Validation warning -->
+        <div id="warning"
+          class="hidden items-center gap-3 bg-red-900/30 border border-red-500/30 rounded-xl px-4 py-3 text-sm text-red-400">
+          <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          <span>Ending rank must be <strong>higher</strong> than the starting rank.</span>
+        </div>
+
+        <!-- ── Divider ── -->
+        <div class="border-t border-slate-700/80"></div>
+
+        <!-- ── Owned CW ── -->
+        <div class="space-y-1.5">
+          <label for="ownedCW" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            ⚙️ Clock-winders you already own <span class="text-slate-600 normal-case font-normal">(optional)</span>
+          </label>
+          <input id="ownedCW" type="number" min="0" value="0" placeholder="0"
+            class="w-full sm:w-56 bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-slate-100
+                   focus:outline-none focus:border-cw-500 focus:ring-1 focus:ring-cw-500/50
+                   transition-colors duration-150 [appearance:textfield]">
+        </div>
+
+        <!-- ── Gem Toggle ── -->
+        <div class="flex items-start gap-4">
+          <label class="toggle mt-0.5">
+            <input type="checkbox" id="useGems">
+            <span class="toggle-slider"></span>
+          </label>
+          <div>
+            <div class="text-sm font-semibold text-slate-200">Convert to Gems</div>
+            <div class="text-xs text-slate-500 mt-0.5">
+              Base rate: 1,000 ⚙️ = 35,000 💎 &nbsp;·&nbsp; 1 ⚙️ = 35 💎
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Results ─────────────────────────────────────────────────────────── -->
+    <div id="results" class="mt-4"></div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <p class="text-center text-xs text-slate-700 mt-8">
+      Data from
+      <a href="https://strayito.github.io/LoM_guide/data/clock-winder.html"
+         class="text-slate-600 hover:text-gold-500 transition-colors underline underline-offset-2"
+         target="_blank" rel="noopener">
+        strayito.github.io/LoM_guide
+      </a>
+      · R1★1 – R24★9
+    </p>
+
+  </div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════════════
+//  DATA  —  source: assets/js/data/clockwinder.js  (cwDet)
+//  Format: [label, cumulativeCW]
+// ════════════════════════════════════════════════════════════════════════════
+const STAGES = (function () {
+  const raw = [
+    ["R1★1",0],["R1★2",3],["R1★3",6],["R1★4",9],["R1★5",12],["R1★6",15],["R1★7",18],["R1★8",21],["R1★9",25],["R1★10",30],
+    ["R2★1",35],["R2★2",40],["R2★3",45],["R2★4",55],["R2★5",60],["R2★6",70],["R2★7",80],["R2★8",90],["R2★9",100],["R2★10",110],
+    ["R3★1",125],["R3★2",140],["R3★3",160],["R3★4",180],["R3★5",205],["R3★6",235],["R3★7",270],["R3★8",305],["R3★9",350],["R3★10",400],
+    ["R4★1",455],["R4★2",520],["R4★3",595],["R4★4",685],["R4★5",785],["R4★6",895],["R4★7",1030],["R4★8",1180],["R4★9",1355],["R4★10",1555],
+    ["R5★1",1785],["R5★2",2050],["R5★3",2355],["R5★4",2705],["R5★5",3110],["R5★6",3570],["R5★7",4105],["R5★8",4715],["R5★9",5420],["R5★10",6230],
+    ["R6★1",7200],["R6★2",8370],["R6★3",9770],["R6★4",11450],["R6★5",13555],["R6★6",15970],["R6★7",18875],["R6★8",22355],["R6★9",26535],["R6★10",31550],
+    ["R7★1",37820],["R7★2",45655],["R7★3",55450],["R7★4",67690],["R7★5",82995],["R7★6",102125],["R7★7",126035],["R7★8",155925],["R7★9",193285],["R7★10",239990],
+    ["R8★1",246260],["R8★2",254095],["R8★3",263890],["R8★4",276130],["R8★5",291435],["R8★6",310565],["R8★7",334475],["R8★8",364365],["R8★9",401725],["R8★10",448430],
+    ["R9★1",454700],["R9★2",462535],["R9★3",472330],["R9★4",484570],["R9★5",499875],["R9★6",519005],["R9★7",542915],["R9★8",572805],["R9★9",610165],["R9★10",656870],
+    ["R10★1",663140],["R10★2",670975],["R10★3",680770],["R10★4",693010],["R10★5",708315],["R10★6",727445],["R10★7",751355],["R10★8",781245],["R10★9",818605],["R10★10",865310],
+    ["R11★1",871580],["R11★2",879415],["R11★3",889210],["R11★4",901450],["R11★5",916755],["R11★6",935885],["R11★7",959795],["R11★8",989685],["R11★9",1027045],["R11★10",1073750],
+    ["R12★1",1080020],["R12★2",1087855],["R12★3",1097650],["R12★4",1109890],["R12★5",1125195],["R12★6",1144325],["R12★7",1168235],["R12★8",1198125],["R12★9",1235485],["R12★10",1282190],
+    ["R13★1",1288460],["R13★2",1296295],["R13★3",1306090],["R13★4",1318330],["R13★5",1333635],["R13★6",1352765],["R13★7",1376675],["R13★8",1406565],["R13★9",1443925],["R13★10",1490630],
+    ["R14★1",1496900],["R14★2",1504735],["R14★3",1514530],["R14★4",1526770],["R14★5",1542075],["R14★6",1561205],["R14★7",1585115],["R14★8",1615005],["R14★9",1652365],["R14★10",1699070],
+    ["R15★1",1705340],["R15★2",1713175],["R15★3",1722970],["R15★4",1735210],["R15★5",1750515],["R15★6",1769645],["R15★7",1793555],["R15★8",1823445],["R15★9",1860805],["R15★10",1907510],
+    ["R16★1",1913780],["R16★2",1921615],["R16★3",1931410],["R16★4",1943650],["R16★5",1958955],["R16★6",1978085],["R16★7",2001995],["R16★8",2031885],["R16★9",2069245],["R16★10",2115950],
+    ["R17★1",2122220],["R17★2",2130055],["R17★3",2139850],["R17★4",2152090],["R17★5",2167395],["R17★6",2186525],["R17★7",2210435],["R17★8",2240325],["R17★9",2277685],["R17★10",2324390],
+    ["R18★1",2330660],["R18★2",2338495],["R18★3",2348290],["R18★4",2360530],["R18★5",2375835],["R18★6",2394965],["R18★7",2418875],["R18★8",2448765],["R18★9",2486125],["R18★10",2532830],
+    ["R19★1",2539100],["R19★2",2546935],["R19★3",2556730],["R19★4",2568970],["R19★5",2584275],["R19★6",2603405],["R19★7",2627315],["R19★8",2657205],["R19★9",2694565],["R19★10",2741270],
+    ["R20★1",2747540],["R20★2",2755375],["R20★3",2765170],["R20★4",2777410],["R20★5",2792715],["R20★6",2811845],["R20★7",2835755],["R20★8",2865645],["R20★9",2903005],["R20★10",2949710],
+    ["R21★1",2955980],["R21★2",2963815],["R21★3",2973610],["R21★4",2985850],["R21★5",3001155],["R21★6",3020285],["R21★7",3044195],["R21★8",3074085],["R21★9",3111445],["R21★10",3158150],
+    ["R22★1",3164420],["R22★2",3172255],["R22★3",3182050],["R22★4",3194290],["R22★5",3209595],["R22★6",3228725],["R22★7",3252635],["R22★8",3282525],["R22★9",3319885],["R22★10",3366590],
+    ["R23★1",3372860],["R23★2",3380695],["R23★3",3390490],["R23★4",3402730],["R23★5",3418035],["R23★6",3437165],["R23★7",3461075],["R23★8",3490965],["R23★9",3528325],["R23★10",3575030],
+    ["R24★1",3581300],["R24★2",3589135],["R24★3",3598930],["R24★4",3611170],["R24★5",3626475],["R24★6",3645605],["R24★7",3669515],["R24★8",3699405],["R24★9",3736765],
+  ];
+  return raw.map(r => ({ label: r[0], cumul: r[1] }));
+})();
+
+const GEMS_PER_CW = 35; // 1,000 CW = 35,000 gems
+
+// ── DOM refs ─────────────────────────────────────────────────────────────────
+const startSel = document.getElementById('startRank');
+const endSel   = document.getElementById('endRank');
+const ownedIn  = document.getElementById('ownedCW');
+const gemsChk  = document.getElementById('useGems');
+const warnEl   = document.getElementById('warning');
+const resEl    = document.getElementById('results');
+
+// ── Populate dropdowns ────────────────────────────────────────────────────────
+(function buildSelects() {
+  [startSel, endSel].forEach(sel => {
+    let lastRank = '', grp = null;
+    STAGES.forEach((s, i) => {
+      const rank = s.label.replace(/★\d+$/, '');
+      if (rank !== lastRank) {
+        grp = document.createElement('optgroup');
+        grp.label = '── ' + rank + ' ──';
+        sel.appendChild(grp);
+        lastRank = rank;
+      }
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = s.label;
+      grp.appendChild(opt);
+    });
+  });
+  startSel.value = 0;
+  endSel.value   = STAGES.findIndex(s => s.label === 'R5★1');
+})();
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmt  = n => Math.round(n).toLocaleString();
+const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
+
+function getBreakdown(si, ei) {
+  const map = {};
+  for (let i = si; i < ei; i++) {
+    const rank = STAGES[i + 1].label.replace(/★\d+$/, '');
+    const cost = STAGES[i + 1].cumul - STAGES[i].cumul;
+    map[rank] = (map[rank] || 0) + cost;
+  }
+  return Object.entries(map);
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  const si      = parseInt(startSel.value);
+  const ei      = parseInt(endSel.value);
+  const owned   = Math.max(0, parseInt(ownedIn.value) || 0);
+  const showGem = gemsChk.checked;
+
+  // Validation
+  if (ei <= si) {
+    warnEl.classList.replace('hidden', 'flex');
+    resEl.innerHTML = '';
+    return;
+  }
+  warnEl.classList.replace('flex', 'hidden');
+
+  const totalCW   = STAGES[ei].cumul - STAGES[si].cumul;
+  const stillNeed = Math.max(0, totalCW - owned);
+  const hasEnough = owned >= totalCW;
+  const gemTotal  = totalCW * GEMS_PER_CW;
+  const gemStill  = stillNeed * GEMS_PER_CW;
+  const stars     = ei - si;
+  const bkd       = getBreakdown(si, ei);
+  const hasOwned  = owned > 0;
+
+  // ── stat card helper ──────────────────────────────────────────────────────
+  const card = (icon, value, label, colorClass, border) => `
+    <div class="flex flex-col items-center justify-center bg-slate-800/60 border ${border} rounded-2xl p-4 text-center gap-1 min-w-0">
+      <span class="text-2xl leading-none">${icon}</span>
+      <span class="text-xl sm:text-2xl font-black font-mono ${colorClass} leading-tight break-all">${value}</span>
+      <span class="text-xs text-slate-500 leading-tight">${label}</span>
+    </div>`;
+
+  // ── breakdown rows ────────────────────────────────────────────────────────
+  const bdRows = bkd.map(([rank, cw]) => {
+    const gems = cw * GEMS_PER_CW;
+    return `<tr class="border-t border-slate-700/40 transition-colors">
+      <td class="py-2 pl-4 pr-2 font-semibold text-gold-400 text-sm">${rank}</td>
+      <td class="py-2 px-2 text-right font-mono text-sm text-slate-200">${fmt(cw)}</td>
+      ${showGem ? `<td class="py-2 pl-2 pr-4 text-right font-mono text-sm text-gem-400">${fmt(gems)}</td>` : `<td class="py-2 pl-2 pr-4 text-right text-xs text-slate-500">${Math.round(cw/totalCW*100)}%</td>`}
+    </tr>`;
+  }).join('');
+
+  resEl.innerHTML = `
+  <div class="animate-pop space-y-4">
+
+    <!-- Route pill -->
+    <div class="bg-slate-900 border border-slate-700/80 rounded-2xl overflow-hidden">
+      <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-3 border-b border-slate-700/80 flex items-center gap-2">
+        <span class="text-gold-400 text-xs font-bold uppercase tracking-widest">Results</span>
+      </div>
+
+      <div class="px-6 py-5 space-y-5">
+
+        <!-- Route summary -->
+        <div class="flex items-center justify-center gap-3 flex-wrap">
+          <span class="bg-slate-700 px-3 py-1.5 rounded-lg text-gold-400 font-bold text-sm font-mono">${STAGES[si].label}</span>
+          <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <span class="bg-slate-700 px-3 py-1.5 rounded-lg text-gold-400 font-bold text-sm font-mono">${STAGES[ei].label}</span>
+          <span class="text-slate-600 text-xs">${stars} star step${stars !== 1 ? 's' : ''}</span>
+        </div>
+
+        <!-- Main stat cards -->
+        <div class="grid grid-cols-${showGem && hasOwned ? '2' : showGem || hasOwned ? '2' : '1'} sm:grid-cols-${showGem && hasOwned ? '4' : '2'} gap-3">
+          ${card('⚙️', fmt(totalCW), 'Total CW needed', 'text-gold-400', 'border-gold-500/20')}
+          ${hasOwned ? card(
+              hasEnough ? '✅' : '⚙️',
+              fmt(stillNeed),
+              hasEnough ? 'You have enough!' : 'CW still needed',
+              hasEnough ? 'text-cw-400' : 'text-orange-400',
+              hasEnough ? 'border-cw-500/20' : 'border-orange-500/20'
+            ) : ''}
+          ${showGem ? card('💎', fmt(gemTotal), 'Total gems (all CW)', 'text-gem-400', 'border-gem-500/20') : ''}
+          ${showGem && hasOwned && !hasEnough ? card('💎', fmt(gemStill), 'Gems for missing CW', 'text-gem-300', 'border-gem-500/20') : ''}
+        </div>
+
+        ${showGem ? `
+        <div class="text-center text-xs text-slate-600">
+          Rate: 1,000 ⚙️ = 35,000 💎 &nbsp;·&nbsp; 1 ⚙️ = ${GEMS_PER_CW} 💎
+          &nbsp;·&nbsp; ${fmt(totalCW)} ⚙️ = ${fmtK(gemTotal)} 💎
+        </div>` : ''}
+
+        ${hasOwned ? `
+        <div class="rounded-xl px-4 py-3 flex items-center gap-3 text-sm
+          ${hasEnough
+            ? 'bg-cw-500/10 border border-cw-500/20 text-cw-400'
+            : 'bg-orange-500/10 border border-orange-500/20 text-orange-400'}">
+          <span class="text-lg flex-shrink-0">${hasEnough ? '🎉' : '📦'}</span>
+          <span>
+            ${hasEnough
+              ? `You own <strong>${fmt(owned)}</strong> CW — that's <strong>${fmt(owned - totalCW)}</strong> more than needed!`
+              : `You own <strong>${fmt(owned)}</strong> CW — still need <strong>${fmt(stillNeed)}</strong> more
+                 ${showGem ? `(<strong>${fmtK(gemStill)} 💎</strong>)` : ''}.`}
+          </span>
+        </div>` : ''}
+
+        ${bkd.length > 1 ? `
+        <!-- Breakdown -->
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Breakdown by rank</div>
+          <div class="border border-slate-700/60 rounded-xl overflow-hidden">
+            <div class="max-h-72 overflow-y-auto">
+              <table class="w-full bd-table">
+                <thead class="sticky top-0 bg-slate-800 z-10">
+                  <tr>
+                    <th class="py-2 pl-4 pr-2 text-left text-xs text-slate-500 font-semibold">Rank</th>
+                    <th class="py-2 px-2 text-right text-xs text-slate-500 font-semibold">⚙️ CW</th>
+                    <th class="py-2 pl-2 pr-4 text-right text-xs text-slate-500 font-semibold">${showGem ? '💎 Gems' : '% share'}</th>
+                  </tr>
+                </thead>
+                <tbody>${bdRows}</tbody>
+                <tfoot class="sticky bottom-0 bg-slate-800 border-t border-slate-600">
+                  <tr>
+                    <td class="py-2 pl-4 pr-2 text-xs font-bold text-slate-400">Total</td>
+                    <td class="py-2 px-2 text-right text-xs font-bold text-gold-400 font-mono">${fmt(totalCW)}</td>
+                    <td class="py-2 pl-2 pr-4 text-right text-xs font-bold ${showGem ? 'text-gem-400 font-mono' : 'text-slate-500'}">${showGem ? fmt(gemTotal) : '100%'}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        ` : ''}
+
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Listeners ─────────────────────────────────────────────────────────────────
+startSel.addEventListener('change', render);
+endSel.addEventListener('change', render);
+ownedIn.addEventListener('input', render);
+gemsChk.addEventListener('change', render);
+
+render();
+</script>
+</body>
+</html>
