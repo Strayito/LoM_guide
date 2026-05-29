@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,8 +35,8 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>⚖️ Comparateur Pal A/B</h1>
-    <p>Comparez deux Familiers côte à côte. Formules Yuko v1.2.</p>
+    <h1><span class="lang-fr">⚖️ Comparateur Pal A/B</span><span class="lang-en hidden">⚖️ Pal A/B Comparator</span><span class="lang-sk hidden">⚖️ Porovnávač Pal A/B</span></h1>
+    <p><span class="lang-fr">Comparez deux Familiers côte à côte. Formules Yuko v1.2.</span><span class="lang-en hidden">Compare two Pals side by side. Yuko v1.2 formulas.</span><span class="lang-sk hidden">Porovnajte dvoch Palov vedľa seba. Vzorce Yuko v1.2.</span></p>
   </div>
   <div class="info-box" style="margin-bottom:20px">
     <strong>Formules Pal:</strong> PalBasic = (ATK&#8722;DEF)&#215;PalMULT%&#215;PalDMG%.
@@ -46,33 +46,33 @@
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn active" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-palcmp">
     <!-- Shared options -->
         <div class="formula-ref" style="margin-bottom:16px">
-          <h4>Options partagées (Pal A et B)</h4>
+          <h4><span class="lang-fr">Options partagées (Pal A et B)</span><span class="lang-en hidden">Shared Options (Pal A and B)</span><span class="lang-sk hidden">Zdieľané možnosti (Pal A a B)</span></h4>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
             <div>
               <div class="form-group">
-                <label class="form-label" for="cpal-mult">Mult. Pal de base (%)</label>
+                <label class="form-label" for="cpal-mult"><span class="lang-fr">Mult. Pal de base (%)</span><span class="lang-en hidden">Base Pal Mult (%)</span><span class="lang-sk hidden">Základný Pal Mult (%)</span></label>
                 <input class="form-input" type="number" id="cpal-mult" value="100" min="0" step="1">
               </div>
             </div>
             <div>
               <div class="form-group">
-                <label class="form-label" for="cpal-palres">Pal DMG RES cible (%) <span class="cap-note">cap 80</span></label>
+                <label class="form-label" for="cpal-palres"><span class="lang-fr">Pal DMG RES cible (%)</span><span class="lang-en hidden">Target Pal DMG RES (%)</span><span class="lang-sk hidden">Cieľ Pal DMG RES (%)</span> <span class="cap-note">cap 80</span></label>
                 <input class="form-input" type="number" id="cpal-palres" value="0" min="0" max="80" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="cpal-globalres">Global DMG RES cible (%) <span class="cap-note">cap 80</span></label>
+                <label class="form-label" for="cpal-globalres"><span class="lang-fr">Global DMG RES cible (%)</span><span class="lang-en hidden">Target Global DMG RES (%)</span><span class="lang-sk hidden">Cieľ Global DMG RES (%)</span> <span class="cap-note">cap 80</span></label>
                 <input class="form-input" type="number" id="cpal-globalres" value="0" min="0" max="80" step="0.1">
               </div>
             </div>
@@ -80,16 +80,16 @@
     
           <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cpal-crit"> Crit
+              <input type="checkbox" id="cpal-crit"> <span class="lang-fr">Crit</span><span class="lang-en hidden">Crit</span><span class="lang-sk hidden">Krit</span>
             </label>
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cpal-combo"> Combo
+              <input type="checkbox" id="cpal-combo"> <span class="lang-fr">Combo</span><span class="lang-en hidden">Combo</span><span class="lang-sk hidden">Combo</span>
             </label>
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cpal-boss"> Boss
+              <input type="checkbox" id="cpal-boss"> <span class="lang-fr">Boss</span><span class="lang-en hidden">Boss</span><span class="lang-sk hidden">Boss</span>
             </label>
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cpal-pvp"> PvP
+              <input type="checkbox" id="cpal-pvp"> <span class="lang-fr">PvP</span><span class="lang-en hidden">PvP</span><span class="lang-sk hidden">PvP</span>
             </label>
           </div>
           <div id="cpal-crit-opts" class="toggle-section" style="display:none;margin-top:8px">
@@ -104,13 +104,13 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="cpal-critres">PalCritRES cible (%)</label>
+              <label class="form-label" for="cpal-critres"><span class="lang-fr">PalCritRES cible (%)</span><span class="lang-en hidden">Target PalCritRES (%)</span><span class="lang-sk hidden">Cieľ PalCritRES (%)</span></label>
               <input class="form-input" type="number" id="cpal-critres" value="100" min="1" step="0.1">
             </div>
           </div>
           <div id="cpal-combo-opts" class="toggle-section" style="display:none;margin-top:8px">
             <div class="form-group">
-              <label class="form-label" for="cpal-combomult">Pal Combo Mult (%)</label>
+              <label class="form-label" for="cpal-combomult"><span class="lang-fr">Pal Combo Mult (%)</span><span class="lang-en hidden">Pal Combo Mult (%)</span><span class="lang-sk hidden">Pal Combo Mult (%)</span></label>
               <input class="form-input" type="number" id="cpal-combomult" value="150" min="0" step="0.1">
             </div>
           </div>
@@ -123,11 +123,11 @@
           <div id="cpal-pvp-opts" class="toggle-section" style="display:none;margin-top:8px">
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="cpal-pvpMyLv">Mon niveau</label>
+                <label class="form-label" for="cpal-pvpMyLv"><span class="lang-fr">Mon niveau</span><span class="lang-en hidden">My level</span><span class="lang-sk hidden">Môj level</span></label>
                 <input class="form-input" type="number" id="cpal-pvpMyLv" value="100" min="1" max="220" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="cpal-pvpELv">Niveau ennemi</label>
+                <label class="form-label" for="cpal-pvpELv"><span class="lang-fr">Niveau ennemi</span><span class="lang-en hidden">Enemy level</span><span class="lang-sk hidden">Level nepriateľa</span></label>
                 <input class="form-input" type="number" id="cpal-pvpELv" value="100" min="1" max="220" step="1">
               </div>
             </div>
@@ -148,7 +148,7 @@
                     <input class="form-input" type="number" id="cpal-a-atk" value="50000" min="0" step="1">
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="cpal-a-def">DEF cible A</label>
+                    <label class="form-label" for="cpal-a-def"><span class="lang-fr">DEF cible A</span><span class="lang-en hidden">Target DEF A</span><span class="lang-sk hidden">DEF cieľa A</span></label>
                     <input class="form-input" type="number" id="cpal-a-def" value="20000" min="0" step="1">
                   </div>
                 </div>
@@ -158,7 +158,7 @@
                 </div>
                 <div class="sim-steps" id="cpal-a-steps" style="margin-top:12px"></div>
                 <div class="result-final" style="border-color:rgba(64,144,216,.3);background:rgba(64,144,216,.06)">
-                  <div class="lbl">Dégâts Pal A</div>
+                  <div class="lbl"><span class="lang-fr">Dégâts Pal A</span><span class="lang-en hidden">Pal A Damage</span><span class="lang-sk hidden">Poškodenie Pal A</span></div>
                   <div class="val" style="color:var(--blue)" id="cpal-a-final">—</div>
                 </div>
               </div>
@@ -176,7 +176,7 @@
                     <input class="form-input" type="number" id="cpal-b-atk" value="55000" min="0" step="1">
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="cpal-b-def">DEF cible B</label>
+                    <label class="form-label" for="cpal-b-def"><span class="lang-fr">DEF cible B</span><span class="lang-en hidden">Target DEF B</span><span class="lang-sk hidden">DEF cieľa B</span></label>
                     <input class="form-input" type="number" id="cpal-b-def" value="20000" min="0" step="1">
                   </div>
                 </div>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="sim-steps" id="cpal-b-steps" style="margin-top:12px"></div>
                 <div class="result-final" style="border-color:rgba(232,192,64,.3);background:rgba(232,192,64,.06)">
-                  <div class="lbl">Dégâts Pal B</div>
+                  <div class="lbl"><span class="lang-fr">Dégâts Pal B</span><span class="lang-en hidden">Pal B Damage</span><span class="lang-sk hidden">Poškodenie Pal B</span></div>
                   <div class="val" style="color:var(--gold)" id="cpal-b-final">—</div>
                 </div>
               </div>
@@ -196,7 +196,7 @@
         </div>
     
         <div class="cmp-diff-row">
-          <div class="cmp-diff-label">Différence B − A</div>
+          <div class="cmp-diff-label"><span class="lang-fr">Différence B − A</span><span class="lang-en hidden">Difference B − A</span><span class="lang-sk hidden">Rozdiel B − A</span></div>
           <div id="cpal-diff">—</div>
         </div>
   </div>
@@ -207,9 +207,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

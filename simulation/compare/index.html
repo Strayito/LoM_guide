@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,8 +35,8 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>⚖️ Comparateur A/B</h1>
-    <p>Comparez deux builds côte à côte — Basic, Combo, Counter, Skill. Formules Yuko v1.2.</p>
+    <h1><span class="lang-fr">⚖️ Comparateur A/B</span><span class="lang-en hidden">⚖️ A/B Comparator</span><span class="lang-sk hidden">⚖️ Porovnávač A/B</span></h1>
+    <p><span class="lang-fr">Comparez deux builds côte à côte — Basic, Combo, Counter, Skill. Formules Yuko v1.2.</span><span class="lang-en hidden">Compare two builds side by side — Basic, Combo, Counter, Skill. Yuko v1.2 formulas.</span><span class="lang-sk hidden">Porovnajte dva buildy vedľa seba — Basic, Combo, Counter, Skill. Vzorce Yuko v1.2.</span></p>
   </div>
   <div class="info-box" style="margin-bottom:20px">
     <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
@@ -47,19 +47,19 @@
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn active" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-compare">
     <!-- Shared options -->
         <div class="formula-ref" style="margin-bottom:16px">
-          <h4>Options partagées (A et B)</h4>
+          <h4><span class="lang-fr">Options partagées (A et B)</span><span class="lang-en hidden">Shared options (A and B)</span><span class="lang-sk hidden">Zdieľané možnosti (A a B)</span></h4>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
             <div>
               <div class="sim-type-btns" id="cmp-type-btns" style="margin-bottom:8px">
@@ -69,17 +69,17 @@
                 <button type="button" class="sim-type-btn" data-type="skill">Skill</button>
               </div>
               <div class="form-group">
-                <label class="form-label" for="cmp-mult">Multiplicateur (%)</label>
+                <label class="form-label" for="cmp-mult"><span class="lang-fr">Multiplicateur (%)</span><span class="lang-en hidden">Multiplier (%)</span><span class="lang-sk hidden">Násobič (%)</span></label>
                 <input class="form-input" type="number" id="cmp-mult" value="100" min="0" step="1">
               </div>
             </div>
             <div>
               <div class="form-group">
-                <label class="form-label" for="cmp-typeRES">TypeRES cible (%) <span class="cap-note">cap 80</span></label>
+                <label class="form-label" for="cmp-typeRES"><span class="lang-fr">TypeRES cible (%) <span class="cap-note">cap 80</span></span><span class="lang-en hidden">Target TypeRES (%) <span class="cap-note">cap 80</span></span><span class="lang-sk hidden">TypeRES cieľa (%) <span class="cap-note">cap 80</span></span></label>
                 <input class="form-input" type="number" id="cmp-typeRES" value="0" min="0" max="80" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="cmp-globalRES">GlobalRES cible (%) <span class="cap-note">cap 80</span></label>
+                <label class="form-label" for="cmp-globalRES"><span class="lang-fr">GlobalRES cible (%) <span class="cap-note">cap 80</span></span><span class="lang-en hidden">Target GlobalRES (%) <span class="cap-note">cap 80</span></span><span class="lang-sk hidden">GlobalRES cieľa (%) <span class="cap-note">cap 80</span></span></label>
                 <input class="form-input" type="number" id="cmp-globalRES" value="0" min="0" max="80" step="0.1">
               </div>
             </div>
@@ -88,20 +88,20 @@
           <!-- Skill option -->
           <div id="cmp-skill-opts" style="display:none;margin-top:8px">
             <div class="form-group">
-              <label class="form-label">Skill DMG bonus partagé (%)</label>
+              <label class="form-label"><span class="lang-fr">Skill DMG bonus partagé (%)</span><span class="lang-en hidden">Shared Skill DMG bonus (%)</span><span class="lang-sk hidden">Zdieľaný Skill DMG bonus (%)</span></label>
               <input class="form-input" type="number" id="cmp-skillbonus" value="0" min="0" step="0.1">
             </div>
           </div>
     
           <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cmp-crit"> Crit
+              <input type="checkbox" id="cmp-crit"> <span class="lang-fr">Crit</span><span class="lang-en hidden">Crit</span><span class="lang-sk hidden">Krit</span>
             </label>
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cmp-boss"> Boss
+              <input type="checkbox" id="cmp-boss"> <span class="lang-fr">Boss</span><span class="lang-en hidden">Boss</span><span class="lang-sk hidden">Boss</span>
             </label>
             <label class="checkbox-row" style="margin:0">
-              <input type="checkbox" id="cmp-pvp"> PvP
+              <input type="checkbox" id="cmp-pvp"> <span class="lang-fr">PvP</span><span class="lang-en hidden">PvP</span><span class="lang-sk hidden">PvP</span>
             </label>
           </div>
           <div id="cmp-crit-opts" class="toggle-section" style="display:none;margin-top:8px">
@@ -116,7 +116,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="cmp-critRES">CritRES cible (%)</label>
+              <label class="form-label" for="cmp-critRES"><span class="lang-fr">CritRES cible (%)</span><span class="lang-en hidden">Target CritRES (%)</span><span class="lang-sk hidden">CritRES cieľa (%)</span></label>
               <input class="form-input" type="number" id="cmp-critRES" value="100" min="1" step="0.1">
             </div>
           </div>
@@ -129,11 +129,11 @@
           <div id="cmp-pvp-opts" class="toggle-section" style="display:none;margin-top:8px">
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="cmp-pvpMyLv">Mon niveau</label>
+                <label class="form-label" for="cmp-pvpMyLv"><span class="lang-fr">Mon niveau</span><span class="lang-en hidden">My level</span><span class="lang-sk hidden">Môj level</span></label>
                 <input class="form-input" type="number" id="cmp-pvpMyLv" value="100" min="1" max="220" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="cmp-pvpELv">Niveau ennemi</label>
+                <label class="form-label" for="cmp-pvpELv"><span class="lang-fr">Niveau ennemi</span><span class="lang-en hidden">Enemy level</span><span class="lang-sk hidden">Level nepriateľa</span></label>
                 <input class="form-input" type="number" id="cmp-pvpELv" value="100" min="1" max="220" step="1">
               </div>
             </div>
@@ -154,13 +154,13 @@
                     <input class="form-input" type="number" id="cmp-a-atk" value="50000" min="0" step="1">
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="cmp-a-def">DEF cible A</label>
+                    <label class="form-label" for="cmp-a-def"><span class="lang-fr">DEF cible A</span><span class="lang-en hidden">Target DEF A</span><span class="lang-sk hidden">DEF cieľa A</span></label>
                     <input class="form-input" type="number" id="cmp-a-def" value="20000" min="0" step="1">
                   </div>
                 </div>
                 <div class="sim-steps" id="cmp-a-steps" style="margin-top:12px"></div>
                 <div class="result-final" style="border-color:rgba(64,144,216,.3);background:rgba(64,144,216,.06)">
-                  <div class="lbl">Dégâts A</div>
+                  <div class="lbl"><span class="lang-fr">Dégâts A</span><span class="lang-en hidden">Damage A</span><span class="lang-sk hidden">Poškodenie A</span></div>
                   <div class="val" style="color:var(--blue)" id="cmp-a-final">—</div>
                 </div>
               </div>
@@ -178,13 +178,13 @@
                     <input class="form-input" type="number" id="cmp-b-atk" value="55000" min="0" step="1">
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="cmp-b-def">DEF cible B</label>
+                    <label class="form-label" for="cmp-b-def"><span class="lang-fr">DEF cible B</span><span class="lang-en hidden">Target DEF B</span><span class="lang-sk hidden">DEF cieľa B</span></label>
                     <input class="form-input" type="number" id="cmp-b-def" value="20000" min="0" step="1">
                   </div>
                 </div>
                 <div class="sim-steps" id="cmp-b-steps" style="margin-top:12px"></div>
                 <div class="result-final" style="border-color:rgba(232,192,64,.3);background:rgba(232,192,64,.06)">
-                  <div class="lbl">Dégâts B</div>
+                  <div class="lbl"><span class="lang-fr">Dégâts B</span><span class="lang-en hidden">Damage B</span><span class="lang-sk hidden">Poškodenie B</span></div>
                   <div class="val" style="color:var(--gold)" id="cmp-b-final">—</div>
                 </div>
               </div>
@@ -194,7 +194,7 @@
         </div>
     
         <div class="cmp-diff-row">
-          <div class="cmp-diff-label">Différence B − A</div>
+          <div class="cmp-diff-label"><span class="lang-fr">Différence B − A</span><span class="lang-en hidden">Difference B − A</span><span class="lang-sk hidden">Rozdiel B − A</span></div>
           <div id="cmp-diff">—</div>
         </div>
   </div>
@@ -205,9 +205,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

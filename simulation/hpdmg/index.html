@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,19 +35,19 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>❤️ HP-Based Damage</h1>
-    <p>Dégâts basés sur les HP — 6 étapes, clamp ATKRef, facteur PvP. Yuko v1.2.</p>
+    <h1><span class="lang-fr">❤️ Dégâts basés sur les HP</span><span class="lang-en hidden">❤️ HP-Based Damage</span><span class="lang-sk hidden">❤️ Poškodenie podľa HP</span></h1>
+    <p><span class="lang-fr">Dégâts basés sur les HP — 6 étapes, clamp ATKRef, facteur PvP. Yuko v1.2.</span><span class="lang-en hidden">HP-based damage — 6 steps, ATKRef clamp, PvP factor. Yuko v1.2.</span><span class="lang-sk hidden">Poškodenie podľa HP — 6 krokov, ATKRef clamp, PvP faktor. Yuko v1.2.</span></p>
   </div>
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn active" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-hpdmg">
@@ -56,7 +56,7 @@
           <form onsubmit="return false">
     
             <div class="formula-ref">
-              <h4>HP-Based Damage — 6 étapes (Yuko v1.2)</h4>
+              <h4><span class="lang-fr">HP-Based Damage — 6 étapes (Yuko v1.2)</span><span class="lang-en hidden">HP-Based Damage — 6 steps (Yuko v1.2)</span><span class="lang-sk hidden">Poškodenie podľa HP — 6 krokov (Yuko v1.2)</span></h4>
               <div class="formula-line">① <span class="v">Raw</span> = TargetHP × HP%/100</div>
               <div class="formula-line">② <span class="v">Adjusted</span> = Raw × PvPFactor  <em>(si PvP)</em></div>
               <div class="formula-line">③ <span class="v">ATKRef</span> = (ATK−DEF) × BasicMult%/100  <em>(sans RES ni crit)</em></div>
@@ -65,36 +65,36 @@
               <div class="formula-line">⑥ <span class="v">Final</span> = Clamped ÷ PvPFactor  <em>(pas de RES, pas de crit)</em></div>
             </div>
     
-            <div class="section-chip">HP de l'ennemi</div>
+            <div class="section-chip"><span class="lang-fr">HP de l'ennemi</span><span class="lang-en hidden">Enemy HP</span><span class="lang-sk hidden">HP nepriateľa</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="hp-target-hp">HP cible</label>
+                <label class="form-label" for="hp-target-hp"><span class="lang-fr">HP cible</span><span class="lang-en hidden">Target HP</span><span class="lang-sk hidden">HP cieľa</span></label>
                 <input class="form-input" type="number" id="hp-target-hp" value="1000000" min="1" step="1000">
               </div>
               <div class="form-group">
-                <label class="form-label" for="hp-pct">HP% de l'attaque</label>
+                <label class="form-label" for="hp-pct"><span class="lang-fr">HP% de l'attaque</span><span class="lang-en hidden">Attack HP%</span><span class="lang-sk hidden">HP% útoku</span></label>
                 <input class="form-input" type="number" id="hp-pct" value="30" min="0" step="0.1">
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="hp-type">Type de HP utilisé</label>
+              <label class="form-label" for="hp-type"><span class="lang-fr">Type de HP utilisé</span><span class="lang-en hidden">HP type used</span><span class="lang-sk hidden">Typ použitých HP</span></label>
               <select class="form-input" id="hp-type">
-                <option value="max">HP max (Max Factor ×100)</option>
-                <option value="current">HP courant (Max Factor ×50)</option>
+                <option value="max"><span class="lang-fr">HP max (Facteur ×100)</span><span class="lang-en hidden">Max HP (Factor ×100)</span><span class="lang-sk hidden">Max HP (Faktor ×100)</span></option>
+                <option value="current"><span class="lang-fr">HP courant (Facteur ×50)</span><span class="lang-en hidden">Current HP (Factor ×50)</span><span class="lang-sk hidden">Aktuálne HP (Faktor ×50)</span></option>
               </select>
             </div>
     
             <hr class="form-divider">
-            <div class="section-chip">Référence ATK (clamp)</div>
+            <div class="section-chip"><span class="lang-fr">Référence ATK (clamp)</span><span class="lang-en hidden">ATK Reference (clamp)</span><span class="lang-sk hidden">ATK referencia (clamp)</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="hp-player-atk">ATK Final (joueur)</label>
+                <label class="form-label" for="hp-player-atk"><span class="lang-fr">ATK Final (joueur)</span><span class="lang-en hidden">Final ATK (player)</span><span class="lang-sk hidden">Finálne ATK (hráč)</span></label>
                 <input class="form-input" type="number" id="hp-player-atk" value="50000" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="hp-enemy-def">DEF Cible</label>
+                <label class="form-label" for="hp-enemy-def"><span class="lang-fr">DEF Cible</span><span class="lang-en hidden">Target DEF</span><span class="lang-sk hidden">DEF cieľa</span></label>
                 <input class="form-input" type="number" id="hp-enemy-def" value="0" min="0" step="1">
-                <div class="input-hint">0 en PvE (EnemyDEF = 0).</div>
+                <div class="input-hint"><span class="lang-fr">0 en PvE (EnemyDEF = 0).</span><span class="lang-en hidden">0 in PvE (EnemyDEF = 0).</span><span class="lang-sk hidden">0 v PvE (EnemyDEF = 0).</span></div>
               </div>
             </div>
             <div class="form-group">
@@ -104,16 +104,16 @@
     
             <hr class="form-divider">
             <label class="checkbox-row">
-              <input type="checkbox" id="hp-pvp"> Mode PvP
+              <input type="checkbox" id="hp-pvp"> <span class="lang-fr">Mode PvP</span><span class="lang-en hidden">PvP Mode</span><span class="lang-sk hidden">PvP Mód</span>
             </label>
             <div id="hp-pvp-opts" class="toggle-section" style="display:none">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label" for="hp-pvpMyLv">Mon niveau</label>
+                  <label class="form-label" for="hp-pvpMyLv"><span class="lang-fr">Mon niveau</span><span class="lang-en hidden">My level</span><span class="lang-sk hidden">Môj level</span></label>
                   <input class="form-input" type="number" id="hp-pvpMyLv" value="100" min="1" max="220" step="1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="hp-pvpELv">Niveau ennemi</label>
+                  <label class="form-label" for="hp-pvpELv"><span class="lang-fr">Niveau ennemi</span><span class="lang-en hidden">Enemy level</span><span class="lang-sk hidden">Level nepriateľa</span></label>
                   <input class="form-input" type="number" id="hp-pvpELv" value="100" min="1" max="220" step="1">
                 </div>
               </div>
@@ -122,15 +122,15 @@
           </form>
     
           <div class="results-panel sticky-results">
-            <div class="results-header">❤️ HP-Based Damage</div>
+            <div class="results-header"><span class="lang-fr">❤️ Dégâts HP</span><span class="lang-en hidden">❤️ HP-Based Damage</span><span class="lang-sk hidden">❤️ Poškodenie podľa HP</span></div>
             <div class="results-body">
               <div class="sim-steps" id="hp-steps"></div>
               <div class="result-final">
-                <div class="lbl">Dégâts Finaux</div>
+                <div class="lbl"><span class="lang-fr">Dégâts Finaux</span><span class="lang-en hidden">Final Damage</span><span class="lang-sk hidden">Finálne poškodenie</span></div>
                 <div class="val" id="hp-final">—</div>
               </div>
               <div class="info-box" style="margin-top:12px;font-size:.76rem">
-                <strong>Note:</strong> Pas de RES, pas de critique. Min=ATKRef×0.8, Max=ATKRef×50 (HP courant) / ×100 (HP max). Source: Yuko v1.2.
+                <strong>Note:</strong> <span class="lang-fr">Pas de RES, pas de critique. Min=ATKRef×0.8, Max=ATKRef×50 (HP courant) / ×100 (HP max).</span><span class="lang-en hidden">No RES, no crit. Min=ATKRef×0.8, Max=ATKRef×50 (current HP) / ×100 (max HP).</span><span class="lang-sk hidden">Bez RES, bez kritu. Min=ATKRef×0.8, Max=ATKRef×50 (aktuálne HP) / ×100 (max HP).</span> Source: Yuko v1.2.
               </div>
             </div>
           </div>
@@ -144,9 +144,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

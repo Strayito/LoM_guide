@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,19 +35,19 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>🎯 Mécaniques de Combat</h1>
-    <p>Evasion, Stun, Pierce, Block, Régénération — Formules Yuko v1.2.</p>
+    <h1><span class="lang-fr">🎯 Mécaniques de Combat</span><span class="lang-en hidden">🎯 Combat Mechanics</span><span class="lang-sk hidden">🎯 Bojové mechaniky</span></h1>
+    <p><span class="lang-fr">Evasion, Stun, Pierce, Block, Régénération — Formules Yuko v1.2.</span><span class="lang-en hidden">Evasion, Stun, Pierce, Block, Regeneration — Yuko v1.2 formulas.</span><span class="lang-sk hidden">Evasion, Stun, Pierce, Block, Regenerácia — Vzorce Yuko v1.2.</span></p>
   </div>
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn active" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn active" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-mechanics">
@@ -56,7 +56,7 @@
           <form onsubmit="return false">
     
             <div class="formula-ref">
-              <h4>Formules Mécaniques (Yuko v1.2)</h4>
+              <h4><span class="lang-fr">Formules Mécaniques (Yuko v1.2)</span><span class="lang-en hidden">Mechanics Formulas (Yuko v1.2)</span><span class="lang-sk hidden">Vzorce mechaník (Yuko v1.2)</span></h4>
               <div class="formula-line">Evasion%, Stun% <span class="o">→</span> max(0, Player−EnemyIgnore)^<span class="o">0.9</span></div>
               <div class="formula-line">Combo%, Counter%, Launch%, Crit% <span class="o">→</span> max(0, Player−EnemyIgnore) [linéaire]</div>
               <div class="formula-line">StunDur = StunTime×(1−StunRES%)×(1−ControlRES%)  |  PvP: <span class="o">0.4</span>×(1−ControlRES%)</div>
@@ -65,64 +65,64 @@
             </div>
     
             <!-- Taux de combat -->
-            <div class="section-chip">Taux de combat</div>
+            <div class="section-chip"><span class="lang-fr">Taux de combat</span><span class="lang-en hidden">Combat rates</span><span class="lang-sk hidden">Bojové hodnoty</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-combo">Combo% joueur <span class="cap-note">cap 100</span></label>
+                <label class="form-label" for="mec-combo"><span class="lang-fr">Combo% joueur <span class="cap-note">cap 100</span></span><span class="lang-en hidden">Player Combo% <span class="cap-note">cap 100</span></span><span class="lang-sk hidden">Combo% hráča <span class="cap-note">cap 100</span></span></label>
                 <input class="form-input" type="number" id="mec-combo" value="0" min="0" max="100" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-combo">Ignore Combo% ennemi</label>
+                <label class="form-label" for="mec-ign-combo"><span class="lang-fr">Ignore Combo% ennemi</span><span class="lang-en hidden">Enemy Ignore Combo%</span><span class="lang-sk hidden">Ignorovanie Combo% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-combo" value="0" min="0" step="0.1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-counter">Counter% joueur <span class="cap-note">cap 100</span></label>
+                <label class="form-label" for="mec-counter"><span class="lang-fr">Counter% joueur <span class="cap-note">cap 100</span></span><span class="lang-en hidden">Player Counter% <span class="cap-note">cap 100</span></span><span class="lang-sk hidden">Counter% hráča <span class="cap-note">cap 100</span></span></label>
                 <input class="form-input" type="number" id="mec-counter" value="0" min="0" max="100" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-counter">Ignore Counter% ennemi</label>
+                <label class="form-label" for="mec-ign-counter"><span class="lang-fr">Ignore Counter% ennemi</span><span class="lang-en hidden">Enemy Ignore Counter%</span><span class="lang-sk hidden">Ignorovanie Counter% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-counter" value="0" min="0" step="0.1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-crit">Crit Rate% joueur <span class="cap-note">cap 100</span></label>
+                <label class="form-label" for="mec-crit"><span class="lang-fr">Crit Rate% joueur <span class="cap-note">cap 100</span></span><span class="lang-en hidden">Player Crit Rate% <span class="cap-note">cap 100</span></span><span class="lang-sk hidden">Crit Rate% hráča <span class="cap-note">cap 100</span></span></label>
                 <input class="form-input" type="number" id="mec-crit" value="0" min="0" max="100" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-crit">Ignore Crit% ennemi</label>
+                <label class="form-label" for="mec-ign-crit"><span class="lang-fr">Ignore Crit% ennemi</span><span class="lang-en hidden">Enemy Ignore Crit%</span><span class="lang-sk hidden">Ignorovanie Crit% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-crit" value="0" min="0" step="0.1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-evasion">Evasion% ennemi <span class="cap-note">^0.9</span></label>
+                <label class="form-label" for="mec-evasion"><span class="lang-fr">Evasion% ennemi <span class="cap-note">^0.9</span></span><span class="lang-en hidden">Enemy Evasion% <span class="cap-note">^0.9</span></span><span class="lang-sk hidden">Evasion% nepriateľa <span class="cap-note">^0.9</span></span></label>
                 <input class="form-input" type="number" id="mec-evasion" value="0" min="0" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-evasion">Ignore Evasion% joueur</label>
+                <label class="form-label" for="mec-ign-evasion"><span class="lang-fr">Ignore Evasion% joueur</span><span class="lang-en hidden">Player Ignore Evasion%</span><span class="lang-sk hidden">Ignorovanie Evasion% hráča</span></label>
                 <input class="form-input" type="number" id="mec-ign-evasion" value="0" min="0" step="0.1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-launch">Launch% joueur <span class="cap-note">cap 100</span></label>
+                <label class="form-label" for="mec-launch"><span class="lang-fr">Launch% joueur <span class="cap-note">cap 100</span></span><span class="lang-en hidden">Player Launch% <span class="cap-note">cap 100</span></span><span class="lang-sk hidden">Launch% hráča <span class="cap-note">cap 100</span></span></label>
                 <input class="form-input" type="number" id="mec-launch" value="0" min="0" max="100" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-launch">Ignore Launch% ennemi</label>
+                <label class="form-label" for="mec-ign-launch"><span class="lang-fr">Ignore Launch% ennemi</span><span class="lang-en hidden">Enemy Ignore Launch%</span><span class="lang-sk hidden">Ignorovanie Launch% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-launch" value="0" min="0" step="0.1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-stun">Stun% joueur <span class="cap-note">^0.9</span></label>
+                <label class="form-label" for="mec-stun"><span class="lang-fr">Stun% joueur <span class="cap-note">^0.9</span></span><span class="lang-en hidden">Player Stun% <span class="cap-note">^0.9</span></span><span class="lang-sk hidden">Stun% hráča <span class="cap-note">^0.9</span></span></label>
                 <input class="form-input" type="number" id="mec-stun" value="0" min="0" step="0.1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-stun">Ignore Stun% ennemi</label>
+                <label class="form-label" for="mec-ign-stun"><span class="lang-fr">Ignore Stun% ennemi</span><span class="lang-en hidden">Enemy Ignore Stun%</span><span class="lang-sk hidden">Ignorovanie Stun% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-stun" value="0" min="0" step="0.1">
               </div>
             </div>
@@ -130,9 +130,9 @@
             <hr class="form-divider">
     
             <!-- Durée de Stun -->
-            <div class="section-chip">Durée de Stun</div>
+            <div class="section-chip"><span class="lang-fr">Durée de Stun</span><span class="lang-en hidden">Stun Duration</span><span class="lang-sk hidden">Trvanie Stunu</span></div>
             <label class="checkbox-row">
-              <input type="checkbox" id="mec-stun-pvp"> Mode PvP (StunTime=1, StunRES=60% fixe)
+              <input type="checkbox" id="mec-stun-pvp"> <span class="lang-fr">Mode PvP</span><span class="lang-en hidden">PvP Mode</span><span class="lang-sk hidden">PvP Mód</span> (StunTime=1, StunRES=60% fixe)
             </label>
             <div id="mec-stun-pve">
               <div class="form-row">
@@ -154,44 +154,44 @@
             <hr class="form-divider">
     
             <!-- Pierce / Block / Pal Inspire / Pal RES -->
-            <div class="section-chip">Pierce / Block / Pal Inspire / Pal RES</div>
+            <div class="section-chip"><span class="lang-fr">Pierce / Block / Pal Inspire / Pal RES</span><span class="lang-en hidden">Pierce / Block / Pal Inspire / Pal RES</span><span class="lang-sk hidden">Pierce / Block / Pal Inspire / Pal RES</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-pierce">Pierce joueur</label>
+                <label class="form-label" for="mec-pierce"><span class="lang-fr">Pierce joueur</span><span class="lang-en hidden">Player Pierce</span><span class="lang-sk hidden">Pierce hráča</span></label>
                 <input class="form-input" type="number" id="mec-pierce" value="0" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-pierce">Ignore Pierce ennemi</label>
+                <label class="form-label" for="mec-ign-pierce"><span class="lang-fr">Ignore Pierce ennemi</span><span class="lang-en hidden">Enemy Ignore Pierce</span><span class="lang-sk hidden">Ignorovanie Pierce nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-pierce" value="0" min="0" step="1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-block">Block joueur</label>
+                <label class="form-label" for="mec-block"><span class="lang-fr">Block joueur</span><span class="lang-en hidden">Player Block</span><span class="lang-sk hidden">Block hráča</span></label>
                 <input class="form-input" type="number" id="mec-block" value="0" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-block">Ignore Block ennemi</label>
+                <label class="form-label" for="mec-ign-block"><span class="lang-fr">Ignore Block ennemi</span><span class="lang-en hidden">Enemy Ignore Block</span><span class="lang-sk hidden">Ignorovanie Block nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-block" value="0" min="0" step="1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-palinsp">Pal Inspire joueur</label>
+                <label class="form-label" for="mec-palinsp"><span class="lang-fr">Pal Inspire joueur</span><span class="lang-en hidden">Player Pal Inspire</span><span class="lang-sk hidden">Pal Inspire hráča</span></label>
                 <input class="form-input" type="number" id="mec-palinsp" value="0" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-palinsp">Ignore Pal Inspire ennemi</label>
+                <label class="form-label" for="mec-ign-palinsp"><span class="lang-fr">Ignore Pal Inspire ennemi</span><span class="lang-en hidden">Enemy Ignore Pal Inspire</span><span class="lang-sk hidden">Ignorovanie Pal Inspire nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-palinsp" value="0" min="0" step="1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-palres">Pal RES joueur</label>
+                <label class="form-label" for="mec-palres"><span class="lang-fr">Pal RES joueur</span><span class="lang-en hidden">Player Pal RES</span><span class="lang-sk hidden">Pal RES hráča</span></label>
                 <input class="form-input" type="number" id="mec-palres" value="0" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-palres">Ignore Pal RES ennemi</label>
+                <label class="form-label" for="mec-ign-palres"><span class="lang-fr">Ignore Pal RES ennemi</span><span class="lang-en hidden">Enemy Ignore Pal RES</span><span class="lang-sk hidden">Ignorovanie Pal RES nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-palres" value="0" min="0" step="1">
               </div>
             </div>
@@ -199,29 +199,29 @@
             <hr class="form-divider">
     
             <!-- Régénération -->
-            <div class="section-chip">Régénération</div>
+            <div class="section-chip"><span class="lang-fr">Régénération</span><span class="lang-en hidden">Regeneration</span><span class="lang-sk hidden">Regenerácia</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="mec-regen">Regen% joueur</label>
+                <label class="form-label" for="mec-regen"><span class="lang-fr">Regen% joueur</span><span class="lang-en hidden">Player Regen%</span><span class="lang-sk hidden">Regen% hráča</span></label>
                 <input class="form-input" type="number" id="mec-regen" value="0" min="0" step="0.01">
               </div>
               <div class="form-group">
-                <label class="form-label" for="mec-ign-regen">Ignore Regen% ennemi</label>
+                <label class="form-label" for="mec-ign-regen"><span class="lang-fr">Ignore Regen% ennemi</span><span class="lang-en hidden">Enemy Ignore Regen%</span><span class="lang-sk hidden">Ignorovanie Regen% nepriateľa</span></label>
                 <input class="form-input" type="number" id="mec-ign-regen" value="0" min="0" step="0.01">
               </div>
             </div>
             <label class="checkbox-row">
-              <input type="checkbox" id="mec-regen-pvp"> Mode PvP (×30%)
+              <input type="checkbox" id="mec-regen-pvp"> <span class="lang-fr">Mode PvP</span><span class="lang-en hidden">PvP Mode</span><span class="lang-sk hidden">PvP Mód</span> (×30%)
             </label>
     
           </form>
     
           <!-- Results panel -->
           <div class="results-panel sticky-results">
-            <div class="results-header">🎯 Résultats Mécaniques</div>
+            <div class="results-header"><span class="lang-fr">🎯 Résultats Mécaniques</span><span class="lang-en hidden">🎯 Mechanics Results</span><span class="lang-sk hidden">🎯 Výsledky mechaník</span></div>
             <div class="results-body">
     
-              <div class="section-chip" style="margin-top:0">Taux effectifs</div>
+              <div class="section-chip" style="margin-top:0"><span class="lang-fr">Taux effectifs</span><span class="lang-en hidden">Effective rates</span><span class="lang-sk hidden">Efektívne hodnoty</span></div>
               <div class="sim-steps">
                 <div class="sim-step"><span class="sim-step-lbl">Combo% net</span><span class="sim-step-val" id="mec-combo-out">—</span></div>
                 <div class="sim-step"><span class="sim-step-lbl">Counter% net</span><span class="sim-step-val" id="mec-counter-out">—</span></div>
@@ -232,13 +232,13 @@
               </div>
     
               <div class="result-final" style="margin-top:12px">
-                <div class="lbl">Durée Stun</div>
+                <div class="lbl"><span class="lang-fr">Durée Stun</span><span class="lang-en hidden">Stun Duration</span><span class="lang-sk hidden">Trvanie Stunu</span></div>
                 <div class="val" id="mec-stun-dur">—</div>
               </div>
     
               <hr class="form-divider">
     
-              <div class="section-chip">Pierce / Block / Pal</div>
+              <div class="section-chip"><span class="lang-fr">Pierce / Block / Pal</span><span class="lang-en hidden">Pierce / Block / Pal</span><span class="lang-sk hidden">Pierce / Block / Pal</span></div>
               <div class="sim-steps">
                 <div class="sim-step"><span class="sim-step-lbl">Pierce</span><span class="sim-step-val" id="mec-pierce-out">—</span></div>
                 <div class="sim-step"><span class="sim-step-lbl">Block</span><span class="sim-step-val" id="mec-block-out">—</span></div>
@@ -248,9 +248,9 @@
     
               <hr class="form-divider">
     
-              <div class="section-chip">Régénération</div>
+              <div class="section-chip"><span class="lang-fr">Régénération</span><span class="lang-en hidden">Regeneration</span><span class="lang-sk hidden">Regenerácia</span></div>
               <div class="result-final">
-                <div class="lbl">Regen nette</div>
+                <div class="lbl"><span class="lang-fr">Regen nette</span><span class="lang-en hidden">Net Regen</span><span class="lang-sk hidden">Čistá Regen</span></div>
                 <div class="val" id="mec-regen-out">—</div>
               </div>
     
@@ -266,9 +266,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

@@ -157,6 +157,14 @@
       text-transform: uppercase;
       margin-bottom: 12px;
     }
+
+    /* ── Lamp Calculator ── */
+    .lamp-prob-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:0.82rem; }
+    .lamp-prob-table th { text-align:left; padding:6px 8px; background:var(--bg-secondary); color:var(--text-muted); font-weight:600; border-bottom:1px solid var(--border); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; }
+    .lamp-prob-table td { padding:5px 8px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+    .lamp-prob-table tr:last-child td { border-bottom:none; }
+    .lamp-prob-bar { height:5px; border-radius:3px; display:inline-block; vertical-align:middle; margin-left:6px; opacity:0.75; }
+    .lamp-section-label { font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px; }
   </style>
 </head>
 <body>
@@ -218,6 +226,9 @@
     </button>
     <button class="tab-btn" data-tab="mount">
       🏇 <span class="lang-fr">Monture</span><span class="lang-en hidden">Mount</span><span class="lang-sk hidden">Jazdec</span>
+    </button>
+    <button class="tab-btn" data-tab="lamp">
+      <img src="assets/image/lom/lamp_icon.png" alt="" style="height:18px;vertical-align:middle;margin-right:4px"><span class="lang-fr">Lampe</span><span class="lang-en hidden">Lamp</span><span class="lang-sk hidden">Lampa</span>
     </button>
   </div>
 
@@ -1557,6 +1568,123 @@
     </div>
   </div>
 
+  <!-- ===== LAMP CALCULATOR ===== -->
+  <div class="tab-content" id="tab-lamp">
+    <div class="calc-layout">
+      <form id="lamp-form" onsubmit="return false">
+
+        <div class="section-chip"><img src="assets/image/lom/lamp_icon.png" alt="" style="height:16px;vertical-align:middle;margin-right:5px"><span class="lang-fr">Calculateur de Lampe</span><span class="lang-en hidden">Lamp Calculator</span><span class="lang-sk hidden">Kalkulačka Lampy</span></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="lamp-current-exp">
+              <img src="assets/image/lom/lamp_exp.png" alt="EXP" style="height:16px;vertical-align:middle;margin-right:4px"><span class="lang-fr">EXP actuel</span><span class="lang-en hidden">Current EXP</span><span class="lang-sk hidden">Aktuálne EXP</span>
+            </label>
+            <input class="form-input" type="number" id="lamp-current-exp" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lamp-total-exp">
+              <img src="assets/image/lom/lamp_exp.png" alt="EXP" style="height:16px;vertical-align:middle;margin-right:4px"><span class="lang-fr">EXP total requis (niveau suivant)</span><span class="lang-en hidden">Total EXP required (next level)</span><span class="lang-sk hidden">Celkové EXP (ďalší level)</span>
+            </label>
+            <input class="form-input" type="number" id="lamp-total-exp" value="50000" min="1" step="1">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="lamp-level">
+            <img src="assets/image/lom/lamp_icon.png" alt="Lampe" style="height:16px;vertical-align:middle;margin-right:4px"><span class="lang-fr">Niveau actuel de la Lampe</span><span class="lang-en hidden">Current Lamp Level</span><span class="lang-sk hidden">Aktuálna úroveň Lampy</span>
+          </label>
+          <select class="form-input" id="lamp-level" style="max-width:220px" data-level-prefix='{"fr":"Niveau","en":"Level","sk":"Úroveň"}'>
+            <option value="1">Niveau 1</option>
+            <option value="2">Niveau 2</option>
+            <option value="3">Niveau 3</option>
+            <option value="4">Niveau 4</option>
+            <option value="5">Niveau 5</option>
+            <option value="6">Niveau 6</option>
+            <option value="7">Niveau 7</option>
+            <option value="8">Niveau 8</option>
+            <option value="9">Niveau 9</option>
+            <option value="10">Niveau 10</option>
+            <option value="11">Niveau 11</option>
+            <option value="12">Niveau 12</option>
+            <option value="13">Niveau 13</option>
+            <option value="14">Niveau 14</option>
+            <option value="15">Niveau 15</option>
+            <option value="16">Niveau 16</option>
+            <option value="17">Niveau 17</option>
+            <option value="18">Niveau 18</option>
+            <option value="19">Niveau 19</option>
+            <option value="20">Niveau 20</option>
+            <option value="21">Niveau 21</option>
+            <option value="22">Niveau 22</option>
+            <option value="23">Niveau 23</option>
+            <option value="24">Niveau 24</option>
+            <option value="25">Niveau 25</option>
+            <option value="26">Niveau 26</option>
+            <option value="27">Niveau 27</option>
+            <option value="28">Niveau 28</option>
+            <option value="29">Niveau 29</option>
+            <option value="30">Niveau 30</option>
+            <option value="31">Niveau 31</option>
+            <option value="32">Niveau 32</option>
+            <option value="33">Niveau 33</option>
+          </select>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="lamp-section-label">
+          <span class="lang-fr">Répartition — Niveau <span id="lamp-lv-display">1</span></span>
+          <span class="lang-en hidden">Breakdown — Level <span id="lamp-lv-display-en">1</span></span>
+          <span class="lang-sk hidden">Rozdelenie — Úroveň <span id="lamp-lv-display-sk">1</span></span>
+        </div>
+        <table class="lamp-prob-table">
+          <thead>
+            <tr>
+              <th><span class="lang-fr">Rareté</span><span class="lang-en hidden">Rarity</span><span class="lang-sk hidden">Vzácnosť</span></th>
+              <th>%</th>
+              <th>EXP</th>
+              <th><span class="lang-fr">Or</span><span class="lang-en hidden">Gold</span><span class="lang-sk hidden">Gold</span></th>
+            </tr>
+          </thead>
+          <tbody id="lamp-prob-tbody"></tbody>
+        </table>
+
+      </form>
+
+      <div class="results-panel sticky-results">
+        <div class="results-header">
+          <img src="assets/image/lom/lamp_icon.png" alt="" style="height:18px;vertical-align:middle;margin-right:6px"><span class="lang-fr">Résultats</span><span class="lang-en hidden">Results</span><span class="lang-sk hidden">Výsledky</span>
+        </div>
+        <div class="results-body">
+          <div class="result-row">
+            <span class="lbl"><img src="assets/image/lom/lamp_exp.png" alt="" style="height:14px;vertical-align:middle;margin-right:4px"><span class="lang-fr">EXP restant</span><span class="lang-en hidden">EXP remaining</span><span class="lang-sk hidden">Zostatok EXP</span></span>
+            <span class="val" id="lamp-res-exp-needed">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><img src="assets/image/lom/lamp_exp.png" alt="" style="height:14px;vertical-align:middle;margin-right:4px"><span class="lang-fr">Moy. EXP / lampe</span><span class="lang-en hidden">Avg EXP / lamp</span><span class="lang-sk hidden">Priem. EXP / lampa</span></span>
+            <span class="val" id="lamp-res-avg-exp">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><img src="assets/image/lom/lamp_coin.png" alt="" style="height:14px;vertical-align:middle;margin-right:4px"><span class="lang-fr">Moy. Or / lampe</span><span class="lang-en hidden">Avg Gold / lamp</span><span class="lang-sk hidden">Priem. Gold / lampa</span></span>
+            <span class="val gold" id="lamp-res-avg-gold">—</span>
+          </div>
+          <div class="result-row">
+            <span class="lbl"><img src="assets/image/lom/lamp_coin.png" alt="" style="height:14px;vertical-align:middle;margin-right:4px"><span class="lang-fr">Or total gagné</span><span class="lang-en hidden">Total Gold earned</span><span class="lang-sk hidden">Celkový Gold získaný</span></span>
+            <span class="val gold" id="lamp-res-gold">—</span>
+          </div>
+          <div class="result-final">
+            <div class="lbl"><img src="assets/image/lom/lamp_icon.png" alt="" style="height:18px;vertical-align:middle;margin-right:6px"><span class="lang-fr">Lampes nécessaires</span><span class="lang-en hidden">Lamps needed</span><span class="lang-sk hidden">Potrebné lampy</span></div>
+            <div class="val" id="lamp-res-lamps">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Formula Reference — en bas de page -->
   <div class="formula-ref" style="margin-top:32px">
     <h4>
@@ -1596,6 +1724,136 @@
   document.getElementById('hamburger').addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
   });
+
+  // ── Lamp Calculator ──
+  (function() {
+    var EQUIP = {
+      Normal:    { exp: 96,  gold: 82  },
+      Unique:    { exp: 115, gold: 98  },
+      Well:      { exp: 138, gold: 118 },
+      Rare:      { exp: 166, gold: 142 },
+      Mythic:    { exp: 200, gold: 171 },
+      Epic:      { exp: 240, gold: 205 },
+      Legendary: { exp: 288, gold: 247 },
+      Immortal:  { exp: 346, gold: 295 },
+      Supreme:   { exp: 413, gold: 353 },
+      Aurous:    { exp: 499, gold: 426 },
+      Eternal:   { exp: 599, gold: 512 }
+    };
+
+    var PROBS = [
+      { Normal: 80,    Unique: 15,    Well: 5 },                                                                                                    // N1
+      { Normal: 73.5,  Unique: 17,    Well: 8,      Rare: 1.5 },                                                                                    // N2
+      { Normal: 68,    Unique: 20,    Well: 10,     Rare: 2 },                                                                                      // N3
+      { Normal: 60,    Unique: 25,    Well: 12.3,   Rare: 2.5,   Mythic: 0.2 },                                                                    // N4
+      { Normal: 50,    Unique: 30,    Well: 16.7,   Rare: 3,     Mythic: 0.3 },                                                                    // N5
+      { Normal: 40,    Unique: 35,    Well: 20.6,   Rare: 4,     Mythic: 0.4 },                                                                    // N6
+      { Normal: 30,    Unique: 40,    Well: 24.45,  Rare: 5,     Mythic: 0.5,   Epic: 0.05 },                                                      // N7
+      { Normal: 20,    Unique: 45,    Well: 28.32,  Rare: 6,     Mythic: 0.6,   Epic: 0.08 },                                                      // N8
+      { Normal: 10,    Unique: 40,    Well: 41.09,  Rare: 8,     Mythic: 0.8,   Epic: 0.1,    Legendary: 0.01 },                                   // N9
+      {                Unique: 35,    Well: 53.93,  Rare: 10,    Mythic: 0.9,   Epic: 0.15,   Legendary: 0.02 },                                   // N10
+      {                Unique: 30,    Well: 56.77,  Rare: 12,    Mythic: 1,     Epic: 0.2,    Legendary: 0.03 },                                   // N11
+      {                Unique: 25,    Well: 59.21,  Rare: 14,    Mythic: 1.5,   Epic: 0.25,   Legendary: 0.04 },                                   // N12
+      {                Unique: 20,    Well: 61.63,  Rare: 16,    Mythic: 2,     Epic: 0.3,    Legendary: 0.06,  Immortal: 0.01 },                  // N13
+      {                Unique: 10,    Well: 69.05,  Rare: 18,    Mythic: 2.5,   Epic: 0.35,   Legendary: 0.08,  Immortal: 0.02 },                  // N14
+      {                               Well: 76.47,  Rare: 20,    Mythic: 3,     Epic: 0.4,    Legendary: 0.1,   Immortal: 0.03 },                  // N15
+      {                               Well: 70.31,  Rare: 25,    Mythic: 4,     Epic: 0.5,    Legendary: 0.15,  Immortal: 0.04 },                  // N16
+      {                               Well: 63.75,  Rare: 30,    Mythic: 5,     Epic: 1,      Legendary: 0.2,   Immortal: 0.05 },                  // N17
+      {                               Well: 55.69,  Rare: 35,    Mythic: 7.5,   Epic: 1.5,    Legendary: 0.25,  Immortal: 0.06 },                  // N18
+      {                               Well: 47.63,  Rare: 40,    Mythic: 10,    Epic: 2,      Legendary: 0.3,   Immortal: 0.07 },                  // N19
+      {                               Well: 39.505, Rare: 45,    Mythic: 12.5,  Epic: 2.5,    Legendary: 0.4,   Immortal: 0.08,  Supreme: 0.015 }, // N20
+      {                               Well: 31.39,  Rare: 50,    Mythic: 15,    Epic: 3,      Legendary: 0.5,   Immortal: 0.09,  Supreme: 0.02 },  // N21
+      {                               Well: 23.275, Rare: 55,    Mythic: 17.5,  Epic: 3.5,    Legendary: 0.6,   Immortal: 0.1,   Supreme: 0.025 }, // N22
+      {                               Well: 15.15,  Rare: 60,    Mythic: 20,    Epic: 4,      Legendary: 0.7,   Immortal: 0.12,  Supreme: 0.03 },  // N23
+      {                               Well: 10,     Rare: 62.01, Mythic: 22.5,  Epic: 4.5,    Legendary: 0.8,   Immortal: 0.14,  Supreme: 0.04,   Aurous: 0.01 }, // N24
+      {                                             Rare: 68.87, Mythic: 25,    Epic: 5,      Legendary: 0.9,   Immortal: 0.16,  Supreme: 0.05,   Aurous: 0.02 }, // N25
+      {                                             Rare: 65.23, Mythic: 27.5,  Epic: 6,      Legendary: 1,     Immortal: 0.18,  Supreme: 0.06,   Aurous: 0.03 }, // N26
+      {                                             Rare: 61.49, Mythic: 30,    Epic: 7,      Legendary: 1.2,   Immortal: 0.2,   Supreme: 0.07,   Aurous: 0.04 }, // N27
+      {                                             Rare: 57.7,  Mythic: 32.5,  Epic: 8,      Legendary: 1.4,   Immortal: 0.25,  Supreme: 0.09,   Aurous: 0.05,  Eternal: 0.01 }, // N28
+      {                                             Rare: 53.91, Mythic: 35,    Epic: 9,      Legendary: 1.6,   Immortal: 0.3,   Supreme: 0.11,   Aurous: 0.06,  Eternal: 0.02 }, // N29
+      {                                             Rare: 50.07, Mythic: 37.5,  Epic: 10,     Legendary: 1.8,   Immortal: 0.4,   Supreme: 0.13,   Aurous: 0.07,  Eternal: 0.03 }, // N30
+      {                                             Rare: 46.23, Mythic: 40,    Epic: 11,     Legendary: 2,     Immortal: 0.5,   Supreme: 0.15,   Aurous: 0.08,  Eternal: 0.04 }, // N31
+      {                                             Rare: 42.39, Mythic: 42.5,  Epic: 12,     Legendary: 2.2,   Immortal: 0.6,   Supreme: 0.17,   Aurous: 0.09,  Eternal: 0.05 }, // N32
+      {                                             Rare: 38.54, Mythic: 45,    Epic: 13,     Legendary: 2.4,   Immortal: 0.7,   Supreme: 0.17,   Aurous: 0.1,   Eternal: 0.06 }  // N33
+    ];
+
+    var COLORS = {
+      Normal:    '#70707e',
+      Unique:    '#2d7f7f',
+      Well:      '#3d6698',
+      Rare:      '#6040a0',
+      Mythic:    '#a07030',
+      Epic:      '#c07030',
+      Legendary: '#b04040',
+      Immortal:  '#b04070',
+      Supreme:   '#2e9e80',
+      Aurous:    '#a89040',
+      Eternal:   '#a89868'
+    };
+
+    function fmtN(n) {
+      return Math.round(n).toLocaleString('fr-FR');
+    }
+
+    function renderProb(level) {
+      var probs = PROBS[level - 1];
+      var tbody = document.getElementById('lamp-prob-tbody');
+      if (!tbody) return;
+      var html = '';
+      Object.keys(probs).forEach(function(r) {
+        var pct = probs[r];
+        var eq = EQUIP[r];
+        var barW = Math.max(2, Math.round(pct * 0.7));
+        var col = COLORS[r] || '#a0a8b0';
+        html += '<tr>';
+        html += '<td style="color:' + col + ';font-weight:700">' + r + '</td>';
+        html += '<td><span style="color:var(--text-primary)">' + pct + '%</span>'
+              + '<span class="lamp-prob-bar" style="width:' + barW + 'px;background:' + col + '"></span></td>';
+        html += '<td style="color:var(--teal)">' + eq.exp + '</td>';
+        html += '<td style="color:var(--gold)">' + eq.gold + '</td>';
+        html += '</tr>';
+      });
+      tbody.innerHTML = html;
+      ['lamp-lv-display','lamp-lv-display-en','lamp-lv-display-sk'].forEach(function(id) {
+        var el = document.getElementById(id); if (el) el.textContent = level;
+      });
+    }
+
+    function calc() {
+      var curExp = parseFloat(document.getElementById('lamp-current-exp').value) || 0;
+      var totExp = parseFloat(document.getElementById('lamp-total-exp').value) || 0;
+      var level  = parseInt(document.getElementById('lamp-level').value)        || 1;
+      if (level < 1) level = 1; if (level > 33) level = 33;
+
+      var probs = PROBS[level - 1];
+      var avgExp = 0, avgGold = 0;
+      Object.keys(probs).forEach(function(r) {
+        var p = probs[r] / 100;
+        avgExp  += p * EQUIP[r].exp;
+        avgGold += p * EQUIP[r].gold;
+      });
+
+      var expNeeded   = Math.max(0, totExp - curExp);
+      var lampsNeeded = avgExp > 0 ? expNeeded / avgExp : 0;
+      var goldEarned  = lampsNeeded * avgGold;
+
+      function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+      set('lamp-res-exp-needed', fmtN(expNeeded));
+      set('lamp-res-avg-exp',    avgExp.toFixed(2));
+      set('lamp-res-avg-gold',   avgGold.toFixed(2));
+      set('lamp-res-lamps',      Math.ceil(lampsNeeded).toLocaleString('fr-FR'));
+      set('lamp-res-gold',       fmtN(goldEarned));
+
+      renderProb(level);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('lamp-form');
+      if (!form) return;
+      form.addEventListener('input', calc);
+      calc();
+    });
+  })();
 
   // Translate <select> options (CSS hidden class doesn't work inside <option>)
   function updateSelectOptions(lang) {

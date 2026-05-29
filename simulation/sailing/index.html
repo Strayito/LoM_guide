@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,19 +35,19 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>⛵ Simulateur Sailing</h1>
-    <p>Dégâts Canon — Capitaine ATK, Ship DMG, Hull DMG, Combo Canon. Yuko v1.2.</p>
+    <h1><span class="lang-fr">⛵ Simulateur Sailing</span><span class="lang-en hidden">⛵ Sailing Simulator</span><span class="lang-sk hidden">⛵ Simulátor Plachtenia</span></h1>
+    <p><span class="lang-fr">Dégâts Canon — Capitaine ATK, Ship DMG, Hull DMG, Combo Canon. Yuko v1.2.</span><span class="lang-en hidden">Cannon Damage — Captain ATK, Ship DMG, Hull DMG, Cannon Combo. Yuko v1.2.</span><span class="lang-sk hidden">Poškodenie Kanóna — Kapitán ATK, Ship DMG, Hull DMG, Combo Kanóna. Yuko v1.2.</span></p>
   </div>
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn active" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-sailing">
@@ -56,21 +56,21 @@
           <form onsubmit="return false">
     
             <div class="formula-ref">
-              <h4>Formule Sailing / Canon (Yuko v1.2 p.13-14)</h4>
+              <h4><span class="lang-fr">Formule Sailing / Canon (Yuko v1.2 p.13-14)</span><span class="lang-en hidden">Sailing / Cannon Formula (Yuko v1.2 p.13-14)</span><span class="lang-sk hidden">Vzorec Plachtenia / Kanóna (Yuko v1.2 p.13-14)</span></h4>
               <div class="formula-line"><span class="v">FinalMult</span> = CaptBasicATKDMG%/100 × <span class="o">(1+CaptDMGRES%)</span> × (1+Ship%+Hull%)</div>
               <div class="formula-line"><span class="v">Basic</span> = (CaptATK−EnemyDEF) × FinalMult × (1−CannonRES<span class="o"> cap60</span>) × (1−CaptDMGRES<span class="o"> cap80</span>)</div>
               <div class="formula-line"><span class="v">Combo</span> = Basic × CannonCombo%/100 × (1−CaptComboDMGRES%)</div>
               <div class="formula-line" style="color:var(--gold);font-size:.72rem">CaptBasicATKDMGRES augmente les dégâts (mécanique inverse, confirmé PDF).</div>
             </div>
     
-            <div class="section-chip">Capitaine</div>
+            <div class="section-chip"><span class="lang-fr">Capitaine</span><span class="lang-en hidden">Captain</span><span class="lang-sk hidden">Kapitán</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="sail-capt-atk">ATK Capitaine</label>
+                <label class="form-label" for="sail-capt-atk"><span class="lang-fr">ATK Capitaine</span><span class="lang-en hidden">Captain ATK</span><span class="lang-sk hidden">ATK Kapitána</span></label>
                 <input class="form-input" type="number" id="sail-capt-atk" value="30000" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="sail-enemy-def">DEF Capitaine ennemi</label>
+                <label class="form-label" for="sail-enemy-def"><span class="lang-fr">DEF Capitaine ennemi</span><span class="lang-en hidden">Enemy Captain DEF</span><span class="lang-sk hidden">DEF nepriateľského Kapitána</span></label>
                 <input class="form-input" type="number" id="sail-enemy-def" value="10000" min="0" step="1">
               </div>
             </div>
@@ -83,12 +83,12 @@
               <div class="form-group">
                 <label class="form-label" for="sail-capt-basic-dmgres">CaptBasicATKDMGRES (%)</label>
                 <input class="form-input" type="number" id="sail-capt-basic-dmgres" value="0" min="0" step="0.1">
-                <div class="input-hint">Augmente les dégâts (mécanique inverse).</div>
+                <div class="input-hint"><span class="lang-fr">Augmente les dégâts (mécanique inverse).</span><span class="lang-en hidden">Increases damage (inverse mechanic).</span><span class="lang-sk hidden">Zvyšuje poškodenie (inverzná mechanika).</span></div>
               </div>
             </div>
     
             <hr class="form-divider">
-            <div class="section-chip">Canon</div>
+            <div class="section-chip"><span class="lang-fr">Canon</span><span class="lang-en hidden">Cannon</span><span class="lang-sk hidden">Kanón</span></div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="sail-ship-cannon-dmg">Ship Cannon DMG (%)</label>
@@ -101,7 +101,7 @@
             </div>
     
             <hr class="form-divider">
-            <div class="section-chip">Résistances ennemies</div>
+            <div class="section-chip"><span class="lang-fr">Résistances ennemies</span><span class="lang-en hidden">Enemy Resistances</span><span class="lang-sk hidden">Odolnosti nepriateľa</span></div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="sail-cannon-res">Cannon DMG RES (%) <span class="cap-note">cap 60%</span></label>
@@ -115,7 +115,7 @@
     
             <hr class="form-divider">
             <label class="checkbox-row">
-              <input type="checkbox" id="sail-combo"> Canon Combo
+              <input type="checkbox" id="sail-combo"> <span class="lang-fr">Canon Combo</span><span class="lang-en hidden">Cannon Combo</span><span class="lang-sk hidden">Kanón Combo</span>
             </label>
             <div id="sail-combo-opts" class="toggle-section" style="display:none">
               <div class="form-row">
@@ -133,11 +133,11 @@
           </form>
     
           <div class="results-panel sticky-results">
-            <div class="results-header">⛵ Dégâts Sailing</div>
+            <div class="results-header"><span class="lang-fr">⛵ Dégâts Sailing</span><span class="lang-en hidden">⛵ Sailing Damage</span><span class="lang-sk hidden">⛵ Poškodenie Plachtenia</span></div>
             <div class="results-body">
               <div class="sim-steps" id="sail-steps"></div>
               <div class="result-final">
-                <div class="lbl">Dégâts Canon Finaux</div>
+                <div class="lbl"><span class="lang-fr">Dégâts Canon Finaux</span><span class="lang-en hidden">Final Cannon Damage</span><span class="lang-sk hidden">Finálne poškodenie Kanóna</span></div>
                 <div class="val" id="sail-final">—</div>
               </div>
             </div>
@@ -152,9 +152,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

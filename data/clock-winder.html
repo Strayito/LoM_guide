@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link active">Data</a>
     <a href="simulation/index.html" class="nav-link">Simulation</a>
   </div>
@@ -34,24 +34,24 @@
 </nav>
 
 <div class="data-page">
-  <a href="data/index.html" class="back-link">← Game Data</a>
+  <a href="data/index.html" class="back-link"><span class="lang-fr">← Données du jeu</span><span class="lang-en hidden">← Game Data</span><span class="lang-sk hidden">← Herné dáta</span></a>
   <h1 class="page-title">⚙️ Clock Winder</h1>
   <div class="acc">
     <div class="acc-item open" id="acc-cw-sum">
       <button class="acc-head" data-acc="cw-sum">
         <span class="acc-icon">⚙️</span>
-        <span class="acc-title">Summary by Rank</span>
+        <span class="acc-title"><span class="lang-fr">Résumé par Rang</span><span class="lang-en hidden">Summary by Rank</span><span class="lang-sk hidden">Súhrn podľa Radu</span></span>
         <span class="acc-badge">R1–R17</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
         <div class="tbl-scroll"><table class="dt" id="tbl-cw-sum">
           <thead><tr>
-            <th data-col="0">Rank</th>
-            <th data-col="1" class="r">Required</th>
-            <th data-col="2" class="r">Cumulative</th>
-            <th data-col="3" class="r">Base Value</th>
-            <th data-col="4" class="r">Evasion</th>
+            <th data-col="0"><span class="lang-fr">Rang</span><span class="lang-en hidden">Rank</span><span class="lang-sk hidden">Rad</span></th>
+            <th data-col="1" class="r"><span class="lang-fr">Requis</span><span class="lang-en hidden">Required</span><span class="lang-sk hidden">Požadované</span></th>
+            <th data-col="2" class="r"><span class="lang-fr">Cumulatif</span><span class="lang-en hidden">Cumulative</span><span class="lang-sk hidden">Kumulatívne</span></th>
+            <th data-col="3" class="r"><span class="lang-fr">Valeur de Base</span><span class="lang-en hidden">Base Value</span><span class="lang-sk hidden">Základná hodnota</span></th>
+            <th data-col="4" class="r"><span class="lang-fr">Esquive</span><span class="lang-en hidden">Evasion</span><span class="lang-sk hidden">Úhyb</span></th>
           </tr></thead>
           <tbody></tbody>
         </table></div>
@@ -60,25 +60,25 @@
     <div class="acc-item open" id="acc-cw-det">
       <button class="acc-head" data-acc="cw-det">
         <span class="acc-icon">⭐</span>
-        <span class="acc-title">Detail by Rank &amp; Star</span>
+        <span class="acc-title"><span class="lang-fr">Détail par Rang &amp; Étoile</span><span class="lang-en hidden">Detail by Rank &amp; Star</span><span class="lang-sk hidden">Detail podľa Radu &amp; Hviezdy</span></span>
         <span class="acc-badge">R1★1–R24★9</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
         <div class="info-note">
-          Each rank has up to <strong>9 stars</strong>. Filter by rank (e.g. <strong>R5</strong>) to jump directly.
+          <span class="lang-fr">Chaque rang a jusqu'à <strong>9 étoiles</strong>. Filtrer par rang (ex : <strong>R5</strong>) pour accéder directement.</span><span class="lang-en hidden">Each rank has up to <strong>9 stars</strong>. Filter by rank (e.g. <strong>R5</strong>) to jump directly.</span><span class="lang-sk hidden">Každý rad má až <strong>9 hviezd</strong>. Filtrovať podľa radu (napr. <strong>R5</strong>) pre priamy prístup.</span>
         </div>
         <div class="toolbar" style="margin-top:.6rem">
-          <input type="search" placeholder="Filter by rank…" data-tbl="cw-det">
+          <input type="search" data-placeholder-fr="Filtrer par rang…" data-placeholder-en="Filter by rank…" data-placeholder-sk="Filtrovať podľa radu…" placeholder="Filtrer par rang…" data-tbl="cw-det">
           <span class="tbl-cnt" id="cnt-cw-det"></span>
         </div>
         <div class="tbl-scroll"><table class="dt" id="tbl-cw-det">
           <thead><tr>
-            <th data-col="0">Rank</th>
-            <th data-col="1" class="r">Required</th>
-            <th data-col="2" class="r">Cumulative</th>
-            <th data-col="3" class="r">Base Value</th>
-            <th data-col="4" class="r">Evasion</th>
+            <th data-col="0"><span class="lang-fr">Rang</span><span class="lang-en hidden">Rank</span><span class="lang-sk hidden">Rad</span></th>
+            <th data-col="1" class="r"><span class="lang-fr">Requis</span><span class="lang-en hidden">Required</span><span class="lang-sk hidden">Požadované</span></th>
+            <th data-col="2" class="r"><span class="lang-fr">Cumulatif</span><span class="lang-en hidden">Cumulative</span><span class="lang-sk hidden">Kumulatívne</span></th>
+            <th data-col="3" class="r"><span class="lang-fr">Valeur de Base</span><span class="lang-en hidden">Base Value</span><span class="lang-sk hidden">Základná hodnota</span></th>
+            <th data-col="4" class="r"><span class="lang-fr">Esquive</span><span class="lang-en hidden">Evasion</span><span class="lang-sk hidden">Úhyb</span></th>
           </tr></thead>
           <tbody></tbody>
         </table></div>
@@ -91,9 +91,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;·&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;·&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
     <a href="data/index.html">Data</a>
   </p>
 </footer>

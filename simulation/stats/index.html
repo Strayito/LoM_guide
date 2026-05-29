@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,24 +35,24 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>📊 Calculateur de Stats</h1>
-    <p>ATK / HP / DEF, Multiplicateurs, CritDMG / CritRES — Formules Yuko v1.2.</p>
+    <h1><span class="lang-fr">📊 Calculateur de Stats</span><span class="lang-en hidden">📊 Stats Calculator</span><span class="lang-sk hidden">📊 Kalkulačka štatistík</span></h1>
+    <p><span class="lang-fr">ATK / HP / DEF, Multiplicateurs, CritDMG / CritRES — Formules Yuko v1.2.</span><span class="lang-en hidden">ATK / HP / DEF, Multipliers, CritDMG / CritRES — Yuko v1.2 formulas.</span><span class="lang-sk hidden">ATK / HP / DEF, Násobitele, CritDMG / CritRES — Vzorce Yuko v1.2.</span></p>
   </div>
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn active" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-stats">
     <div class="formula-ref" style="margin-bottom:20px">
-          <h4>Formules Stats (Yuko v1.2)</h4>
+          <h4><span class="lang-fr">Formules Stats (Yuko v1.2)</span><span class="lang-en hidden">Stats Formulas (Yuko v1.2)</span><span class="lang-sk hidden">Vzorce štatistík (Yuko v1.2)</span></h4>
           <div class="formula-line">FinalStat = Initial × <span class="o">(1+Base%/100)</span> × <span class="o">(1+Global%/100)</span></div>
           <div class="formula-line">FinalMult = Base × <span class="o">(1+Bonus%/100)</span> × <span class="o">(1+Global%/100)</span></div>
           <div class="formula-line">CritRatio = max(<span class="o">1.5</span>, CritDMG% / max(<span class="o">50%</span>, CritRES%))</div>
@@ -66,24 +66,24 @@
             <div class="results-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label" for="stat-initial">Valeur initiale</label>
+                  <label class="form-label" for="stat-initial"><span class="lang-fr">Valeur initiale</span><span class="lang-en hidden">Base value</span><span class="lang-sk hidden">Základná hodnota</span></label>
                   <input class="form-input" type="number" id="stat-initial" value="10000" min="0" step="1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="stat-base">Bonus Base (%)</label>
+                  <label class="form-label" for="stat-base"><span class="lang-fr">Bonus Base (%)</span><span class="lang-en hidden">Base Bonus (%)</span><span class="lang-sk hidden">Základný bonus (%)</span></label>
                   <input class="form-input" type="number" id="stat-base" value="0" min="0" step="0.1">
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="stat-global">Bonus Global (%)</label>
+                <label class="form-label" for="stat-global"><span class="lang-fr">Bonus Global (%)</span><span class="lang-en hidden">Global Bonus (%)</span><span class="lang-sk hidden">Globálny bonus (%)</span></label>
                 <input class="form-input" type="number" id="stat-global" value="0" min="0" step="0.1">
               </div>
               <div class="sim-steps" style="margin-top:12px">
-                <div class="sim-step"><span class="sim-step-lbl">Facteur Base</span><span class="sim-step-val" id="stat-bfactor">—</span></div>
-                <div class="sim-step"><span class="sim-step-lbl">Facteur Global</span><span class="sim-step-val" id="stat-gfactor">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl"><span class="lang-fr">Facteur Base</span><span class="lang-en hidden">Base Factor</span><span class="lang-sk hidden">Základný faktor</span></span><span class="sim-step-val" id="stat-bfactor">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl"><span class="lang-fr">Facteur Global</span><span class="lang-en hidden">Global Factor</span><span class="lang-sk hidden">Globálny faktor</span></span><span class="sim-step-val" id="stat-gfactor">—</span></div>
               </div>
               <div class="result-final" style="margin-top:12px">
-                <div class="lbl">Stat Finale</div>
+                <div class="lbl"><span class="lang-fr">Stat Finale</span><span class="lang-en hidden">Final Stat</span><span class="lang-sk hidden">Finálna štatistika</span></div>
                 <div class="val" id="stat-final">—</div>
               </div>
               <div class="info-box" style="margin-top:10px;font-size:.76rem" id="stat-formula">—</div>
@@ -96,20 +96,20 @@
             <div class="results-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label" for="stat-mult-base">Mult. base (%)</label>
+                  <label class="form-label" for="stat-mult-base"><span class="lang-fr">Mult. base (%)</span><span class="lang-en hidden">Base Mult. (%)</span><span class="lang-sk hidden">Základný násobič (%)</span></label>
                   <input class="form-input" type="number" id="stat-mult-base" value="100" min="0" step="0.1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="stat-mult-bonus">Bonus Mult (%)</label>
+                  <label class="form-label" for="stat-mult-bonus"><span class="lang-fr">Bonus Mult (%)</span><span class="lang-en hidden">Mult Bonus (%)</span><span class="lang-sk hidden">Bonus násobič (%)</span></label>
                   <input class="form-input" type="number" id="stat-mult-bonus" value="0" min="0" step="0.1">
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="stat-mult-global">Global Mult bonus (%)</label>
+                <label class="form-label" for="stat-mult-global"><span class="lang-fr">Global Mult bonus (%)</span><span class="lang-en hidden">Global Mult bonus (%)</span><span class="lang-sk hidden">Globálny Mult bonus (%)</span></label>
                 <input class="form-input" type="number" id="stat-mult-global" value="0" min="0" step="0.1">
               </div>
               <div class="result-final" style="margin-top:12px">
-                <div class="lbl">Mult. Final</div>
+                <div class="lbl"><span class="lang-fr">Mult. Final</span><span class="lang-en hidden">Final Mult.</span><span class="lang-sk hidden">Finálny násobič</span></div>
                 <div class="val" id="stat-mult-out">—</div>
               </div>
               <div class="info-box" style="margin-top:10px;font-size:.76rem" id="stat-mult-formula">—</div>
@@ -149,11 +149,11 @@
                 <input class="form-input" type="number" id="stat-cres-global" value="0" min="0" step="0.1">
               </div>
               <div class="sim-steps" style="margin-top:12px">
-                <div class="sim-step"><span class="sim-step-lbl">CritDMG final</span><span class="sim-step-val" id="stat-cdmg-out">—</span></div>
-                <div class="sim-step"><span class="sim-step-lbl">CritRES final (min 50%)</span><span class="sim-step-val" id="stat-cres-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl"><span class="lang-fr">CritDMG final</span><span class="lang-en hidden">Final CritDMG</span><span class="lang-sk hidden">Finálne CritDMG</span></span><span class="sim-step-val" id="stat-cdmg-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl"><span class="lang-fr">CritRES final (min 50%)</span><span class="lang-en hidden">Final CritRES (min 50%)</span><span class="lang-sk hidden">Finálne CritRES (min 50%)</span></span><span class="sim-step-val" id="stat-cres-out">—</span></div>
               </div>
               <div class="result-final" style="margin-top:12px">
-                <div class="lbl">Ratio Crit (min 1.5)</div>
+                <div class="lbl"><span class="lang-fr">Ratio Crit (min 1.5)</span><span class="lang-en hidden">Crit Ratio (min 1.5)</span><span class="lang-sk hidden">Crit Ratio (min 1.5)</span></div>
                 <div class="val" id="stat-cratio-out">—</div>
               </div>
             </div>
@@ -168,9 +168,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

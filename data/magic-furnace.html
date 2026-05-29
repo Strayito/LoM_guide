@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link active">Data</a>
     <a href="simulation/index.html" class="nav-link">Simulation</a>
   </div>
@@ -34,7 +34,7 @@
 </nav>
 
 <div class="data-page">
-  <a href="data/index.html" class="back-link">← Game Data</a>
+  <a href="data/index.html" class="back-link"><span class="lang-fr">← Données du jeu</span><span class="lang-en hidden">← Game Data</span><span class="lang-sk hidden">← Herné dáta</span></a>
   <h1 class="page-title">🔥 Magic Furnace</h1>
 
   <div class="acc">
@@ -43,25 +43,33 @@
     <div class="acc-item open" id="acc-enhance">
       <button class="acc-head" data-acc="enhance">
         <span class="acc-icon">⬆️</span>
-        <span class="acc-title">Magic Enhance Level</span>
+        <span class="acc-title"><span class="lang-fr">Niveau d'Amélioration Magique</span><span class="lang-en hidden">Magic Enhance Level</span><span class="lang-sk hidden">Úroveň magického vylepšenia</span></span>
         <span class="acc-badge">Lv 0→150</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
         <div class="info-note">
-          <strong>Arcane Stones</strong> = cost per slot per enhance attempt.
+          <span class="lang-fr"><strong>Pierres Arcanes</strong> = coût par slot par tentative d'amélioration.
+          <strong>×10 Slots</strong> = coût avec 10 slots améliorés simultanément.
+          <strong>Total</strong> = coût cumulatif ×10 depuis Nv 0.
+          <strong>※</strong> = nécessite une Percée pour déverrouiller.</span>
+          <span class="lang-en hidden"><strong>Arcane Stones</strong> = cost per slot per enhance attempt.
           <strong>×10 Slots</strong> = cost assuming 10 equipment slots enhanced simultaneously.
           <strong>Total</strong> = cumulative ×10 cost from Lv 0.
-          <strong>※</strong> = requires Breakthrough to unlock.
+          <strong>※</strong> = requires Breakthrough to unlock.</span>
+          <span class="lang-sk hidden"><strong>Arcane kamene</strong> = náklady na slot na pokus o vylepšenie.
+          <strong>×10 Slotov</strong> = náklady pri 10 súčasne vylepšených slotoch.
+          <strong>Celkovo</strong> = kumulatívne ×10 náklady od Nv 0.
+          <strong>※</strong> = vyžaduje Prelom na odomknutie.</span>
         </div>
         <div class="toolbar" style="margin-top:.6rem">
-          <input type="search" placeholder="Filter…" data-tbl="enhance">
+          <input type="search" data-placeholder-fr="Filtrer…" data-placeholder-en="Filter…" data-placeholder-sk="Filtrovať…" placeholder="Filtrer…" data-tbl="enhance">
           <span class="tbl-cnt" id="cnt-enhance"></span>
         </div>
         <div class="tbl-scroll"><table class="dt" id="tbl-enhance">
           <thead><tr>
             <th>Lv</th>
-            <th data-col="1" class="r">Effect</th>
+            <th data-col="1" class="r"><span class="lang-fr">Effet</span><span class="lang-en hidden">Effect</span><span class="lang-sk hidden">Efekt</span></th>
             <th data-col="2" class="r">Arcane Stones</th>
             <th data-col="3" class="r">×10 Slots</th>
             <th data-col="4" class="r">Total (×10)</th>
@@ -75,20 +83,24 @@
     <div class="acc-item" id="acc-breakthrough">
       <button class="acc-head" data-acc="breakthrough">
         <span class="acc-icon">💎</span>
-        <span class="acc-title">Breakthrough</span>
+        <span class="acc-title"><span class="lang-fr">Percée</span><span class="lang-en hidden">Breakthrough</span><span class="lang-sk hidden">Prelom</span></span>
         <span class="acc-badge">Lv 0–25</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
         <div class="info-note">
-          <strong>Max Enhance Lv</strong> = enhance level cap unlocked at this breakthrough.
-          <strong>Pierce / Block / Pal Inspire / Pal RES</strong> = cumulative stat total granted.
+          <span class="lang-fr"><strong>Nv Amél. Max</strong> = plafond d'amélioration débloqué à cette percée.
+          <strong>Perçage / Blocage / Pal Inspire / Pal RES</strong> = total cumulatif accordé.</span>
+          <span class="lang-en hidden"><strong>Max Enhance Lv</strong> = enhance level cap unlocked at this breakthrough.
+          <strong>Pierce / Block / Pal Inspire / Pal RES</strong> = cumulative stat total granted.</span>
+          <span class="lang-sk hidden"><strong>Max Nv vylepšenia</strong> = strop vylepšenia odomknutý touto prelomením.
+          <strong>Prerazenie / Blokovanie / Pal Inspire / Pal RES</strong> = kumulatívny celkový súčet.</span>
         </div>
         <div class="tbl-scroll"><table class="dt" id="tbl-breakthrough">
           <thead><tr>
             <th data-col="0">Lv</th>
             <th data-col="1" class="r">Divine Crystals</th>
-            <th data-col="2" class="r">Max Enhance Lv</th>
+            <th data-col="2" class="r"><span class="lang-fr">Nv Amél. Max</span><span class="lang-en hidden">Max Enhance Lv</span><span class="lang-sk hidden">Max Nv Vylepšenia</span></th>
             <th data-col="3" class="r">Pierce</th>
             <th data-col="4" class="r">Block</th>
             <th data-col="5" class="r">Pal Inspire</th>
@@ -103,17 +115,19 @@
     <div class="acc-item" id="acc-resonance">
       <button class="acc-head" data-acc="resonance">
         <span class="acc-icon">🔗</span>
-        <span class="acc-title">Gear Resonance</span>
+        <span class="acc-title"><span class="lang-fr">Résonance d'Équipement</span><span class="lang-en hidden">Gear Resonance</span><span class="lang-sk hidden">Rezonancia vybavenia</span></span>
         <span class="acc-badge">Lv 2–36</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
         <div class="info-note">
-          Resonance bonuses at even levels only. Values are cumulative totals at the given resonance level.
+          <span class="lang-fr">Bonus de résonance aux niveaux pairs uniquement. Les valeurs sont des totaux cumulatifs.</span>
+          <span class="lang-en hidden">Resonance bonuses at even levels only. Values are cumulative totals at the given resonance level.</span>
+          <span class="lang-sk hidden">Bonusy rezonancie iba na párnych úrovniach. Hodnoty sú kumulatívne súčty.</span>
         </div>
         <div class="tbl-scroll"><table class="dt" id="tbl-resonance">
           <thead><tr>
-            <th data-col="0">Resonance Lv</th>
+            <th data-col="0"><span class="lang-fr">Nv Résonance</span><span class="lang-en hidden">Resonance Lv</span><span class="lang-sk hidden">Nv Rezonancie</span></th>
             <th data-col="1" class="r">Final DMG Boost</th>
             <th data-col="2" class="r">Final DMG RES</th>
           </tr></thead>
@@ -129,9 +143,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;·&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;·&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;·&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
     <a href="data/index.html">Data</a>
   </p>
 </footer>

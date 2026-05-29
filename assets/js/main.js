@@ -13,6 +13,20 @@ function initLanguage() {
     enBlocks.forEach(el => el.classList.toggle('hidden', lang !== 'en'));
     skBlocks.forEach(el => el.classList.toggle('hidden', lang !== 'sk'));
     document.documentElement.lang = lang;
+    // update [data-lang-*] elements (e.g. <option> which can't hold spans)
+    document.querySelectorAll('[data-lang-fr],[data-lang-en],[data-lang-sk]').forEach(el => {
+      const v = el.getAttribute('data-lang-' + lang); if (v != null) el.textContent = v;
+    });
+    // update input placeholders
+    document.querySelectorAll('[data-placeholder-fr],[data-placeholder-en],[data-placeholder-sk]').forEach(el => {
+      const v = el.getAttribute('data-placeholder-' + lang); if (v != null) el.placeholder = v;
+    });
+    // update selects with data-level-prefix (lamp level options)
+    document.querySelectorAll('select[data-level-prefix]').forEach(sel => {
+      let map; try { map = JSON.parse(sel.getAttribute('data-level-prefix')); } catch(e) { return; }
+      const prefix = map[lang] || map.fr || 'Level';
+      Array.from(sel.options).forEach(opt => { if (opt.value) opt.textContent = prefix + ' ' + opt.value; });
+    });
   }
 
   const savedLang = localStorage.getItem('siteLang') || 'fr';

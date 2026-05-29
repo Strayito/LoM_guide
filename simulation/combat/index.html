@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,8 +35,8 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>⚔️ Simulateur de Combat LoM</h1>
-    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+    <h1><span class="lang-fr">⚔️ Simulateur de Combat LoM</span><span class="lang-en hidden">⚔️ Combat Simulator</span><span class="lang-sk hidden">⚔️ Bojový simulátor</span></h1>
+    <p><span class="lang-fr">Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</span><span class="lang-en hidden">Full Yuko v1.2 formulas — real-time results with step-by-step breakdown.</span><span class="lang-sk hidden">Úplné vzorce Yuko v1.2 — výsledky v reálnom čase krok za krokom.</span></p>
   </div>
   <div class="info-box" style="margin-bottom:20px">
     <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
@@ -47,13 +47,13 @@
   <div class="tabs">
     <a class="sim-tab-btn active" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-combat">
@@ -63,7 +63,7 @@
     
             <!-- Formula ref -->
             <div class="formula-ref">
-              <h4>Formule de combat</h4>
+              <h4><span class="lang-fr">Formule de combat</span><span class="lang-en hidden">Combat Formula</span><span class="lang-sk hidden">Bojová vzorec</span></h4>
               <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × Mult%/100 [× (1+SkillDMG%) pour Skill]</div>
               <div class="formula-line"><span class="v">B</span> = A × max(<span class="o">1.5</span>, CritDMG÷CritRES)  <em>ou</em>  A × (1+SkillCrit%)^<span class="o">0.98</span></div>
               <div class="formula-line"><span class="v">C</span> = B × (1−TypeRES%) × (1−GlobalRES%)</div>
@@ -72,7 +72,7 @@
             </div>
     
             <!-- Attack type -->
-            <div class="section-chip">Type d'attaque</div>
+            <div class="section-chip"><span class="lang-fr">Type d'attaque</span><span class="lang-en hidden">Attack Type</span><span class="lang-sk hidden">Typ útoku</span></div>
             <div class="sim-type-btns" id="sc-type-btns">
               <button type="button" class="sim-type-btn active" data-type="basic">Basic ATK</button>
               <button type="button" class="sim-type-btn" data-type="combo">Combo</button>
@@ -81,27 +81,27 @@
             </div>
     
             <!-- Stats -->
-            <div class="section-chip">Attaquant / Cible</div>
+            <div class="section-chip"><span class="lang-fr">Attaquant / Cible</span><span class="lang-en hidden">Attacker / Target</span><span class="lang-sk hidden">Útočník / Cieľ</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="sc-atk">ATK Final</label>
+                <label class="form-label" for="sc-atk"><span class="lang-fr">ATK Final</span><span class="lang-en hidden">Final ATK</span><span class="lang-sk hidden">Finálne ATK</span></label>
                 <input class="form-input" type="number" id="sc-atk" value="50000" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="sc-def">DEF Cible</label>
+                <label class="form-label" for="sc-def"><span class="lang-fr">DEF Cible</span><span class="lang-en hidden">Target DEF</span><span class="lang-sk hidden">DEF cieľa</span></label>
                 <input class="form-input" type="number" id="sc-def" value="20000" min="0" step="1">
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="sc-mult">Multiplicateur de base (%)</label>
+              <label class="form-label" for="sc-mult"><span class="lang-fr">Multiplicateur de base (%)</span><span class="lang-en hidden">Base Multiplier (%)</span><span class="lang-sk hidden">Základný násobič (%)</span></label>
               <input class="form-input" type="number" id="sc-mult" value="100" min="0" step="1">
-              <div class="input-hint">Ex: 100 pour Basic ATK, 300 pour une compétence puissante.</div>
+              <div class="input-hint"><span class="lang-fr">Ex : 100 pour Basic ATK, 300 pour une compétence puissante.</span><span class="lang-en hidden">E.g. 100 for Basic ATK, 300 for a powerful skill.</span><span class="lang-sk hidden">Napr. 100 pre Basic ATK, 300 pre silný skill.</span></div>
             </div>
     
             <!-- Skill bonus (shown for skill type) -->
             <div id="sc-skill-opts" style="display:none">
               <div class="form-group">
-                <label class="form-label" for="sc-skillbonus">Skill DMG bonus (%) <span class="cap-note">votre stat</span></label>
+                <label class="form-label" for="sc-skillbonus"><span class="lang-fr">Skill DMG bonus (%) <span class="cap-note">votre stat</span></span><span class="lang-en hidden">Skill DMG bonus (%) <span class="cap-note">your stat</span></span><span class="lang-sk hidden">Skill DMG bonus (%) <span class="cap-note">vaša stat</span></span></label>
                 <input class="form-input" type="number" id="sc-skillbonus" value="0" min="0" step="0.1">
                 <div class="input-hint">Votre stat "Skill DMG%" personnelle — multiplie le dégât de compétence.</div>
               </div>
@@ -110,12 +110,12 @@
             <hr class="form-divider">
     
             <!-- Resistances -->
-            <div class="section-chip">Résistances</div>
+            <div class="section-chip"><span class="lang-fr">Résistances</span><span class="lang-en hidden">Resistances</span><span class="lang-sk hidden">Odolnosti</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="sc-typeRES">RES spécifique (%) <span class="cap-note">cap 80%</span></label>
+                <label class="form-label" for="sc-typeRES"><span class="lang-fr">RES spécifique (%) <span class="cap-note">cap 80%</span></span><span class="lang-en hidden">Type RES (%) <span class="cap-note">cap 80%</span></span><span class="lang-sk hidden">Špecifická RES (%) <span class="cap-note">cap 80%</span></span></label>
                 <input class="form-input" type="number" id="sc-typeRES" value="0" min="0" max="80" step="0.1">
-                <div class="input-hint">BasicATK RES / Combo RES / Counter RES / Skill RES selon le type.</div>
+                <div class="input-hint"><span class="lang-fr">BasicATK RES / Combo RES / Counter RES / Skill RES selon le type.</span><span class="lang-en hidden">BasicATK RES / Combo RES / Counter RES / Skill RES depending on type.</span><span class="lang-sk hidden">BasicATK RES / Combo RES / Counter RES / Skill RES podľa typu.</span></div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="sc-globalRES">Global DMG RES (%) <span class="cap-note">cap 80%</span></label>
@@ -126,10 +126,10 @@
             <hr class="form-divider">
     
             <!-- Options -->
-            <div class="section-chip">Options</div>
+            <div class="section-chip"><span class="lang-fr">Options</span><span class="lang-en hidden">Options</span><span class="lang-sk hidden">Možnosti</span></div>
     
             <label class="checkbox-row">
-              <input type="checkbox" id="sc-crit"> Coup Critique
+              <input type="checkbox" id="sc-crit"> <span class="lang-fr">Coup Critique</span><span class="lang-en hidden">Critical Hit</span><span class="lang-sk hidden">Kritický úder</span>
             </label>
             <div id="sc-crit-opts" class="toggle-section" style="display:none">
               <div class="form-row">
@@ -138,7 +138,7 @@
                   <input class="form-input" type="number" id="sc-critDMG" value="150" min="0" step="0.1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="sc-critRES">Crit RES cible (%)</label>
+                  <label class="form-label" for="sc-critRES"><span class="lang-fr">Crit RES cible (%)</span><span class="lang-en hidden">Target Crit RES (%)</span><span class="lang-sk hidden">Crit RES cieľa (%)</span></label>
                   <input class="form-input" type="number" id="sc-critRES" value="100" min="1" step="0.1">
                   <div class="input-hint">Ratio = max(1.5, CritDMG ÷ CritRES)</div>
                 </div>
@@ -146,7 +146,7 @@
             </div>
     
             <label class="checkbox-row" id="sc-skillcrit-row">
-              <input type="checkbox" id="sc-skillcrit"> Skill Critique (Skill uniquement)
+              <input type="checkbox" id="sc-skillcrit"> <span class="lang-fr">Skill Critique (Skill uniquement)</span><span class="lang-en hidden">Skill Crit (Skill only)</span><span class="lang-sk hidden">Skill Krit (len Skill)</span>
             </label>
             <div id="sc-skillcrit-opts" class="toggle-section" style="display:none">
               <div class="form-group">
@@ -157,41 +157,41 @@
             </div>
     
             <label class="checkbox-row">
-              <input type="checkbox" id="sc-boss"> Boss DMG
+              <input type="checkbox" id="sc-boss"> <span class="lang-fr">Boss DMG</span><span class="lang-en hidden">Boss DMG</span><span class="lang-sk hidden">Boss DMG</span>
             </label>
             <div id="sc-boss-opts" class="toggle-section" style="display:none">
               <div class="form-group">
-                <label class="form-label" for="sc-bossDMG">Boss DMG bonus (%)</label>
+                <label class="form-label" for="sc-bossDMG"><span class="lang-fr">Boss DMG bonus (%)</span><span class="lang-en hidden">Boss DMG bonus (%)</span><span class="lang-sk hidden">Boss DMG bonus (%)</span></label>
                 <input class="form-input" type="number" id="sc-bossDMG" value="0" min="0" step="0.1">
               </div>
             </div>
     
             <label class="checkbox-row">
-              <input type="checkbox" id="sc-pvp"> Mode PvP
+              <input type="checkbox" id="sc-pvp"> <span class="lang-fr">Mode PvP</span><span class="lang-en hidden">PvP Mode</span><span class="lang-sk hidden">PvP Mód</span>
             </label>
             <div id="sc-pvp-opts" class="toggle-section" style="display:none">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label" for="sc-pvpMyLv">Mon niveau</label>
+                  <label class="form-label" for="sc-pvpMyLv"><span class="lang-fr">Mon niveau</span><span class="lang-en hidden">My level</span><span class="lang-sk hidden">Môj level</span></label>
                   <input class="form-input" type="number" id="sc-pvpMyLv" value="100" min="1" max="220" step="1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="sc-pvpELv">Niveau ennemi</label>
+                  <label class="form-label" for="sc-pvpELv"><span class="lang-fr">Niveau ennemi</span><span class="lang-en hidden">Enemy level</span><span class="lang-sk hidden">Level nepriateľa</span></label>
                   <input class="form-input" type="number" id="sc-pvpELv" value="100" min="1" max="220" step="1">
                 </div>
               </div>
-              <div class="input-hint">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv · table exacte Yuko v1.2)</div>
+              <div class="input-hint"><span class="lang-fr">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv · table exacte Yuko v1.2)</span><span class="lang-en hidden">PvP Divisor: <strong id="sc-pvp-div-en" style="display:none">—</strong> (avg lv · exact Yuko v1.2 table)</span><span class="lang-sk hidden">PvP deliteľ: (avg lv · tabuľka Yuko v1.2)</span></div>
             </div>
     
           </form>
     
           <!-- Results -->
           <div class="results-panel sticky-results">
-            <div class="results-header">⚔️ Résultat étape par étape</div>
+            <div class="results-header"><span class="lang-fr">⚔️ Résultat étape par étape</span><span class="lang-en hidden">⚔️ Step-by-step result</span><span class="lang-sk hidden">⚔️ Výsledok krok za krokom</span></div>
             <div class="results-body">
               <div class="sim-steps" id="sc-steps"></div>
               <div class="result-final">
-                <div class="lbl">Dégâts Finaux</div>
+                <div class="lbl"><span class="lang-fr">Dégâts Finaux</span><span class="lang-en hidden">Final Damage</span><span class="lang-sk hidden">Finálne poškodenie</span></div>
                 <div class="val" id="sc-final">—</div>
               </div>
             </div>
@@ -206,9 +206,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>

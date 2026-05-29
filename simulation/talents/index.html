@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Talents — LoM Fan Guide</title>
+  <meta name="description" content="Calculateur de talents LoM — investissez vos Plumes Jaunes et visualisez vos stats.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+  <style>
+    /* ── Feather bar ── */
+    .feather-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .feather-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .feather-lbl { font-size: .82rem; color: var(--text-secondary); flex-shrink: 0; white-space: nowrap; }
+    .feather-input {
+      width: 90px;
+      padding: 5px 10px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: .92rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .feather-counters {
+      margin-left: auto;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .feather-stat { text-align: center; }
+    .feather-stat-v { font-size: 1.05rem; font-weight: 800; display: block; }
+    .feather-stat-l { font-size: .68rem; color: var(--text-secondary); display: block; }
+    .fv-spent  { color: var(--orange); }
+    .fv-ok     { color: var(--teal); }
+    .fv-warn   { color: var(--orange); }
+    .fv-danger { color: var(--red); }
+    .btn-reset-all {
+      padding: 6px 14px;
+      border-radius: var(--r);
+      border: 1px solid var(--red);
+      background: rgba(224,64,64,.07);
+      color: var(--red);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .18s;
+      white-space: nowrap;
+    }
+    .btn-reset-all:hover { background: rgba(224,64,64,.16); }
+    .mode-toggle { display: flex; gap: 4px; }
+    .mode-btn {
+      padding: 5px 11px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .mode-btn.active-add { border-color: var(--teal); color: var(--teal); background: rgba(32,212,168,.1); }
+    .mode-btn.active-rem { border-color: var(--red);  color: var(--red);  background: rgba(224,64,64,.1); }
+
+    /* ── Class tabs ── */
+    .class-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .class-tab {
+      padding: 8px 14px;
+      border-radius: var(--r);
+      border: 2px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: .84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .18s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .class-tab:hover { color: var(--text-primary); border-color: #2a4060; }
+    .class-tab.active {
+      background: rgba(var(--ctab-r),var(--ctab-g),var(--ctab-b),.1);
+      border-color: rgb(var(--ctab-r),var(--ctab-g),var(--ctab-b));
+      color: rgb(var(--ctab-r),var(--ctab-g),var(--ctab-b));
+    }
+
+    /* ── Main talent layout ── */
+    .talent-layout {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .talent-layout { grid-template-columns: 1fr; } }
+
+    /* ── Trees area ── */
+    .trees-area { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── 3-column trees grid ── */
+    .trees-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 600px) { .trees-grid { grid-template-columns: 1fr; } }
+
+    /* ── Individual tree section ── */
+    .tree-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: visible;
+    }
+    .tree-section-hdr {
+      padding: 7px 12px;
+      font-size: .78rem;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0,0,0,.15);
+    }
+
+    /* ── Portrait tree canvas ── */
+    .tree-canvas {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 5;
+      overflow: visible;
+    }
+    .tree-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* ── Talent nodes ── */
+    .tnode {
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      margin-left: -29px;
+      margin-top: -29px;
+      border-radius: 50%;
+      border: 3px solid #2a3a4a;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .14s, box-shadow .14s, border-color .14s, background .14s;
+      user-select: none;
+      z-index: 3;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tnode:hover, .tnode:focus { transform: scale(1.12); outline: none; }
+    .tnode.locked  { opacity: .35; filter: grayscale(.85); cursor: not-allowed; }
+    .tnode.partial { border-color: var(--nc); }
+    .tnode.partial:hover { box-shadow: 0 0 12px rgba(var(--nc-r),var(--nc-g),var(--nc-b),.35); background: rgba(var(--nc-r),var(--nc-g),var(--nc-b),.06); }
+    .tnode.ready   { border-color: var(--nc); box-shadow: 0 0 8px rgba(var(--nc-r),var(--nc-g),var(--nc-b),.25); background: rgba(var(--nc-r),var(--nc-g),var(--nc-b),.06); }
+    .tnode.maxed   { border-color: var(--gold); box-shadow: 0 0 18px rgba(232,192,64,.5); background: rgba(232,192,64,.1); }
+    .tnode.active-node:not(.partial):not(.maxed) { border-color: rgba(var(--nc-r),var(--nc-g),var(--nc-b),.5); }
+
+    /* Final Talent: diamond shape */
+    .tnode.is-final {
+      border-radius: 8px;
+      transform: rotate(45deg);
+      width: 52px;
+      height: 52px;
+      margin-left: -26px;
+      margin-top: -26px;
+    }
+    .tnode.is-final:hover, .tnode.is-final:focus { transform: rotate(45deg) scale(1.12); }
+    .tnode.is-final .tnode-icon,
+    .tnode.is-final .tnode-lv { transform: rotate(-45deg); display: block; }
+    .tnode.is-final .tnode-tip { transform: rotate(-45deg) translateX(-50%); }
+    .tnode.is-final.locked  { border-color: #2a3a4a; }
+    .tnode.is-final.ready   { border-color: rgba(232,192,64,.5); box-shadow: 0 0 10px rgba(232,192,64,.2); }
+    .tnode.is-final.maxed   { border-color: var(--gold); box-shadow: 0 0 28px rgba(232,192,64,.8); background: rgba(232,192,64,.18); }
+
+    .tnode-icon { font-size: 1.3rem; line-height: 1; }
+    .tnode-lv {
+      font-size: .55rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+      color: var(--text-muted);
+    }
+    .tnode.partial .tnode-lv,
+    .tnode.ready   .tnode-lv { color: var(--nc); }
+    .tnode.maxed   .tnode-lv { color: var(--gold); }
+
+    /* ── Tooltip ── */
+    .tnode-tip {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      min-width: 160px;
+      max-width: 210px;
+      background: #0a1928;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 9px 11px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.7);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .12s;
+      font-size: .74rem;
+      white-space: normal;
+      text-align: left;
+    }
+    .tnode:hover .tnode-tip,
+    .tnode:focus .tnode-tip { opacity: 1; }
+    .tnode.tip-above .tnode-tip { bottom: calc(100% + 8px); top: auto; }
+    .tnode.tip-below .tnode-tip { top: calc(100% + 8px); bottom: auto; }
+    .tnode.tip-left  .tnode-tip { right: 0; left: auto; transform: none; }
+    .tnode.tip-right .tnode-tip { left: 0; transform: none; }
+    .tnode.is-final  .tnode-tip { transform: rotate(-45deg) translateX(-50%); }
+    .tnode.is-final.tip-left  .tnode-tip { transform: rotate(-45deg); right: 0; left: auto; }
+    .tnode.is-final.tip-right .tnode-tip { transform: rotate(-45deg); left: 0; }
+    .tip-name { font-weight: 700; color: var(--text-primary); margin-bottom: 5px; }
+    .tip-stat { color: var(--teal); line-height: 1.5; }
+    .tip-max  { font-size: .68rem; color: var(--text-muted); }
+    .tip-final-badge { font-size: .66rem; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+    .tip-req  { color: var(--orange); font-size: .68rem; margin-top: 4px; }
+    .tip-hint { color: var(--text-muted); font-size: .66rem; margin-top: 5px; border-top: 1px solid var(--border); padding-top: 4px; }
+
+    /* ── Tree hint ── */
+    .tree-hint {
+      font-size: .72rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 4px 0 2px;
+    }
+
+    /* ── Stats panel ── */
+    .stats-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+    .stats-head {
+      padding: 10px 14px;
+      font-size: .76rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      border-bottom: 1px solid var(--border);
+      background: rgba(32,212,168,.05);
+    }
+    .stats-body { padding: 10px 14px; }
+    .srow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(26,48,80,.4);
+      gap: 6px;
+    }
+    .srow:last-child { border-bottom: none; }
+    .srow-name { font-size: .75rem; color: var(--text-secondary); flex: 1; }
+    .srow-val  { font-size: .82rem; font-weight: 700; color: var(--teal); white-space: nowrap; }
+    .stats-empty { color: var(--text-muted); font-size: .79rem; padding: 10px 0; text-align: center; }
+    .stats-cost-box {
+      margin-top: 12px;
+      padding: 9px 12px;
+      background: rgba(232,192,64,.06);
+      border: 1px solid rgba(232,192,64,.14);
+      border-radius: var(--r);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .scost-lbl { font-size: .75rem; color: var(--text-secondary); }
+    .scost-val { font-size: .98rem; font-weight: 800; color: var(--gold); }
+
+    @media (max-width: 480px) {
+      .tnode { width: 52px; height: 52px; margin-left: -26px; margin-top: -26px; }
+      .tnode-icon { font-size: 1.1rem; }
+      .tnode-lv { font-size: .5rem; }
+      .tnode.is-final { width: 46px; height: 46px; margin-left: -23px; margin-top: -23px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/index.html" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="label">
+      <span class="lang-fr">Simulation — Talents</span>
+      <span class="lang-en hidden">Simulation — Talents</span>
+      <span class="lang-sk hidden">Simulácia — Talenty</span>
+    </span>
+    <h1>
+      <span class="lang-fr">🪶 Calculateur de Talents</span>
+      <span class="lang-en hidden">🪶 Talent Calculator</span>
+      <span class="lang-sk hidden">🪶 Kalkulátor Talentov</span>
+    </h1>
+    <p>
+      <span class="lang-fr">Investissez vos Plumes Jaunes dans les arbres de talents et visualisez vos stats totales.</span>
+      <span class="lang-en hidden">Invest your Yellow Feathers in talent trees and see your total stats.</span>
+      <span class="lang-sk hidden">Investujte Žlté Pierka do talentových stromov a sledujte celkové štatistiky.</span>
+    </p>
+  </div>
+
+  <div class="tabs">
+    <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
+    <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
+    <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
+    <a class="sim-tab-btn active" href="simulation/talents/index.html">🪶 Talents</a>
+  </div>
+
+  <!-- Feather resource bar -->
+  <div class="feather-bar">
+    <span class="feather-icon">🪶</span>
+    <label class="feather-lbl" for="feather-pool">
+      <span class="lang-fr">Plumes disponibles :</span>
+      <span class="lang-en hidden">Available feathers:</span>
+      <span class="lang-sk hidden">Dostupné pierka:</span>
+    </label>
+    <input type="number" id="feather-pool" class="feather-input" value="500" min="0" max="99999">
+
+    <div class="mode-toggle">
+      <button class="mode-btn active-add" id="mode-add">
+        <span class="lang-fr">+ Ajouter</span><span class="lang-en hidden">+ Add</span><span class="lang-sk hidden">+ Pridať</span>
+      </button>
+      <button class="mode-btn" id="mode-rem">
+        <span class="lang-fr">− Retirer</span><span class="lang-en hidden">− Remove</span><span class="lang-sk hidden">− Odobrať</span>
+      </button>
+    </div>
+
+    <div class="feather-counters">
+      <div class="feather-stat">
+        <span class="feather-stat-v fv-spent" id="fv-spent">0</span>
+        <span class="feather-stat-l">
+          <span class="lang-fr">dépensées</span><span class="lang-en hidden">spent</span><span class="lang-sk hidden">minuté</span>
+        </span>
+      </div>
+      <div class="feather-stat">
+        <span class="feather-stat-v fv-ok" id="fv-remain">500</span>
+        <span class="feather-stat-l">
+          <span class="lang-fr">restantes</span><span class="lang-en hidden">remaining</span><span class="lang-sk hidden">zostatok</span>
+        </span>
+      </div>
+    </div>
+
+    <button class="btn-reset-all" id="reset-all">
+      <span class="lang-fr">Tout réinitialiser</span>
+      <span class="lang-en hidden">Reset all</span>
+      <span class="lang-sk hidden">Resetovať všetko</span>
+    </button>
+  </div>
+
+  <!-- Class tabs (rendered by JS) -->
+  <div class="class-tabs" id="class-tabs"></div>
+
+  <!-- Main area: 3 trees + stats panel -->
+  <div class="talent-layout">
+    <div class="trees-area">
+      <div class="trees-grid" id="trees-grid"></div>
+      <div class="tree-hint">
+        <span class="lang-fr">Clic gauche : +1 niveau &nbsp;·&nbsp; Clic droit / mode − : −1 niveau &nbsp;·&nbsp; ◆ = Talent Final</span>
+        <span class="lang-en hidden">Left click: +1 level &nbsp;·&nbsp; Right-click / − mode: −1 level &nbsp;·&nbsp; ◆ = Final Talent</span>
+        <span class="lang-sk hidden">Ľavý klik: +1 úroveň &nbsp;·&nbsp; Pravý klik / mód −: −1 úroveň &nbsp;·&nbsp; ◆ = Finálny Talent</span>
+      </div>
+    </div>
+    <div class="stats-panel">
+      <div class="stats-head">
+        <span class="lang-fr">📊 Stats totales — tous talents</span>
+        <span class="lang-en hidden">📊 Total stats — all talents</span>
+        <span class="lang-sk hidden">📊 Celkové štatistiky — všetky talenty</span>
+      </div>
+      <div class="stats-body" id="stats-body">
+        <div class="stats-empty">
+          <span class="lang-fr">Cliquez sur une bulle pour investir vos plumes.</span>
+          <span class="lang-en hidden">Click a node to invest your feathers.</span>
+          <span class="lang-sk hidden">Kliknite na bublinu pre investíciu pierka.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .container -->
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;·&nbsp;
+    <a href="simulation/index.html">Simulation</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+<script src="assets/js/talent-data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const levels = {};
+  let currentCls = 'fury';
+  let removeMode = false;
+
+  /* ── Helpers ── */
+  function lv(id)  { return levels[id] || 0; }
+  function lang()  { return localStorage.getItem('siteLang') || 'fr'; }
+  function t(obj)  { const l = lang(); return obj[l] || obj.fr || obj.en || ''; }
+
+  function hexRgb(hex) {
+    const h = hex.replace('#','');
+    return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+  }
+
+  function nodeUnlocked(node) {
+    if (!node.prereq) return true;
+    if (lv(node.prereq) < node.prereqMin) return false;
+    if (node.prereq2) {
+      const pm2 = node.prereqMin2 != null ? node.prereqMin2 : node.prereqMin;
+      if (lv(node.prereq2) < pm2) return false;
+    }
+    return true;
+  }
+
+  function totalSpent() {
+    return Object.values(levels).reduce((s, v) => s + v, 0);
+  }
+  function featherPool() {
+    return Math.max(0, parseInt(document.getElementById('feather-pool').value, 10) || 0);
+  }
+  function available() { return featherPool() - totalSpent(); }
+
+  /* ── Feather display ── */
+  function updateFeathers() {
+    const spent = totalSpent();
+    const rem   = available();
+    document.getElementById('fv-spent').textContent = spent;
+    const rv = document.getElementById('fv-remain');
+    rv.textContent = rem;
+    rv.className   = 'feather-stat-v ' + (rem < 0 ? 'fv-danger' : rem < 50 ? 'fv-warn' : 'fv-ok');
+  }
+
+  /* ── Class tabs ── */
+  function renderClassTabs() {
+    const wrap = document.getElementById('class-tabs');
+    wrap.innerHTML = '';
+    const CLASS_COLORS = { fury:'224,64,64', archery:'232,192,64', sorcery:'144,96,224', beasts:'64,144,216' };
+    TALENT_CLASSES.forEach(cls => {
+      const d = TALENT_DATA[cls];
+      const [r,g,b] = CLASS_COLORS[cls].split(',');
+      const btn = document.createElement('button');
+      btn.className = 'class-tab' + (cls === currentCls ? ' active' : '');
+      btn.style.setProperty('--ctab-r', r);
+      btn.style.setProperty('--ctab-g', g);
+      btn.style.setProperty('--ctab-b', b);
+      btn.innerHTML = `${d.icon} ${t(d.label)}`;
+      btn.addEventListener('click', () => {
+        currentCls = cls;
+        renderClassTabs();
+        renderAllTrees();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  /* ── Render all 3 trees in the grid ── */
+  function renderAllTrees() {
+    const grid = document.getElementById('trees-grid');
+    grid.innerHTML = '';
+    TALENT_DATA[currentCls].trees.forEach(tree => {
+      const section = document.createElement('div');
+      section.className = 'tree-section';
+
+      const hdr = document.createElement('div');
+      hdr.className = 'tree-section-hdr';
+      hdr.style.color = tree.color;
+      hdr.style.borderBottomColor = tree.color + '44';
+      hdr.textContent = tree.icon + ' ' + t(tree.name);
+      section.appendChild(hdr);
+
+      const canvas = document.createElement('div');
+      canvas.className = 'tree-canvas';
+      section.appendChild(canvas);
+
+      grid.appendChild(section);
+      renderTreeInCanvas(tree, canvas);
+    });
+  }
+
+  /* ── Render a single tree into a canvas element ── */
+  function renderTreeInCanvas(tree, canvas) {
+    canvas.innerHTML = '';
+    const color = tree.color;
+    const [cr, cg, cb] = hexRgb(color);
+
+    /* Build node map for edge lookup */
+    const nodeMap = {};
+    tree.nodes.forEach(n => { nodeMap[n.id] = n; });
+
+    /* SVG connection lines */
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.classList.add('tree-svg');
+    svg.setAttribute('viewBox','0 0 100 100');
+    svg.setAttribute('preserveAspectRatio','none');
+
+    tree.edges.forEach(([fid, tid]) => {
+      const fn = nodeMap[fid], tn = nodeMap[tid];
+      if (!fn || !tn) return;
+      const lit = lv(fid) > 0 && (nodeUnlocked(tn) || lv(tid) > 0);
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', fn.x); line.setAttribute('y1', fn.y);
+      line.setAttribute('x2', tn.x); line.setAttribute('y2', tn.y);
+      line.setAttribute('stroke', lit ? color : 'rgba(255,255,255,.07)');
+      line.setAttribute('stroke-width','0.6');
+      if (!lit) line.setAttribute('stroke-dasharray','1.5,2');
+      svg.appendChild(line);
+    });
+    canvas.appendChild(svg);
+
+    /* Nodes */
+    tree.nodes.forEach(node => {
+      const level    = lv(node.id);
+      const unlocked = nodeUnlocked(node);
+      const maxed    = level >= node.maxLevel;
+      const partial  = level > 0 && !maxed;
+      const ready    = unlocked && level === 0;
+      const isFinal  = node.isFinalTalent;
+
+      let cls = 'tnode';
+      if (isFinal)       cls += ' is-final';
+      if (!unlocked)     cls += ' locked';
+      else if (maxed)    cls += ' maxed';
+      else if (partial)  cls += ' partial';
+      else if (ready)    cls += ' ready';
+      else               cls += ' active-node';
+
+      /* Tooltip direction */
+      if (node.y < 42)        cls += ' tip-below'; else cls += ' tip-above';
+      if (node.x < 30)        cls += ' tip-right';
+      else if (node.x > 70)   cls += ' tip-left';
+
+      const btn = document.createElement('button');
+      btn.className = cls;
+      btn.style.left = node.x + '%';
+      btn.style.top  = node.y + '%';
+      btn.style.setProperty('--nc',   color);
+      btn.style.setProperty('--nc-r', cr);
+      btn.style.setProperty('--nc-g', cg);
+      btn.style.setProperty('--nc-b', cb);
+
+      /* Level display */
+      const lvText = isFinal ? (maxed ? '✓' : '0/1') : (level + '/' + node.maxLevel);
+
+      /* Tooltip content */
+      const ln = lang();
+      let statsLines;
+      if (isFinal) {
+        statsLines = Object.entries(node.stats)
+          .map(([k,v]) => `<strong>+${v}%</strong> ${k}`)
+          .join('<br>');
+      } else {
+        statsLines = Object.entries(node.stats)
+          .map(([k,v]) => `+${v}%/lv &rarr; max <strong>+${(v * node.maxLevel).toFixed(0)}%</strong> ${k}`)
+          .join('<br>');
+      }
+
+      let reqHtml = '';
+      if (node.prereq) {
+        const pn = nodeMap[node.prereq];
+        const p2 = node.prereq2 ? nodeMap[node.prereq2] : null;
+        const reqWord = ln==='fr'?'Requis':ln==='sk'?'Požiadavka':'Required';
+        const inWord  = ln==='fr'?'dans':ln==='sk'?'v':'in';
+        const req1    = `${node.prereqMin} ${inWord} ${t(pn.name)}`;
+        const req2    = p2 ? ` + ${node.prereqMin2} ${inWord} ${t(p2.name)}` : '';
+        reqHtml = `<div class="tip-req">⚠ ${reqWord}: ${req1}${req2}</div>`;
+      }
+
+      const maxLine  = isFinal
+        ? `<div class="tip-final-badge">${ln==='fr'?'◆ Talent Final — activation unique':ln==='sk'?'◆ Finálny Talent — jednorazová aktivácia':'◆ Final Talent — one-time activation'}</div>`
+        : `<div class="tip-max">${ln==='fr'?'Max au niveau':ln==='sk'?'Max na úrovni':'Max at level'} ${node.maxLevel}</div>`;
+      const hintHtml = `<div class="tip-hint">${ln==='fr'?'Clic +1 · Clic droit −1':ln==='sk'?'Klik +1 · Pravý klik −1':'Click +1 · Right-click −1'}</div>`;
+
+      btn.innerHTML = `
+        <span class="tnode-icon">${node.icon}</span>
+        <span class="tnode-lv">${lvText}</span>
+        <div class="tnode-tip">
+          <div class="tip-name">${t(node.name)}</div>
+          ${maxLine}
+          <div class="tip-stat">${statsLines}</div>
+          ${reqHtml}
+          ${hintHtml}
+        </div>`;
+
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        if (removeMode) doRemove(node.id);
+        else            doAdd(node.id, node);
+      });
+      btn.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        doRemove(node.id);
+      });
+
+      canvas.appendChild(btn);
+    });
+  }
+
+  function doAdd(id, node) {
+    if (!nodeUnlocked(node)) return;
+    if (lv(id) >= node.maxLevel) return;
+    if (available() <= 0) return;
+    levels[id] = lv(id) + 1;
+    refresh();
+  }
+
+  function doRemove(id) {
+    if (lv(id) <= 0) return;
+    levels[id] = lv(id) - 1;
+    if (levels[id] === 0) delete levels[id];
+    refresh();
+  }
+
+  function refresh() {
+    renderAllTrees();
+    renderStats();
+    updateFeathers();
+  }
+
+  /* ── Stats panel ── */
+  function renderStats() {
+    const acc = {};
+    TALENT_CLASSES.forEach(cls => {
+      TALENT_DATA[cls].trees.forEach(tree => {
+        tree.nodes.forEach(node => {
+          const level = lv(node.id);
+          if (!level) return;
+          Object.entries(node.stats).forEach(([stat, val]) => {
+            acc[stat] = (acc[stat] || 0) + val * level;
+          });
+        });
+      });
+    });
+
+    const body    = document.getElementById('stats-body');
+    const entries = Object.entries(acc);
+    const ln      = lang();
+
+    if (!entries.length) {
+      const msg = ln==='fr'?'Cliquez sur une bulle pour investir vos plumes.':ln==='sk'?'Kliknite na bublinu pre investíciu pierka.':'Click a node to invest your feathers.';
+      body.innerHTML = `<div class="stats-empty">${msg}</div>`;
+      return;
+    }
+
+    const rows = entries
+      .sort((a,b) => b[1] - a[1])
+      .map(([stat, val]) => `<div class="srow"><span class="srow-name">${stat}</span><span class="srow-val">+${val % 1 ? val.toFixed(1) : val}%</span></div>`)
+      .join('');
+
+    const costLbl = ln==='fr'?'Coût total investi':ln==='sk'?'Celkové náklady':'Total cost invested';
+    body.innerHTML = rows + `<div class="stats-cost-box"><span class="scost-lbl">${costLbl}</span><span class="scost-val">🪶 ${totalSpent()}</span></div>`;
+  }
+
+  /* ── Mode toggle ── */
+  function setupModeToggle() {
+    const addBtn = document.getElementById('mode-add');
+    const remBtn = document.getElementById('mode-rem');
+    addBtn.addEventListener('click', () => {
+      removeMode = false;
+      addBtn.className = 'mode-btn active-add';
+      remBtn.className = 'mode-btn';
+    });
+    remBtn.addEventListener('click', () => {
+      removeMode = true;
+      addBtn.className = 'mode-btn';
+      remBtn.className = 'mode-btn active-rem';
+    });
+  }
+
+  /* ── Re-render on language change ── */
+  function hookLangButtons() {
+    document.querySelectorAll('.lang-switcher button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTimeout(() => {
+          renderClassTabs();
+          renderAllTrees();
+          renderStats();
+        }, 30);
+      });
+    });
+  }
+
+  /* ── Init ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    renderClassTabs();
+    renderAllTrees();
+    renderStats();
+    updateFeathers();
+    setupModeToggle();
+    hookLangButtons();
+
+    document.getElementById('feather-pool').addEventListener('input', updateFeathers);
+
+    document.getElementById('reset-all').addEventListener('click', () => {
+      Object.keys(levels).forEach(k => delete levels[k]);
+      refresh();
+    });
+  });
+})();
+</script>
+</body>
+</html>

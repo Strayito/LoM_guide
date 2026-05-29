@@ -17,9 +17,9 @@
     LoM Fan Guide
   </a>
   <div class="nav-links" id="navLinks">
-    <a href="index.html" class="nav-link">Accueil</a>
-    <a href="guide.html" class="nav-link">Guides</a>
-    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
     <a href="data/index.html" class="nav-link">Data</a>
     <a href="simulation/index.html" class="nav-link active">Simulation</a>
   </div>
@@ -35,8 +35,8 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>👾 Simulateur Familier</h1>
-    <p>Dégâts Pal — PalDMG, Crit Pal, PalCombo, PvP. Formules Yuko v1.2.</p>
+    <h1><span class="lang-fr">👾 Simulateur Familier</span><span class="lang-en hidden">👾 Pal Simulator</span><span class="lang-sk hidden">👾 Simulátor Pala</span></h1>
+    <p><span class="lang-fr">Dégâts Pal — PalDMG, Crit Pal, PalCombo, PvP. Formules Yuko v1.2.</span><span class="lang-en hidden">Pal Damage — PalDMG, Crit Pal, PalCombo, PvP. Yuko v1.2 formulas.</span><span class="lang-sk hidden">Poškodenie Pala — PalDMG, Crit Pal, PalCombo, PvP. Vzorce Yuko v1.2.</span></p>
   </div>
   <div class="info-box" style="margin-bottom:20px">
     <strong>Formules Pal:</strong> PalBasic = (ATK&#8722;DEF)&#215;PalMULT%&#215;PalDMG%.
@@ -46,13 +46,13 @@
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
     <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
-    <a class="sim-tab-btn active" href="simulation/pal/index.html">👾 Familier</a>
+    <a class="sim-tab-btn active" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
     <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
     <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
     <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
-    <a class="sim-tab-btn" href="simulation/mechanics/index.html">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
     <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
-    <a class="sim-tab-btn" href="simulation/guardian/index.html">🛡️ Gardiens</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
   </div>
 
   <div id="sim-tab-pal">
@@ -61,7 +61,7 @@
           <form onsubmit="return false">
     
             <div class="formula-ref">
-              <h4>Formule Familier</h4>
+              <h4><span class="lang-fr">Formule Familier</span><span class="lang-en hidden">Pal Formula</span><span class="lang-sk hidden">Vzorec Pala</span></h4>
               <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × PalMult% × PalDMG%/100</div>
               <div class="formula-line"><span class="v">B</span> = A × max(1.5, PalCritDMG÷PalCritRES)  <em>(si Crit)</em></div>
               <div class="formula-line"><span class="v">B</span> = B × PalComboMult%/100  <em>(si Combo)</em></div>
@@ -69,32 +69,32 @@
               <div class="formula-line"><span class="v">Final</span> = C ÷ PvPDiv  <em>(si PvP)</em></div>
             </div>
     
-            <div class="section-chip">Stats</div>
+            <div class="section-chip"><span class="lang-fr">Stats</span><span class="lang-en hidden">Stats</span><span class="lang-sk hidden">Štatistiky</span></div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="pal-atk">ATK Final</label>
+                <label class="form-label" for="pal-atk"><span class="lang-fr">ATK Final</span><span class="lang-en hidden">Final ATK</span><span class="lang-sk hidden">Finálne ATK</span></label>
                 <input class="form-input" type="number" id="pal-atk" value="50000" min="0" step="1">
               </div>
               <div class="form-group">
-                <label class="form-label" for="pal-def">DEF Cible</label>
+                <label class="form-label" for="pal-def"><span class="lang-fr">DEF Cible</span><span class="lang-en hidden">Target DEF</span><span class="lang-sk hidden">DEF cieľa</span></label>
                 <input class="form-input" type="number" id="pal-def" value="20000" min="0" step="1">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="pal-mult">Mult. Pal de base (%)</label>
+                <label class="form-label" for="pal-mult"><span class="lang-fr">Mult. Pal de base (%)</span><span class="lang-en hidden">Base Pal Mult (%)</span><span class="lang-sk hidden">Základný Pal Mult (%)</span></label>
                 <input class="form-input" type="number" id="pal-mult" value="100" min="0" step="1">
-                <div class="input-hint">Multiplicateur de l'attaque familier.</div>
+                <div class="input-hint"><span class="lang-fr">Multiplicateur de l'attaque familier.</span><span class="lang-en hidden">Pal attack multiplier.</span><span class="lang-sk hidden">Násobič útoku Pala.</span></div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="pal-dmgpct">Pal DMG bonus (%)</label>
+                <label class="form-label" for="pal-dmgpct"><span class="lang-fr">Pal DMG bonus (%)</span><span class="lang-en hidden">Pal DMG bonus (%)</span><span class="lang-sk hidden">Pal DMG bonus (%)</span></label>
                 <input class="form-input" type="number" id="pal-dmgpct" value="100" min="0" step="0.1">
                 <div class="input-hint">Votre stat "Pal DMG" (100 = neutre).</div>
               </div>
             </div>
     
             <hr class="form-divider">
-            <div class="section-chip">Résistances</div>
+            <div class="section-chip"><span class="lang-fr">Résistances</span><span class="lang-en hidden">Resistances</span><span class="lang-sk hidden">Odolnosti</span></div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="pal-res">Pal DMG RES (%) <span class="cap-note">cap 80</span></label>
@@ -107,7 +107,7 @@
             </div>
     
             <hr class="form-divider">
-            <div class="section-chip">Options</div>
+            <div class="section-chip"><span class="lang-fr">Options</span><span class="lang-en hidden">Options</span><span class="lang-sk hidden">Možnosti</span></div>
     
             <label class="checkbox-row">
               <input type="checkbox" id="pal-crit"> Pal Critique
@@ -130,13 +130,13 @@
             </label>
             <div id="pal-combo-opts" class="toggle-section" style="display:none">
               <div class="form-group">
-                <label class="form-label" for="pal-combomult">Pal Combo Mult (%)</label>
+                <label class="form-label" for="pal-combomult"><span class="lang-fr">Pal Combo</span><span class="lang-en hidden">Pal Combo</span><span class="lang-sk hidden">Pal Combo</span> Mult (%)</label>
                 <input class="form-input" type="number" id="pal-combomult" value="150" min="0" step="0.1">
               </div>
             </div>
     
             <label class="checkbox-row">
-              <input type="checkbox" id="pal-boss"> Boss DMG
+              <input type="checkbox" id="pal-boss"> <span class="lang-fr">Boss DMG</span><span class="lang-en hidden">Boss DMG</span><span class="lang-sk hidden">Boss DMG</span>
             </label>
             <div id="pal-boss-opts" class="toggle-section" style="display:none">
               <div class="form-group">
@@ -146,16 +146,16 @@
             </div>
     
             <label class="checkbox-row">
-              <input type="checkbox" id="pal-pvp"> Mode PvP
+              <input type="checkbox" id="pal-pvp"> <span class="lang-fr">Mode PvP</span><span class="lang-en hidden">PvP Mode</span><span class="lang-sk hidden">PvP Mód</span>
             </label>
             <div id="pal-pvp-opts" class="toggle-section" style="display:none">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label" for="pal-pvpMyLv">Mon niveau</label>
+                  <label class="form-label" for="pal-pvpMyLv"><span class="lang-fr">Mon niveau</span><span class="lang-en hidden">My level</span><span class="lang-sk hidden">Môj level</span></label>
                   <input class="form-input" type="number" id="pal-pvpMyLv" value="100" min="1" max="220" step="1">
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="pal-pvpELv">Niveau ennemi</label>
+                  <label class="form-label" for="pal-pvpELv"><span class="lang-fr">Niveau ennemi</span><span class="lang-en hidden">Enemy level</span><span class="lang-sk hidden">Level nepriateľa</span></label>
                   <input class="form-input" type="number" id="pal-pvpELv" value="100" min="1" max="220" step="1">
                 </div>
               </div>
@@ -164,11 +164,11 @@
           </form>
     
           <div class="results-panel sticky-results">
-            <div class="results-header">👾 Dégâts Familier</div>
+            <div class="results-header"><span class="lang-fr">👾 Dégâts Familier</span><span class="lang-en hidden">👾 Pal Damage</span><span class="lang-sk hidden">👾 Poškodenie Pala</span></div>
             <div class="results-body">
               <div class="sim-steps" id="pal-steps"></div>
               <div class="result-final">
-                <div class="lbl">Dégâts Finaux</div>
+                <div class="lbl"><span class="lang-fr">Dégâts Finaux</span><span class="lang-en hidden">Final Damage</span><span class="lang-sk hidden">Finálne poškodenie</span></div>
                 <div class="val" id="pal-final">—</div>
               </div>
             </div>
@@ -183,9 +183,9 @@
   <div class="mushroom">🍄</div>
   <p>LoM Fan Guide — built by <strong>Stray</strong></p>
   <p style="margin-top:10px">
-    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
-    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
-    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;&#183;&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;&#183;&nbsp;
     <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
     <a href="simulation/index.html">Simulation</a>
   </p>
