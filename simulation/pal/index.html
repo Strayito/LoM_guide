@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Familier — LoM Fan Guide</title>
+  <meta name="description" content="Simulateur Pal/Familier — Pal DMG, crit, combo, PvP. Formules Yuko v1.2.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+</head>
+<body><nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/combat/" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="container">
+  <div class="page-header">
+    <span class="label">Simulation</span>
+    <h1>⚔️ Simulateur de Combat LoM</h1>
+    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+  </div>
+  <div class="info-box" style="margin-bottom:20px">
+    <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
+    Crit = &#215;max(1.5, CritDMG&#247;CritRES). SkillCrit = &#215;(1+x%)^0.98.
+    Boss = &#215;(1+BossDMG%). PvP = &#247;ReductionFactor(avgLv).
+    Table PvP = valeurs exactes Yuko v1.2 (04/2025, 220 niveaux).
+  </div>
+  <div class="tabs">
+    <a class="sim-tab-btn" href="simulation/combat/">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn active" href="simulation/pal/">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/palcmp/">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/">⛵ Sailing</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/stats/">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/">🛡️ Gardiens</a>
+  </div>
+
+  <div id="sim-tab-pal">
+    <div class="calc-layout">
+    
+          <form onsubmit="return false">
+    
+            <div class="formula-ref">
+              <h4>Formule Familier</h4>
+              <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × PalMult% × PalDMG%/100</div>
+              <div class="formula-line"><span class="v">B</span> = A × max(1.5, PalCritDMG÷PalCritRES)  <em>(si Crit)</em></div>
+              <div class="formula-line"><span class="v">B</span> = B × PalComboMult%/100  <em>(si Combo)</em></div>
+              <div class="formula-line"><span class="v">C</span> = B × (1−PalDMGRES%) × (1−GlobalDMGRES%)</div>
+              <div class="formula-line"><span class="v">Final</span> = C ÷ PvPDiv  <em>(si PvP)</em></div>
+            </div>
+    
+            <div class="section-chip">Stats</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pal-atk">ATK Final</label>
+                <input class="form-input" type="number" id="pal-atk" value="50000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pal-def">DEF Cible</label>
+                <input class="form-input" type="number" id="pal-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pal-mult">Mult. Pal de base (%)</label>
+                <input class="form-input" type="number" id="pal-mult" value="100" min="0" step="1">
+                <div class="input-hint">Multiplicateur de l'attaque familier.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pal-dmgpct">Pal DMG bonus (%)</label>
+                <input class="form-input" type="number" id="pal-dmgpct" value="100" min="0" step="0.1">
+                <div class="input-hint">Votre stat "Pal DMG" (100 = neutre).</div>
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+            <div class="section-chip">Résistances</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pal-res">Pal DMG RES (%) <span class="cap-note">cap 80</span></label>
+                <input class="form-input" type="number" id="pal-res" value="0" min="0" max="80" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pal-globalres">Global DMG RES (%) <span class="cap-note">cap 80</span></label>
+                <input class="form-input" type="number" id="pal-globalres" value="0" min="0" max="80" step="0.1">
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+            <div class="section-chip">Options</div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="pal-crit"> Pal Critique
+            </label>
+            <div id="pal-crit-opts" class="toggle-section" style="display:none">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="pal-critdmg">Pal Crit DMG (%)</label>
+                  <input class="form-input" type="number" id="pal-critdmg" value="150" min="0" step="0.1">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pal-critres">Pal Crit RES cible (%)</label>
+                  <input class="form-input" type="number" id="pal-critres" value="100" min="1" step="0.1">
+                </div>
+              </div>
+            </div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="pal-combo"> Pal Combo
+            </label>
+            <div id="pal-combo-opts" class="toggle-section" style="display:none">
+              <div class="form-group">
+                <label class="form-label" for="pal-combomult">Pal Combo Mult (%)</label>
+                <input class="form-input" type="number" id="pal-combomult" value="150" min="0" step="0.1">
+              </div>
+            </div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="pal-boss"> Boss DMG
+            </label>
+            <div id="pal-boss-opts" class="toggle-section" style="display:none">
+              <div class="form-group">
+                <label class="form-label" for="pal-bossdmg">Boss DMG bonus (%)</label>
+                <input class="form-input" type="number" id="pal-bossdmg" value="0" min="0" step="0.1">
+              </div>
+            </div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="pal-pvp"> Mode PvP
+            </label>
+            <div id="pal-pvp-opts" class="toggle-section" style="display:none">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="pal-pvpMyLv">Mon niveau</label>
+                  <input class="form-input" type="number" id="pal-pvpMyLv" value="100" min="1" max="220" step="1">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pal-pvpELv">Niveau ennemi</label>
+                  <input class="form-input" type="number" id="pal-pvpELv" value="100" min="1" max="220" step="1">
+                </div>
+              </div>
+            </div>
+    
+          </form>
+    
+          <div class="results-panel sticky-results">
+            <div class="results-header">👾 Dégâts Familier</div>
+            <div class="results-body">
+              <div class="sim-steps" id="pal-steps"></div>
+              <div class="result-final">
+                <div class="lbl">Dégâts Finaux</div>
+                <div class="val" id="pal-final">—</div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
+    <a href="simulation/combat/">Simulation</a>
+  </p>
+</footer>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/simulation.js"></script>
+<script>SIM.init();</script>
+</body>
+</html>

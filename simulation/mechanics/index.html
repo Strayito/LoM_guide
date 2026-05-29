@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mécaniques de Combat — LoM Fan Guide</title>
+  <meta name="description" content="Calculateur mécaniques LoM — Evasion, Stun, Pierce, Block, Regen. Yuko v1.2.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+</head>
+<body><nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/combat/" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="container">
+  <div class="page-header">
+    <span class="label">Simulation</span>
+    <h1>⚔️ Simulateur de Combat LoM</h1>
+    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+  </div>
+  <div class="info-box" style="margin-bottom:20px">
+    <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
+    Crit = &#215;max(1.5, CritDMG&#247;CritRES). SkillCrit = &#215;(1+x%)^0.98.
+    Boss = &#215;(1+BossDMG%). PvP = &#247;ReductionFactor(avgLv).
+    Table PvP = valeurs exactes Yuko v1.2 (04/2025, 220 niveaux).
+  </div>
+  <div class="tabs">
+    <a class="sim-tab-btn" href="simulation/combat/">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn" href="simulation/pal/">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/palcmp/">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/">⛵ Sailing</a>
+    <a class="sim-tab-btn active" href="simulation/mechanics/">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/stats/">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/">🛡️ Gardiens</a>
+  </div>
+
+  <div id="sim-tab-mechanics">
+    <div class="calc-layout">
+    
+          <form onsubmit="return false">
+    
+            <div class="formula-ref">
+              <h4>Formules Mécaniques (Yuko v1.2)</h4>
+              <div class="formula-line">Evasion%, Stun% <span class="o">→</span> max(0, Player−EnemyIgnore)^<span class="o">0.9</span></div>
+              <div class="formula-line">Combo%, Counter%, Launch%, Crit% <span class="o">→</span> max(0, Player−EnemyIgnore) [linéaire]</div>
+              <div class="formula-line">StunDur = StunTime×(1−StunRES%)×(1−ControlRES%)  |  PvP: <span class="o">0.4</span>×(1−ControlRES%)</div>
+              <div class="formula-line">Pierce/Block net = max(0,P−I)×<span class="o">0.01%</span> de RES ignoré/gagné <em>(proc 30%)</em></div>
+              <div class="formula-line">Regen net = max(0, Player−EnemyIgnore)  |  PvP: ×<span class="o">30%</span></div>
+            </div>
+    
+            <!-- Taux de combat -->
+            <div class="section-chip">Taux de combat</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-combo">Combo% joueur <span class="cap-note">cap 100</span></label>
+                <input class="form-input" type="number" id="mec-combo" value="0" min="0" max="100" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-combo">Ignore Combo% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-combo" value="0" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-counter">Counter% joueur <span class="cap-note">cap 100</span></label>
+                <input class="form-input" type="number" id="mec-counter" value="0" min="0" max="100" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-counter">Ignore Counter% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-counter" value="0" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-crit">Crit Rate% joueur <span class="cap-note">cap 100</span></label>
+                <input class="form-input" type="number" id="mec-crit" value="0" min="0" max="100" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-crit">Ignore Crit% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-crit" value="0" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-evasion">Evasion% ennemi <span class="cap-note">^0.9</span></label>
+                <input class="form-input" type="number" id="mec-evasion" value="0" min="0" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-evasion">Ignore Evasion% joueur</label>
+                <input class="form-input" type="number" id="mec-ign-evasion" value="0" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-launch">Launch% joueur <span class="cap-note">cap 100</span></label>
+                <input class="form-input" type="number" id="mec-launch" value="0" min="0" max="100" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-launch">Ignore Launch% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-launch" value="0" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-stun">Stun% joueur <span class="cap-note">^0.9</span></label>
+                <input class="form-input" type="number" id="mec-stun" value="0" min="0" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-stun">Ignore Stun% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-stun" value="0" min="0" step="0.1">
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+    
+            <!-- Durée de Stun -->
+            <div class="section-chip">Durée de Stun</div>
+            <label class="checkbox-row">
+              <input type="checkbox" id="mec-stun-pvp"> Mode PvP (StunTime=1, StunRES=60% fixe)
+            </label>
+            <div id="mec-stun-pve">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="mec-stun-time">Stun Time (sec)</label>
+                  <input class="form-input" type="number" id="mec-stun-time" value="1" min="0" step="0.1">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="mec-stun-res">Stun RES ennemi (%)</label>
+                  <input class="form-input" type="number" id="mec-stun-res" value="0" min="0" max="100" step="0.1">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mec-control-res">Control RES ennemi (%)</label>
+              <input class="form-input" type="number" id="mec-control-res" value="0" min="0" max="100" step="0.1">
+            </div>
+    
+            <hr class="form-divider">
+    
+            <!-- Pierce / Block / Pal Inspire / Pal RES -->
+            <div class="section-chip">Pierce / Block / Pal Inspire / Pal RES</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-pierce">Pierce joueur</label>
+                <input class="form-input" type="number" id="mec-pierce" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-pierce">Ignore Pierce ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-pierce" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-block">Block joueur</label>
+                <input class="form-input" type="number" id="mec-block" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-block">Ignore Block ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-block" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-palinsp">Pal Inspire joueur</label>
+                <input class="form-input" type="number" id="mec-palinsp" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-palinsp">Ignore Pal Inspire ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-palinsp" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-palres">Pal RES joueur</label>
+                <input class="form-input" type="number" id="mec-palres" value="0" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-palres">Ignore Pal RES ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-palres" value="0" min="0" step="1">
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+    
+            <!-- Régénération -->
+            <div class="section-chip">Régénération</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="mec-regen">Regen% joueur</label>
+                <input class="form-input" type="number" id="mec-regen" value="0" min="0" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="mec-ign-regen">Ignore Regen% ennemi</label>
+                <input class="form-input" type="number" id="mec-ign-regen" value="0" min="0" step="0.01">
+              </div>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" id="mec-regen-pvp"> Mode PvP (×30%)
+            </label>
+    
+          </form>
+    
+          <!-- Results panel -->
+          <div class="results-panel sticky-results">
+            <div class="results-header">🎯 Résultats Mécaniques</div>
+            <div class="results-body">
+    
+              <div class="section-chip" style="margin-top:0">Taux effectifs</div>
+              <div class="sim-steps">
+                <div class="sim-step"><span class="sim-step-lbl">Combo% net</span><span class="sim-step-val" id="mec-combo-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Counter% net</span><span class="sim-step-val" id="mec-counter-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Crit Rate% net</span><span class="sim-step-val" id="mec-crit-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Evasion% effective (^0.9)</span><span class="sim-step-val" id="mec-eva-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Launch% net</span><span class="sim-step-val" id="mec-launch-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Stun% effective (^0.9)</span><span class="sim-step-val" id="mec-stun-out">—</span></div>
+              </div>
+    
+              <div class="result-final" style="margin-top:12px">
+                <div class="lbl">Durée Stun</div>
+                <div class="val" id="mec-stun-dur">—</div>
+              </div>
+    
+              <hr class="form-divider">
+    
+              <div class="section-chip">Pierce / Block / Pal</div>
+              <div class="sim-steps">
+                <div class="sim-step"><span class="sim-step-lbl">Pierce</span><span class="sim-step-val" id="mec-pierce-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Block</span><span class="sim-step-val" id="mec-block-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Pal Inspire</span><span class="sim-step-val" id="mec-palinsp-out">—</span></div>
+                <div class="sim-step"><span class="sim-step-lbl">Pal RES</span><span class="sim-step-val" id="mec-palres-out">—</span></div>
+              </div>
+    
+              <hr class="form-divider">
+    
+              <div class="section-chip">Régénération</div>
+              <div class="result-final">
+                <div class="lbl">Regen nette</div>
+                <div class="val" id="mec-regen-out">—</div>
+              </div>
+    
+            </div>
+          </div>
+    
+        </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
+    <a href="simulation/combat/">Simulation</a>
+  </p>
+</footer>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/simulation.js"></script>
+<script>SIM.init();</script>
+</body>
+</html>

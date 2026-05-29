@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Combat — LoM Fan Guide</title>
+  <meta name="description" content="Simulateur de combat LoM — Basic/Combo/Counter/Skill, Crit, Boss, PvP. Formules Yuko v1.2.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+</head>
+<body><nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link">Accueil</a>
+    <a href="guide.html" class="nav-link">Guides</a>
+    <a href="calculator.html" class="nav-link">Calculateur</a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/combat/" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="container">
+  <div class="page-header">
+    <span class="label">Simulation</span>
+    <h1>⚔️ Simulateur de Combat LoM</h1>
+    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+  </div>
+  <div class="info-box" style="margin-bottom:20px">
+    <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
+    Crit = &#215;max(1.5, CritDMG&#247;CritRES). SkillCrit = &#215;(1+x%)^0.98.
+    Boss = &#215;(1+BossDMG%). PvP = &#247;ReductionFactor(avgLv).
+    Table PvP = valeurs exactes Yuko v1.2 (04/2025, 220 niveaux).
+  </div>
+  <div class="tabs">
+    <a class="sim-tab-btn active" href="simulation/combat/">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn" href="simulation/pal/">👾 Familier</a>
+    <a class="sim-tab-btn" href="simulation/palcmp/">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/">⛵ Sailing</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/">🎯 Mécaniques</a>
+    <a class="sim-tab-btn" href="simulation/stats/">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/">🛡️ Gardiens</a>
+  </div>
+
+  <div id="sim-tab-combat">
+    <div class="calc-layout">
+    
+          <form onsubmit="return false">
+    
+            <!-- Formula ref -->
+            <div class="formula-ref">
+              <h4>Formule de combat</h4>
+              <div class="formula-line"><span class="v">A</span> = (ATK − DEF) × Mult%/100 [× (1+SkillDMG%) pour Skill]</div>
+              <div class="formula-line"><span class="v">B</span> = A × max(<span class="o">1.5</span>, CritDMG÷CritRES)  <em>ou</em>  A × (1+SkillCrit%)^<span class="o">0.98</span></div>
+              <div class="formula-line"><span class="v">C</span> = B × (1−TypeRES%) × (1−GlobalRES%)</div>
+              <div class="formula-line"><span class="v">D</span> = C × (1+BossDMG%)  <em>(si Boss)</em></div>
+              <div class="formula-line"><span class="v">Final</span> = D ÷ PvPDiv(avgLv)  <em>(si PvP)</em></div>
+            </div>
+    
+            <!-- Attack type -->
+            <div class="section-chip">Type d'attaque</div>
+            <div class="sim-type-btns" id="sc-type-btns">
+              <button type="button" class="sim-type-btn active" data-type="basic">Basic ATK</button>
+              <button type="button" class="sim-type-btn" data-type="combo">Combo</button>
+              <button type="button" class="sim-type-btn" data-type="counter">Counter</button>
+              <button type="button" class="sim-type-btn" data-type="skill">Skill</button>
+            </div>
+    
+            <!-- Stats -->
+            <div class="section-chip">Attaquant / Cible</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="sc-atk">ATK Final</label>
+                <input class="form-input" type="number" id="sc-atk" value="50000" min="0" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="sc-def">DEF Cible</label>
+                <input class="form-input" type="number" id="sc-def" value="20000" min="0" step="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sc-mult">Multiplicateur de base (%)</label>
+              <input class="form-input" type="number" id="sc-mult" value="100" min="0" step="1">
+              <div class="input-hint">Ex: 100 pour Basic ATK, 300 pour une compétence puissante.</div>
+            </div>
+    
+            <!-- Skill bonus (shown for skill type) -->
+            <div id="sc-skill-opts" style="display:none">
+              <div class="form-group">
+                <label class="form-label" for="sc-skillbonus">Skill DMG bonus (%) <span class="cap-note">votre stat</span></label>
+                <input class="form-input" type="number" id="sc-skillbonus" value="0" min="0" step="0.1">
+                <div class="input-hint">Votre stat "Skill DMG%" personnelle — multiplie le dégât de compétence.</div>
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+    
+            <!-- Resistances -->
+            <div class="section-chip">Résistances</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="sc-typeRES">RES spécifique (%) <span class="cap-note">cap 80%</span></label>
+                <input class="form-input" type="number" id="sc-typeRES" value="0" min="0" max="80" step="0.1">
+                <div class="input-hint">BasicATK RES / Combo RES / Counter RES / Skill RES selon le type.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="sc-globalRES">Global DMG RES (%) <span class="cap-note">cap 80%</span></label>
+                <input class="form-input" type="number" id="sc-globalRES" value="0" min="0" max="80" step="0.1">
+              </div>
+            </div>
+    
+            <hr class="form-divider">
+    
+            <!-- Options -->
+            <div class="section-chip">Options</div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="sc-crit"> Coup Critique
+            </label>
+            <div id="sc-crit-opts" class="toggle-section" style="display:none">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="sc-critDMG">Crit DMG (%)</label>
+                  <input class="form-input" type="number" id="sc-critDMG" value="150" min="0" step="0.1">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="sc-critRES">Crit RES cible (%)</label>
+                  <input class="form-input" type="number" id="sc-critRES" value="100" min="1" step="0.1">
+                  <div class="input-hint">Ratio = max(1.5, CritDMG ÷ CritRES)</div>
+                </div>
+              </div>
+            </div>
+    
+            <label class="checkbox-row" id="sc-skillcrit-row">
+              <input type="checkbox" id="sc-skillcrit"> Skill Critique (Skill uniquement)
+            </label>
+            <div id="sc-skillcrit-opts" class="toggle-section" style="display:none">
+              <div class="form-group">
+                <label class="form-label" for="sc-skillCritMult">Skill Crit Mult (%)</label>
+                <input class="form-input" type="number" id="sc-skillCritMult" value="50" min="0" step="0.1">
+                <div class="input-hint">DMG × (1 + x%)^0.98</div>
+              </div>
+            </div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="sc-boss"> Boss DMG
+            </label>
+            <div id="sc-boss-opts" class="toggle-section" style="display:none">
+              <div class="form-group">
+                <label class="form-label" for="sc-bossDMG">Boss DMG bonus (%)</label>
+                <input class="form-input" type="number" id="sc-bossDMG" value="0" min="0" step="0.1">
+              </div>
+            </div>
+    
+            <label class="checkbox-row">
+              <input type="checkbox" id="sc-pvp"> Mode PvP
+            </label>
+            <div id="sc-pvp-opts" class="toggle-section" style="display:none">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="sc-pvpMyLv">Mon niveau</label>
+                  <input class="form-input" type="number" id="sc-pvpMyLv" value="100" min="1" max="220" step="1">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="sc-pvpELv">Niveau ennemi</label>
+                  <input class="form-input" type="number" id="sc-pvpELv" value="100" min="1" max="220" step="1">
+                </div>
+              </div>
+              <div class="input-hint">Diviseur PvP : <strong id="sc-pvp-div">—</strong> (avg lv · table exacte Yuko v1.2)</div>
+            </div>
+    
+          </form>
+    
+          <!-- Results -->
+          <div class="results-panel sticky-results">
+            <div class="results-header">⚔️ Résultat étape par étape</div>
+            <div class="results-body">
+              <div class="sim-steps" id="sc-steps"></div>
+              <div class="result-final">
+                <div class="lbl">Dégâts Finaux</div>
+                <div class="val" id="sc-final">—</div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html">Accueil</a> &nbsp;&#183;&nbsp;
+    <a href="guide.html">Guides</a> &nbsp;&#183;&nbsp;
+    <a href="calculator.html">Calculateur</a> &nbsp;&#183;&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;&#183;&nbsp;
+    <a href="simulation/combat/">Simulation</a>
+  </p>
+</footer>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/simulation.js"></script>
+<script>SIM.init();</script>
+</body>
+</html>
