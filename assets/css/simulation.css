@@ -582,6 +582,55 @@
       .gcombat-hero-time  { font-size: 2rem; }
     }
 
+    /* ── Simulation Hub ── */
+    .sim-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    a.sim-hub-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.6rem 1rem 1.3rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: border-color .18s, background .18s, transform .14s;
+      gap: .45rem;
+    }
+    a.sim-hub-card:hover, a.sim-hub-card:focus {
+      border-color: var(--teal);
+      background: rgba(32,212,168,.07);
+      transform: translateY(-2px);
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    a.sim-hub-card:visited { color: var(--text-primary); }
+    .sim-hub-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: .2rem;
+    }
+    .sim-hub-name {
+      font-size: .93rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .sim-hub-desc {
+      font-size: .67rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    @media (max-width: 480px) {
+      .sim-hub-grid { grid-template-columns: repeat(2, 1fr); gap: .65rem; }
+      .sim-hub-icon { font-size: 1.8rem; }
+    }
+
     /* ── Tabs as <a> links ── */
     a.sim-tab-btn {
       color: var(--text-secondary);
