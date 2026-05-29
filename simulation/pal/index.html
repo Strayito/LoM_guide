@@ -35,14 +35,13 @@
 <div class="container">
   <div class="page-header">
     <span class="label">Simulation</span>
-    <h1>⚔️ Simulateur de Combat LoM</h1>
-    <p>Formules complètes Yuko v1.2 — résultats en temps réel avec détail étape par étape.</p>
+    <h1>👾 Simulateur Familier</h1>
+    <p>Dégâts Pal — PalDMG, Crit Pal, PalCombo, PvP. Formules Yuko v1.2.</p>
   </div>
   <div class="info-box" style="margin-bottom:20px">
-    <strong>Formules:</strong> Basic/Combo/Counter = (ATK&#8722;DEF)&#215;Mult% &#215; RES &#215; GlobalRES.
-    Crit = &#215;max(1.5, CritDMG&#247;CritRES). SkillCrit = &#215;(1+x%)^0.98.
+    <strong>Formules Pal:</strong> PalBasic = (ATK&#8722;DEF)&#215;PalMULT%&#215;PalDMG%.
+    PalCrit = &#215;max(1.5, PalCritDMG&#247;CritRES). PalCombo = PalBasic&#215;PalComboMULT%.
     Boss = &#215;(1+BossDMG%). PvP = &#247;ReductionFactor(avgLv).
-    Table PvP = valeurs exactes Yuko v1.2 (04/2025, 220 niveaux).
   </div>
   <div class="tabs">
     <a class="sim-tab-btn" href="simulation/combat/">⚔️ Combat</a>
