@@ -312,30 +312,65 @@
       var subE = noData ? '—'
         : 'Tén.' + fmt(eTEN) + ' ÷ (Tén.×0.1 + TPEN' + fmt(pTPEN) + ')';
 
+      var maxSurv  = Math.max(survP, survE, 0.001);
+      var barWP    = ((survP / maxSurv) * 100).toFixed(1);
+      var barWE    = ((survE / maxSurv) * 100).toFixed(1);
+      var pWins    = survP >= survE;
+      var colPtime = noData ? 'var(--text-muted)' : (pWins  ? 'var(--teal)' : '#e04040');
+      var colEtime = noData ? 'var(--text-muted)' : (!pWins ? 'var(--teal)' : '#e04040');
+      var badgeP   = (!noData && survP >= 9.99) ? '<span class="gcombat-survivor-badge">⭐ Survivant</span>' : '';
+      var badgeE   = (!noData && survE >= 9.99) ? '<span class="gcombat-survivor-badge">⭐ Survivant</span>' : '';
+
       cbRes.innerHTML =
-        '<div class="gcombat-results">'
-          + rbox('Invocations', count + '×', 'sur ' + D + 's', 'var(--teal)')
-          + rbox('Survie/fen. (Vous)',   noData ? '—' : survP.toFixed(2) + 's', subP, '#5599ff')
-          + rbox('Survie/fen. (Ennemi)', noData ? '—' : survE.toFixed(2) + 's', subE, '#5599ff')
-          + rbox('Dégâts/inv. (Vous)',   noData ? '—' : fmt(dmgP),
-                 'TPEN ' + fmt(pTPEN) + ' × ' + survP.toFixed(2) + 's', 'var(--teal)')
-          + rbox('Dégâts/inv. (Ennemi)', noData ? '—' : fmt(dmgE),
-                 'TPEN ' + fmt(eTPEN) + ' × ' + survE.toFixed(2) + 's', '#e04040')
-          + rbox('Stacks Boost', stacks + '/8', '+' + boost + '% Final DMG', 'var(--gold)')
-          + rbox('Total (Vous)',   noData ? '—' : fmt(totP),
-                 count + ' invocation' + (count > 1 ? 's' : ''), 'var(--teal)')
-          + rbox('Total (Ennemi)', noData ? '—' : fmt(totE),
-                 count + ' invocation' + (count > 1 ? 's' : ''), '#e04040')
-          + rbox('Bilan net', noData ? '—' : (totP >= totE ? '+' : '') + fmt(totP - totE),
-                 totP >= totE ? 'Avantage joueur' : 'Avantage ennemi',
-                 totP >= totE ? 'var(--teal)' : '#e04040')
+        '<div class="gcombat-hero-block">'
+          + '<div class="gcombat-hero-side">'
+            + '<div class="gcombat-hero-label" style="color:var(--teal)">👤 Votre Gardien</div>'
+            + '<div class="gcombat-hero-time" style="color:' + colPtime + '">'
+              + (noData ? '—' : survP.toFixed(2)) + '<span class="gcombat-hero-unit">s</span>'
+            + '</div>'
+            + badgeP
+            + '<div class="gcombat-surv-bar-track"><div class="gcombat-surv-bar" style="width:' + (noData ? '0' : barWP) + '%;background:rgba(32,212,168,.8)"></div></div>'
+            + '<div class="gcombat-hero-sub">' + (noData ? '—' : 'Ténacité ' + fmt(pTEN)) + '</div>'
+          + '</div>'
+          + '<div class="gcombat-vs-divider">VS</div>'
+          + '<div class="gcombat-hero-side">'
+            + '<div class="gcombat-hero-label" style="color:#e04040">⚔️ Gardien Ennemi</div>'
+            + '<div class="gcombat-hero-time" style="color:' + colEtime + '">'
+              + (noData ? '—' : survE.toFixed(2)) + '<span class="gcombat-hero-unit">s</span>'
+            + '</div>'
+            + badgeE
+            + '<div class="gcombat-surv-bar-track"><div class="gcombat-surv-bar" style="width:' + (noData ? '0' : barWE) + '%;background:rgba(224,64,64,.8)"></div></div>'
+            + '<div class="gcombat-hero-sub">' + (noData ? '—' : 'Ténacité ' + fmt(eTEN)) + '</div>'
+          + '</div>'
         + '</div>'
         + '<div class="gcombat-verdict" style="color:' + vColor + ';border-color:' + vColor + ';background:rgba(0,0,0,.18)">' + verdict + '</div>'
-        + '<div class="info-note" style="margin-bottom:.75rem;font-size:.72rem">'
-        + '📐 Survie = Ténacité ÷ (Ténacité×0.1 + TPEN_ennemi) · '
-        + 'le gardien perd 10 % de sa Ténacité max/s naturellement · '
-        + 'Dégâts/inv. = TPEN × Survie'
-        + '</div>';
+        + '<details class="gcombat-details">'
+          + '<summary class="gcombat-details-summary">📋 Détails du combat</summary>'
+          + '<div class="gcombat-details-body">'
+            + '<div class="gcombat-results">'
+              + rbox('Invocations', count + '×', 'sur ' + D + 's', 'var(--teal)')
+              + rbox('Survie/fen. (Vous)',   noData ? '—' : survP.toFixed(2) + 's', subP, '#5599ff')
+              + rbox('Survie/fen. (Ennemi)', noData ? '—' : survE.toFixed(2) + 's', subE, '#5599ff')
+              + rbox('Dégâts/inv. (Vous)',   noData ? '—' : fmt(dmgP),
+                     'TPEN ' + fmt(pTPEN) + ' × ' + survP.toFixed(2) + 's', 'var(--teal)')
+              + rbox('Dégâts/inv. (Ennemi)', noData ? '—' : fmt(dmgE),
+                     'TPEN ' + fmt(eTPEN) + ' × ' + survE.toFixed(2) + 's', '#e04040')
+              + rbox('Stacks Boost', stacks + '/8', '+' + boost + '% Final DMG', 'var(--gold)')
+              + rbox('Total (Vous)',   noData ? '—' : fmt(totP),
+                     count + ' invocation' + (count > 1 ? 's' : ''), 'var(--teal)')
+              + rbox('Total (Ennemi)', noData ? '—' : fmt(totE),
+                     count + ' invocation' + (count > 1 ? 's' : ''), '#e04040')
+              + rbox('Bilan net', noData ? '—' : (totP >= totE ? '+' : '') + fmt(totP - totE),
+                     totP >= totE ? 'Avantage joueur' : 'Avantage ennemi',
+                     totP >= totE ? 'var(--teal)' : '#e04040')
+            + '</div>'
+            + '<div class="info-note" style="font-size:.72rem">'
+              + '📐 Survie = Ténacité ÷ (Ténacité×0.1 + TPEN_ennemi) · '
+              + 'le gardien perd 10 % de sa Ténacité max/s naturellement · '
+              + 'Dégâts/inv. = TPEN × Survie'
+            + '</div>'
+          + '</div>'
+        + '</details>';
 
       renderCombatChart(summons, D, pTPEN, eTPEN, survP, survE);
     }
