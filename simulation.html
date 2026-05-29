@@ -282,6 +282,14 @@
     .g-stats { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: .25rem; }
     .g-stat { font-size: .67rem; color: var(--text-secondary); white-space: nowrap; }
     .g-stat b { font-weight: 700; }
+    .g-stars { display: flex; gap: .22rem; margin: .25rem 0 .2rem; flex-wrap: wrap; }
+    .g-star-btn {
+      background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text-secondary); font-size: .58rem; font-weight: 700;
+      padding: .15rem .3rem; cursor: pointer; transition: background .12s, color .12s, border-color .12s;
+    }
+    .g-star-btn:hover  { border-color: var(--gold); color: var(--gold); }
+    .g-star-btn.active { background: rgba(232,192,64,.15); border-color: var(--gold); color: var(--gold); }
     .g-skill {
       font-size: .66rem; color: var(--text-secondary); line-height: 1.45;
       display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
@@ -1628,7 +1636,7 @@
         <button class="acc-head">
           <span class="acc-icon">⭐</span>
           <span class="acc-title">Progression ★1 → ★5</span>
-          <span class="acc-badge">Wrath · Spirit · Sage</span>
+          <span class="acc-badge">Wrath · Spirit · Sage · Hero</span>
           <span class="acc-chev">▼</span>
         </button>
         <div class="acc-body">
@@ -1667,7 +1675,7 @@
               </select>
               <div style="margin-bottom:.7rem">
                 <div class="gcombat-stat-lbl">Niveau d'étoile</div>
-                <select class="gsim-select" id="cb-p-star" disabled style="opacity:.4">
+                <select class="gsim-select" id="cb-p-star" style="opacity:.4">
                   <option value="1">★ 1</option>
                   <option value="2">★ 2</option>
                   <option value="3">★ 3</option>
@@ -1732,7 +1740,7 @@
               </select>
               <div style="margin-bottom:.7rem">
                 <div class="gcombat-stat-lbl">Niveau d'étoile</div>
-                <select class="gsim-select" id="cb-e-star" disabled style="opacity:.4">
+                <select class="gsim-select" id="cb-e-star" style="opacity:.4">
                   <option value="1">★ 1</option>
                   <option value="2">★ 2</option>
                   <option value="3">★ 3</option>
@@ -1929,22 +1937,46 @@
     html += '<div class="g-section-title">' + RARITY_ICON[rarity] + ' ' + rarity + '</div>';
     html += '<div class="g-grid">';
     group.forEach(function (g) {
-      var hasStar = !!GUARDIAN_STARS[g.name];
+      var starData = GUARDIAN_STARS[g.name];
+      var dispTpen = starData ? starData[0][1] : g.tpen;
+      var dispTen  = starData ? starData[0][2] : g.ten;
       html += '<div class="g-card">';
       html += '<img class="g-card-img" src="' + imgSrc(g.img) + '" alt="' + g.name + '" loading="lazy"'
            + ' onerror="this.style.opacity=.3;this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'><text y=\\\'48\\\' font-size=\\\'48\\\'>🛡️</text></svg>\'">';
       html += '<div class="g-card-info">';
       html += '<div class="g-card-name">' + g.name + '</div>';
       html += '<span class="g-badge">' + rarity + '</span>';
-      if (hasStar) html += ' <span class="g-badge" style="opacity:.55;font-size:.55rem">★1-5</span>';
-      html += '<div class="g-stats"><span class="g-stat">TPEN <b>' + fmt(g.tpen) + '</b></span>'
-           + '<span class="g-stat">Ten. <b>' + fmt(g.ten) + '</b></span></div>';
+      html += '<div class="g-stats"><span class="g-stat g-tpen">TPEN <b>' + fmt(dispTpen) + '</b></span>'
+           + '<span class="g-stat g-ten">Ten. <b>' + fmt(dispTen) + '</b></span></div>';
+      if (starData) {
+        html += '<div class="g-stars" data-name="' + g.name + '">';
+        for (var s = 1; s <= 5; s++) {
+          html += '<button class="g-star-btn' + (s === 1 ? ' active' : '') + '" data-s="' + s + '">★' + s + '</button>';
+        }
+        html += '</div>';
+      }
       html += '<div class="g-skill">' + g.skill + '</div>';
       html += '</div></div>';
     });
     html += '</div></div>';
   });
   overviewEl.innerHTML = html;
+
+  overviewEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('.g-star-btn');
+    if (!btn) return;
+    var starsDiv = btn.closest('.g-stars');
+    var name = starsDiv.getAttribute('data-name');
+    var star = parseInt(btn.getAttribute('data-s'), 10);
+    var rows = GUARDIAN_STARS[name];
+    if (!rows) return;
+    var row = rows[star - 1];
+    var card = starsDiv.closest('.g-card');
+    card.querySelector('.g-tpen b').textContent = fmt(row[1]);
+    card.querySelector('.g-ten b').textContent  = fmt(row[2]);
+    starsDiv.querySelectorAll('.g-star-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  });
 
   /* ── 2. Star tables ── */
   var starsEl = document.getElementById('g-stars-container');
@@ -1969,7 +2001,8 @@
       var star = row[0], tpen = row[1], ten = row[2], pow = row[3];
       var dTpen = i > 0 ? '+' + fmt(tpen - rows[i-1][1]) : '—';
       var dTen  = i > 0 ? '+' + fmt(ten  - rows[i-1][2]) : '—';
-      var dPow  = i > 0 ? '+' + (parseInt(pow) - parseInt(rows[i-1][3])) + '%' : '—';
+      var powN  = parseInt(pow);
+      var dPow  = (i > 0 && !isNaN(powN)) ? '+' + (powN - parseInt(rows[i-1][3])) + '%' : '—';
       stHtml += '<tr><td class="hi">★' + star + '</td>'
              + '<td class="r">' + fmt(tpen) + '</td><td class="r val-teal" style="font-size:.73rem">' + dTpen + '</td>'
              + '<td class="r">' + fmt(ten)  + '</td><td class="r val-teal" style="font-size:.73rem">' + dTen  + '</td>'
@@ -2084,7 +2117,8 @@
     var cbDur    = document.getElementById('cb-duration');
     var cbRes    = document.getElementById('cb-results');
     var cbChrt   = document.getElementById('cb-chart');
-    if (!cbPSel) return;
+    /* Guard — abort silently if any critical element is missing */
+    if (!cbPSel || !cbESel || !cbPStar || !cbEStar || !cbDur || !cbRes || !cbChrt) return;
 
     GUARDIAN_LIST.forEach(function (g) {
       [cbPSel, cbESel].forEach(function (sel) {
@@ -2113,8 +2147,10 @@
     function fillPanel(sel, starSel, imgEl, nameEl, rarEl, tpenBEl, tenBEl) {
       var g = GUARDIAN_LIST.find(function (x) { return x.name === sel.value; });
       var stars = g ? GUARDIAN_STARS[g.name] : null;
-      starSel.disabled = !stars;
-      starSel.style.opacity = stars ? '1' : '.4';
+
+      /* Opacity: dim when no star data, bright when data available */
+      starSel.style.opacity = (g && stars) ? '1' : '.4';
+
       if (g) {
         var star = parseInt(starSel.value) || 1;
         var row  = stars ? stars[star - 1] : null;
@@ -2275,6 +2311,8 @@
     });
     renderCombat();
   })();
+
+
 
 
 
