@@ -1,4 +1,4 @@
-* ── Guardian tab ── */
+/* ── Guardian tab ── */
 (function () {
   'use strict';
   if (typeof GUARDIAN_LIST === 'undefined') return;

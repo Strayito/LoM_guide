@@ -233,8 +233,8 @@
        GUARDIAN TAB
     ══════════════════════════════════════════════ */
     :root {
-      --c-beast:  #20d4a8; --c-war:    #4090d8; --c-wrath:  #e87820;
-      --c-spirit: #9060e0; --c-sage:   #e8c040; --c-hero:   #e04040;
+      --c-beast:  #20d4a8; --c-war:    #4090d8; --c-wrath:  #c060f0;
+      --c-spirit: #9060e0; --c-sage:   #e04040; --c-hero:   #e0e0e0;
     }
 
     /* Overview grid */
@@ -293,21 +293,21 @@
     .gr-War    .g-card:hover    { border-color: var(--c-war); }
     .gr-War    .g-badge         { color: var(--c-war);   border-color: rgba(64,144,216,.4); background: rgba(64,144,216,.1); }
     .gr-War    .g-stat b        { color: var(--c-war); }
-    .gr-Wrath  .g-section-title { color: var(--c-wrath); border-color: rgba(232,120,32,.2); }
+    .gr-Wrath  .g-section-title { color: var(--c-wrath); border-color: rgba(192,96,240,.2); }
     .gr-Wrath  .g-card:hover    { border-color: var(--c-wrath); }
-    .gr-Wrath  .g-badge         { color: var(--c-wrath); border-color: rgba(232,120,32,.4); background: rgba(232,120,32,.1); }
+    .gr-Wrath  .g-badge         { color: var(--c-wrath); border-color: rgba(192,96,240,.4); background: rgba(192,96,240,.1); }
     .gr-Wrath  .g-stat b        { color: var(--c-wrath); }
     .gr-Spirit .g-section-title { color: var(--c-spirit); border-color: rgba(144,96,224,.2); }
     .gr-Spirit .g-card:hover    { border-color: var(--c-spirit); }
     .gr-Spirit .g-badge         { color: var(--c-spirit); border-color: rgba(144,96,224,.4); background: rgba(144,96,224,.1); }
     .gr-Spirit .g-stat b        { color: var(--c-spirit); }
-    .gr-Sage   .g-section-title { color: var(--c-sage);  border-color: rgba(232,192,64,.2); }
+    .gr-Sage   .g-section-title { color: var(--c-sage);  border-color: rgba(224,64,64,.2); }
     .gr-Sage   .g-card:hover    { border-color: var(--c-sage); }
-    .gr-Sage   .g-badge         { color: var(--c-sage);  border-color: rgba(232,192,64,.4); background: rgba(232,192,64,.1); }
+    .gr-Sage   .g-badge         { color: var(--c-sage);  border-color: rgba(224,64,64,.4); background: rgba(224,64,64,.1); }
     .gr-Sage   .g-stat b        { color: var(--c-sage); }
-    .gr-Hero   .g-section-title { color: var(--c-hero);  border-color: rgba(224,64,64,.2); }
+    .gr-Hero   .g-section-title { color: var(--c-hero);  border-color: rgba(224,224,224,.2); }
     .gr-Hero   .g-card:hover    { border-color: var(--c-hero); }
-    .gr-Hero   .g-badge         { color: var(--c-hero);  border-color: rgba(224,64,64,.4); background: rgba(224,64,64,.1); }
+    .gr-Hero   .g-badge         { color: var(--c-hero);  border-color: rgba(224,224,224,.4); background: rgba(224,224,224,.1); }
     .gr-Hero   .g-stat b        { color: var(--c-hero); }
 
     /* Accordion head image */
