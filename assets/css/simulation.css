@@ -1,4 +1,4 @@
-﻿/* ── Layout ── */
+/* ── Layout ── */
     .calc-layout {
       display: grid;
       grid-template-columns: 1fr 340px;
@@ -467,4 +467,13 @@
       .gcombat-panels  { grid-template-columns: 1fr; }
       .gcombat-results { grid-template-columns: repeat(2, 1fr); }
     }
-    .sim-tab-btn { text-decoration: none; display: inline-block; }
+    /* ── Tabs as <a> links ── */
+    a.sim-tab-btn {
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-block;
+    }
+    a.sim-tab-btn:visited { color: var(--text-secondary); }
+    a.sim-tab-btn:hover   { color: var(--text-primary); text-decoration: none; }
+    a.sim-tab-btn.active  { color: #0d1117; }
+    a.sim-tab-btn.active:hover { color: #0d1117; }
