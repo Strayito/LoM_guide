@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Souls — LoM Fan Guide</title>
+  <meta name="description" content="Simulateur de Souls LoM — répartissez votre Essence sur 8 souls, visualisez vos stats et trouvez la meilleure amélioration.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+  <style>
+    /* ── Budget bar ── */
+    .budget-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .budget-bar-icon { font-size:1.1rem; flex-shrink:0; display:flex; align-items:center; gap:5px; }
+    .budget-bar-icon img { width:26px; height:26px; object-fit:contain; }
+    .budget-bar-lbl  { font-size:.82rem; color:var(--text-secondary); white-space:nowrap; flex-shrink:0; }
+    .budget-input {
+      width:120px; padding:5px 10px;
+      border-radius:var(--r); border:1px solid var(--border);
+      background:var(--bg-input); color:var(--text-primary);
+      font-size:.92rem; font-weight:700; text-align:center;
+    }
+    .budget-counters { margin-left:auto; display:flex; gap:20px; align-items:center; }
+    .bc-stat { text-align:center; }
+    .bc-stat-v { font-size:1.05rem; font-weight:800; display:block; }
+    .bc-stat-l { font-size:.68rem; color:var(--text-secondary); display:block; }
+    .bv-used   { color:var(--orange); }
+    .bv-ok     { color:var(--teal); }
+    .bv-warn   { color:var(--orange); }
+    .bv-danger { color:var(--red); }
+    .btn-reset-all {
+      padding:6px 14px; border-radius:var(--r);
+      border:1px solid var(--red); background:rgba(224,64,64,.07);
+      color:var(--red); font-size:.78rem; font-weight:700;
+      cursor:pointer; transition:background .15s; white-space:nowrap;
+    }
+    .btn-reset-all:hover { background:rgba(224,64,64,.16); }
+
+    /* ── Main layout ── */
+    .soul-layout {
+      display:grid;
+      grid-template-columns:1fr 280px;
+      gap:18px;
+      align-items:start;
+    }
+    @media(max-width:900px){ .soul-layout{grid-template-columns:1fr;} }
+
+    /* ── Soul cards grid ── */
+    .soul-cards {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+    @media(max-width:560px){ .soul-cards{grid-template-columns:1fr;} }
+
+    /* ── Individual soul card ── */
+    .soul-card {
+      background:var(--bg-secondary);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      padding:13px 15px;
+      transition:border-color .18s;
+    }
+    .soul-card.active { border-color:var(--nc); }
+
+    .soul-card-head {
+      display:flex; align-items:center; gap:8px; margin-bottom:9px;
+    }
+    .soul-card-img { width:28px; height:28px; object-fit:contain; flex-shrink:0; }
+    .soul-card-name {
+      font-size:.81rem; font-weight:700; color:var(--text-primary); line-height:1.25;
+    }
+    .soul-card-sublbl {
+      font-size:.61rem; color:var(--text-muted); line-height:1.3;
+    }
+
+    /* Stat mini-display */
+    .soul-stats-mini {
+      display:flex; flex-wrap:wrap; gap:4px 8px;
+      margin-bottom:8px;
+    }
+    .soul-stat-tag {
+      font-size:.66rem; color:var(--nc,var(--teal)); font-weight:700;
+      background:rgba(32,212,168,.08); border:1px solid rgba(32,212,168,.15);
+      border-radius:4px; padding:2px 6px;
+    }
+
+    /* Progress bar */
+    .soul-bar-track {
+      width:100%; height:6px;
+      background:var(--bg-primary); border-radius:99px;
+      overflow:hidden; margin:6px 0 3px;
+    }
+    .soul-bar-fill {
+      height:100%; border-radius:99px;
+      background:var(--nc,var(--teal)); transition:width .2s;
+    }
+    .soul-bar-labels {
+      display:flex; justify-content:space-between;
+      font-size:.62rem; color:var(--text-muted); margin-bottom:8px;
+    }
+
+    /* Controls */
+    .soul-controls {
+      display:flex; align-items:center; gap:4px; flex-wrap:wrap;
+    }
+    .soul-btn {
+      padding:5px 8px; border-radius:var(--r);
+      border:1px solid var(--border); background:var(--bg-primary);
+      color:var(--text-secondary); font-size:.74rem; font-weight:700;
+      cursor:pointer; transition:background .12s,color .12s,border-color .12s;
+      white-space:nowrap;
+    }
+    .soul-btn:hover { color:var(--text-primary); border-color:#2a4060; }
+    .soul-btn.add { border-color:rgba(32,212,168,.4); color:var(--teal); }
+    .soul-btn.add:hover { background:rgba(32,212,168,.1); }
+    .soul-btn.sub { border-color:rgba(224,64,64,.35); color:var(--red); }
+    .soul-btn.sub:hover { background:rgba(224,64,64,.08); }
+    .soul-btn.max { border-color:rgba(232,192,64,.4); color:var(--gold); }
+    .soul-btn.max:hover { background:rgba(232,192,64,.1); }
+    .soul-btn.rst { border-color:rgba(224,64,64,.35); color:var(--red); }
+    .soul-btn.rst:hover { background:rgba(224,64,64,.08); }
+
+    .soul-lv-input {
+      width:48px; padding:4px 6px; border-radius:var(--r);
+      border:1px solid var(--border); background:var(--bg-input);
+      color:var(--text-primary); font-size:.82rem; font-weight:700; text-align:center;
+    }
+    .soul-lv-sep { font-size:.72rem; color:var(--text-muted); }
+
+    .soul-cost-chip {
+      margin-top:6px; font-size:.65rem; color:var(--text-muted);
+    }
+    .soul-cost-chip span { color:var(--orange); font-weight:700; }
+
+    /* ── Stats panel ── */
+    .stats-panel {
+      background:var(--bg-secondary);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      overflow:hidden;
+      position:sticky;
+      top:calc(var(--nav-h,60px) + 12px);
+    }
+    .stats-head {
+      padding:9px 14px;
+      font-size:.74rem; font-weight:700; color:var(--teal);
+      text-transform:uppercase; letter-spacing:.07em;
+      border-bottom:1px solid var(--border);
+      background:rgba(32,212,168,.05);
+    }
+    .stats-body { padding:8px 12px; }
+    .srow {
+      display:flex; justify-content:space-between;
+      align-items:baseline; padding:3px 0;
+      border-bottom:1px solid rgba(26,48,80,.35); gap:6px;
+    }
+    .srow:last-child { border-bottom:none; }
+    .srow-name { font-size:.71rem; color:var(--text-secondary); flex:1; line-height:1.3; }
+    .srow-val  { font-size:.78rem; font-weight:700; color:var(--teal); white-space:nowrap; }
+    .srow-val.zero { color:var(--text-muted); }
+    .stats-total-box {
+      margin-top:9px; padding:8px 11px;
+      background:rgba(232,192,64,.06);
+      border:1px solid rgba(232,192,64,.14);
+      border-radius:var(--r);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .stot-lbl { font-size:.72rem; color:var(--text-secondary); }
+    .stot-val { font-size:.9rem; font-weight:800; color:var(--gold); }
+
+    /* result bubble */
+    .stat-bubble {
+      margin-top:10px; padding:9px 12px;
+      background:rgba(32,212,168,.06);
+      border:1px solid rgba(32,212,168,.2);
+      border-radius:var(--r-lg);
+    }
+    .stat-bubble-title {
+      font-size:.64rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:.08em;
+      color:var(--teal); margin-bottom:5px;
+    }
+    .bubble-row {
+      display:flex; justify-content:space-between;
+      font-size:.7rem; padding:2px 0; gap:6px;
+    }
+    .bubble-lbl { color:var(--text-muted); }
+    .bubble-val { font-weight:700; color:var(--text-primary); }
+
+    /* ── Optimizer section ── */
+    .optimizer-section {
+      margin-top:22px;
+      background:var(--bg-secondary);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      overflow:hidden;
+    }
+    .opt-head {
+      padding:11px 16px;
+      display:flex; align-items:center; gap:10px;
+      border-bottom:1px solid var(--border);
+      background:rgba(232,192,64,.05);
+    }
+    .opt-head-title {
+      font-size:.82rem; font-weight:700; color:var(--gold);
+      text-transform:uppercase; letter-spacing:.06em; flex:1;
+    }
+    .opt-mode-btns { display:flex; gap:6px; }
+    .opt-mode-btn {
+      padding:5px 11px; border-radius:var(--r);
+      border:1px solid var(--border); background:var(--bg-primary);
+      color:var(--text-secondary); font-size:.74rem; font-weight:700;
+      cursor:pointer; transition:all .14s;
+    }
+    .opt-mode-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(232,192,64,.09); }
+
+    .opt-body { padding:14px 16px; }
+
+    /* Optimizer table */
+    .opt-table {
+      width:100%; border-collapse:collapse; font-size:.74rem;
+    }
+    .opt-table th {
+      text-align:left; padding:5px 8px;
+      color:var(--text-secondary); font-size:.66rem;
+      font-weight:600; border-bottom:1px solid var(--border);
+      text-transform:uppercase; letter-spacing:.05em;
+    }
+    .opt-table th.r { text-align:right; }
+    .opt-table td { padding:5px 8px; border-bottom:1px solid rgba(26,48,80,.3); }
+    .opt-table tr:last-child td { border-bottom:none; }
+    .opt-table td.r { text-align:right; }
+    .opt-table tr.opt-row-soul td { }
+    .opt-table tr.opt-row-scroll td { }
+    .opt-badge {
+      display:inline-block; padding:1px 6px; border-radius:3px;
+      font-size:.62rem; font-weight:700;
+    }
+    .opt-badge-soul   { background:rgba(192,96,240,.13); color:#c060f0; border:1px solid rgba(192,96,240,.25); }
+    .opt-badge-scroll { background:rgba(32,212,168,.1);  color:var(--teal); border:1px solid rgba(32,212,168,.2); }
+    .opt-gain { color:var(--teal); font-weight:700; }
+    .opt-cost { color:var(--text-muted); }
+    .opt-eff  { font-weight:800; }
+    .opt-eff.best { color:var(--gold); }
+    .opt-rank {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:20px; height:20px; border-radius:50%;
+      font-size:.65rem; font-weight:800;
+      background:var(--bg-primary); color:var(--text-muted);
+    }
+    .opt-rank.r1 { background:rgba(232,192,64,.15); color:var(--gold); }
+    .opt-rank.r2 { background:rgba(26,48,80,.4); color:var(--text-secondary); }
+    .opt-rank.r3 { background:rgba(26,48,80,.25); color:var(--text-muted); }
+
+    .opt-stat-filter {
+      display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;
+    }
+    .opt-stat-btn {
+      padding:4px 10px; border-radius:99px;
+      border:1px solid var(--border); background:var(--bg-primary);
+      color:var(--text-secondary); font-size:.72rem; font-weight:600;
+      cursor:pointer; transition:all .14s;
+    }
+    .opt-stat-btn.active {
+      border-color:var(--teal); color:var(--teal);
+      background:rgba(32,212,168,.09);
+    }
+
+    .opt-empty {
+      text-align:center; color:var(--text-muted); font-size:.78rem;
+      padding:18px; font-style:italic;
+    }
+
+    @media(max-width:480px){
+      .soul-btn { padding:5px 6px; font-size:.7rem; }
+      .soul-lv-input { width:42px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/index.html" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="label">
+      <span class="lang-fr">Simulation — Souls</span>
+      <span class="lang-en hidden">Simulation — Souls</span>
+      <span class="lang-sk hidden">Simulácia — Duše</span>
+    </span>
+    <h1>
+      <img src="assets/image/lom/soul.png" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:8px">
+      <span class="lang-fr">Simulateur de Souls</span>
+      <span class="lang-en hidden">Soul Simulator</span>
+      <span class="lang-sk hidden">Simulátor Duší</span>
+    </h1>
+    <p>
+      <span class="lang-fr">Répartissez votre Essence sur les 8 Souls (max Lv 100) et trouvez la meilleure progression.</span>
+      <span class="lang-en hidden">Distribute your Essence across 8 Souls (max Lv 100) and find the best progression path.</span>
+      <span class="lang-sk hidden">Rozdeľte Esenciu na 8 Duší (max Lv 100) a nájdite najlepšiu cestu postupu.</span>
+    </p>
+  </div>
+
+  <div class="tabs">
+    <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
+    <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
+    <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
+    <a class="sim-tab-btn" href="simulation/talents/index.html">🪶 Talents</a>
+    <a class="sim-tab-btn" href="simulation/scrolls/index.html">📜 Scrolls</a>
+    <a class="sim-tab-btn active" href="simulation/souls/index.html">👻 Souls</a>
+  </div>
+
+  <!-- Essence budget bar -->
+  <div class="budget-bar">
+    <div class="budget-bar-icon">
+      <img src="assets/image/lom/essence.png" alt="Essence">
+    </div>
+    <label class="budget-bar-lbl" for="essence-pool">
+      <span class="lang-fr">Essence disponible :</span>
+      <span class="lang-en hidden">Available Essence:</span>
+      <span class="lang-sk hidden">Dostupná Esencia:</span>
+    </label>
+    <input type="number" id="essence-pool" class="budget-input" value="50000" min="0" max="9999999" step="1000">
+
+    <div class="budget-counters">
+      <div class="bc-stat">
+        <span class="bc-stat-v bv-used" id="bv-used">0</span>
+        <span class="bc-stat-l">
+          <span class="lang-fr">utilisée</span>
+          <span class="lang-en hidden">used</span>
+          <span class="lang-sk hidden">použité</span>
+        </span>
+      </div>
+      <div class="bc-stat">
+        <span class="bc-stat-v bv-ok" id="bv-remain">50000</span>
+        <span class="bc-stat-l">
+          <span class="lang-fr">restante</span>
+          <span class="lang-en hidden">remaining</span>
+          <span class="lang-sk hidden">zostatok</span>
+        </span>
+      </div>
+    </div>
+
+    <button class="btn-reset-all" id="reset-all">
+      <span class="lang-fr">Tout réinitialiser</span>
+      <span class="lang-en hidden">Reset all</span>
+      <span class="lang-sk hidden">Resetovať</span>
+    </button>
+  </div>
+
+  <!-- Main layout -->
+  <div class="soul-layout">
+
+    <!-- 8 soul cards -->
+    <div class="soul-cards" id="soul-cards"></div>
+
+    <!-- Stats panel -->
+    <div class="stats-panel">
+      <div class="stats-head">
+        <span class="lang-fr">📊 Stats totales</span>
+        <span class="lang-en hidden">📊 Total Stats</span>
+        <span class="lang-sk hidden">📊 Celkové štatistiky</span>
+      </div>
+      <div class="stats-body" id="stats-body">
+        <div class="srow"><span class="srow-name">Global ATK</span><span class="srow-val zero" id="sv-atk">+0%</span></div>
+        <div class="srow"><span class="srow-name">Global HP</span><span class="srow-val zero" id="sv-hp">+0%</span></div>
+        <div class="srow"><span class="srow-name">Global DEF</span><span class="srow-val zero" id="sv-def">+0%</span></div>
+        <div class="srow"><span class="srow-name">Heal Rate</span><span class="srow-val zero" id="sv-heal">+0%</span></div>
+        <div class="srow"><span class="srow-name">HP Regen</span><span class="srow-val zero" id="sv-regen">+0%</span></div>
+        <div class="srow"><span class="srow-name">Boss DMG RES</span><span class="srow-val zero" id="sv-bossres">+0%</span></div>
+        <div class="srow"><span class="srow-name">Crit RES</span><span class="srow-val zero" id="sv-critres">+0%</span></div>
+        <div class="srow"><span class="srow-name">Pal Crit %</span><span class="srow-val zero" id="sv-palcrit">+0%</span></div>
+        <div class="srow"><span class="srow-name">Pal Crit DMG</span><span class="srow-val zero" id="sv-palcritdmg">+0%</span></div>
+        <div class="srow"><span class="srow-name">Crit DMG</span><span class="srow-val zero" id="sv-critdmg">+0%</span></div>
+        <div class="srow"><span class="srow-name">Skill Crit DMG</span><span class="srow-val zero" id="sv-skillcrit">+0%</span></div>
+        <div class="srow"><span class="srow-name">Counter DMG</span><span class="srow-val zero" id="sv-counter">+0%</span></div>
+        <div class="srow"><span class="srow-name">Pal DMG</span><span class="srow-val zero" id="sv-pal">+0%</span></div>
+        <div class="srow"><span class="srow-name">Combo DMG</span><span class="srow-val zero" id="sv-combo">+0%</span></div>
+        <div class="srow"><span class="srow-name">Boss DMG</span><span class="srow-val zero" id="sv-boss">+0%</span></div>
+        <div class="srow"><span class="srow-name">Basic ATK DMG</span><span class="srow-val zero" id="sv-basic">+0%</span></div>
+        <div class="srow"><span class="srow-name">Skill DMG</span><span class="srow-val zero" id="sv-skill">+0%</span></div>
+
+        <div class="stats-total-box">
+          <span class="stot-lbl">
+            <span class="lang-fr">Essence investie</span>
+            <span class="lang-en hidden">Essence invested</span>
+            <span class="lang-sk hidden">Investovaná Esencia</span>
+          </span>
+          <span class="stot-val" id="bv-total">0</span>
+        </div>
+
+        <div class="stat-bubble" id="stat-bubble" style="display:none">
+          <div class="stat-bubble-title">
+            <span class="lang-fr">Résumé du build</span>
+            <span class="lang-en hidden">Build Summary</span>
+            <span class="lang-sk hidden">Prehľad buildu</span>
+          </div>
+          <div id="bubble-rows"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Optimizer section -->
+  <div class="optimizer-section">
+    <div class="opt-head">
+      <div class="opt-head-title">
+        ⚡ <span class="lang-fr">Optimiseur — Meilleure amélioration suivante</span>
+        <span class="lang-en hidden">Optimizer — Best next upgrade</span>
+        <span class="lang-sk hidden">Optimalizátor — Najlepší ďalší upgrade</span>
+      </div>
+      <div class="opt-mode-btns">
+        <button class="opt-mode-btn active" id="opt-mode-soul" data-mode="soul">
+          <span class="lang-fr">Souls</span><span class="lang-en hidden">Souls</span><span class="lang-sk hidden">Duše</span>
+        </button>
+        <button class="opt-mode-btn" id="opt-mode-scroll" data-mode="scroll">
+          <span class="lang-fr">Scrolls</span><span class="lang-en hidden">Scrolls</span><span class="lang-sk hidden">Zvitky</span>
+        </button>
+        <button class="opt-mode-btn" id="opt-mode-all" data-mode="all">
+          <span class="lang-fr">Combiné</span><span class="lang-en hidden">Combined</span><span class="lang-sk hidden">Kombinované</span>
+        </button>
+      </div>
+    </div>
+    <div class="opt-body">
+      <div class="opt-stat-filter" id="opt-filters">
+        <button class="opt-stat-btn active" data-stat="all">
+          <span class="lang-fr">Tout</span><span class="lang-en hidden">All</span><span class="lang-sk hidden">Všetko</span>
+        </button>
+        <button class="opt-stat-btn" data-stat="atk">ATK / DMG</button>
+        <button class="opt-stat-btn" data-stat="def">HP / DEF</button>
+        <button class="opt-stat-btn" data-stat="crit">Crit</button>
+        <button class="opt-stat-btn" data-stat="spec">
+          <span class="lang-fr">Spécial</span><span class="lang-en hidden">Special</span><span class="lang-sk hidden">Špeciálne</span>
+        </button>
+      </div>
+      <div class="opt-info" id="opt-info" style="font-size:.72rem;color:var(--text-muted);margin-bottom:10px"></div>
+      <div id="opt-table-wrap">
+        <table class="opt-table">
+          <thead>
+            <tr>
+              <th style="width:26px"></th>
+              <th><span class="lang-fr">Source</span><span class="lang-en hidden">Source</span><span class="lang-sk hidden">Zdroj</span></th>
+              <th><span class="lang-fr">Niv. actuel</span><span class="lang-en hidden">Curr. Lv</span><span class="lang-sk hidden">Aktuálna Úr.</span></th>
+              <th><span class="lang-fr">Stats (prochain)</span><span class="lang-en hidden">Stats (next)</span><span class="lang-sk hidden">Štatistiky (ďalší)</span></th>
+              <th class="r"><span class="lang-fr">Gain</span><span class="lang-en hidden">Gain</span><span class="lang-sk hidden">Zisk</span></th>
+              <th class="r"><span class="lang-fr">Coût</span><span class="lang-en hidden">Cost</span><span class="lang-sk hidden">Cena</span></th>
+              <th class="r"><span class="lang-fr">Efficacité</span><span class="lang-en hidden">Efficiency</span><span class="lang-sk hidden">Efektivita</span></th>
+            </tr>
+          </thead>
+          <tbody id="opt-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:.7rem;color:var(--text-muted);margin-top:1rem;text-align:center;display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+    <a href="data/souls.html" style="color:var(--teal)">
+      <span class="lang-fr">👻 Voir le tableau des données Soul</span>
+      <span class="lang-en hidden">👻 View Soul data table</span>
+      <span class="lang-sk hidden">👻 Zobraziť tabuľku dát Soul</span>
+    </a>
+    <a href="simulation/scrolls/index.html" style="color:var(--text-muted)">
+      <span class="lang-fr">📜 Simulateur Parchemins</span>
+      <span class="lang-en hidden">📜 Scroll Simulator</span>
+      <span class="lang-sk hidden">📜 Simulátor Zvitkov</span>
+    </a>
+  </div>
+
+</div><!-- .container -->
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;·&nbsp;
+    <a href="simulation/index.html">Simulation</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+<script src="assets/js/data/soul.js"></script>
+<script src="assets/js/data/soul_costs.js"></script>
+<script src="assets/js/data/scroll.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── Helpers ── */
+  function lang() { return localStorage.getItem('siteLang') || 'fr'; }
+  function t(obj) { var l = lang(); return obj[l] || obj.fr || obj.en || ''; }
+  function fmt(v) {
+    if (v === 0) return '0';
+    if (Math.abs(v) >= 10) return v.toFixed(1);
+    return v.toFixed(2);
+  }
+  function fmtK(v) {
+    if (v >= 1000000) return (v/1000000).toFixed(2) + 'M';
+    if (v >= 1000)    return (v/1000).toFixed(1) + 'k';
+    return String(v);
+  }
+
+  var MAX_LV = 100;
+
+  /* ── Soul definitions ──
+   * primary: stats this soul provides
+   *   col: 1-indexed into soulLevels row (0=Lv, 1=Global HP, ..., 17=Skill DMG)
+   *   sh: share of table value attributed to this soul
+   *   lbl: display label
+   *   group: 'atk'|'def'|'crit'|'spec'
+   */
+  var SOUL_DEFS = [
+    { id:'immortal', color:'#20d4a8',
+      name:{fr:'Immortal Spirit',en:'Immortal Spirit',sk:'Immortal Spirit'},
+      primary:[
+        {col:1, sh:1.0, lbl:'Global HP',    grp:'def'},
+        {col:6, sh:0.5, lbl:'Heal Rate',    grp:'def'},
+        {col:2, sh:0.25,lbl:'HP Regen',     grp:'def'}
+      ]},
+    { id:'horns', color:'#4090d8',
+      name:{fr:'Forgiving Horns',en:'Forgiving Horns',sk:'Forgiving Horns'},
+      primary:[
+        {col:3, sh:1.0, lbl:'Global DEF',   grp:'def'},
+        {col:4, sh:1.0, lbl:'Boss DMG RES', grp:'def'}
+      ]},
+    { id:'bloodblade', color:'#e04040',
+      name:{fr:'Bloodstained Blade',en:'Bloodstained Blade',sk:'Bloodstained Blade'},
+      primary:[
+        {col:5, sh:1.0, lbl:'Global ATK',   grp:'atk'},
+        {col:6, sh:0.5, lbl:'Heal Rate',    grp:'def'},
+        {col:2, sh:0.25,lbl:'HP Regen',     grp:'def'}
+      ]},
+    { id:'guardian', color:'#c060f0',
+      name:{fr:'Guardian Star',en:'Guardian Star',sk:'Guardian Star'},
+      primary:[
+        {col:7, sh:1.0, lbl:'Crit RES',     grp:'crit'},
+        {col:8, sh:1.0, lbl:'Pal Crit %',   grp:'crit'},
+        {col:9, sh:1.0, lbl:'Pal Crit DMG', grp:'crit'}
+      ]},
+    { id:'abyss', color:'#e8c040',
+      name:{fr:'Eye of the Abyss',en:'Eye of the Abyss',sk:'Eye of the Abyss'},
+      primary:[
+        {col:10,sh:1.0, lbl:'Crit DMG',     grp:'crit'},
+        {col:11,sh:1.0, lbl:'Skill Crit',   grp:'crit'}
+      ]},
+    { id:'companion', color:'#f07820',
+      name:{fr:'Excellent Companion',en:'Excellent Companion',sk:'Excellent Companion'},
+      primary:[
+        {col:12,sh:1.0, lbl:'Counter DMG',  grp:'atk'},
+        {col:13,sh:1.0, lbl:'Pal DMG',      grp:'atk'},
+        {col:2, sh:0.25,lbl:'HP Regen',     grp:'def'}
+      ]},
+    { id:'bladeduo', color:'#d04848',
+      name:{fr:'Blade Duo',en:'Blade Duo',sk:'Blade Duo'},
+      primary:[
+        {col:14,sh:1.0, lbl:'Combo DMG',    grp:'atk'},
+        {col:15,sh:1.0, lbl:'Boss DMG',     grp:'atk'},
+        {col:2, sh:0.25,lbl:'HP Regen',     grp:'def'}
+      ]},
+    { id:'wildfire', color:'#e86020',
+      name:{fr:'Wildfire Piercer',en:'Wildfire Piercer',sk:'Wildfire Piercer'},
+      primary:[
+        {col:16,sh:1.0, lbl:'Basic ATK',    grp:'atk'},
+        {col:17,sh:1.0, lbl:'Skill DMG',    grp:'atk'}
+      ]},
+  ];
+
+  /* stat-panel rows: {id, col, sh, label} — maps panel element IDs to soul columns */
+  var STAT_ROWS = [
+    {id:'atk',      col:5,  sh:1.0},
+    {id:'hp',       col:1,  sh:1.0},
+    {id:'def',      col:3,  sh:1.0},
+    {id:'heal',     col:6,  sh:1.0},
+    {id:'regen',    col:2,  sh:1.0},
+    {id:'bossres',  col:4,  sh:1.0},
+    {id:'critres',  col:7,  sh:1.0},
+    {id:'palcrit',  col:8,  sh:1.0},
+    {id:'palcritdmg',col:9, sh:1.0},
+    {id:'critdmg',  col:10, sh:1.0},
+    {id:'skillcrit',col:11, sh:1.0},
+    {id:'counter',  col:12, sh:1.0},
+    {id:'pal',      col:13, sh:1.0},
+    {id:'combo',    col:14, sh:1.0},
+    {id:'boss',     col:15, sh:1.0},
+    {id:'basic',    col:16, sh:1.0},
+    {id:'skill',    col:17, sh:1.0},
+  ];
+
+  /* ── State ── */
+  var levels = {};
+  SOUL_DEFS.forEach(function(s){ levels[s.id] = 0; });
+
+  /* ── Cost helpers ── */
+  function essencePool() {
+    return Math.max(0, parseInt(document.getElementById('essence-pool').value, 10) || 0);
+  }
+  function totalUsed() {
+    return SOUL_DEFS.reduce(function(s, soul) {
+      return s + soulCostCumul(levels[soul.id]);
+    }, 0);
+  }
+  function remaining() { return essencePool() - totalUsed(); }
+
+  /* Highest affordable level in [cur, ceiling] given current remaining */
+  function maxAffordable(cur, ceiling) {
+    var budget = remaining();
+    var base   = soulCostCumul(cur);
+    var nxt    = cur;
+    while (nxt < ceiling && soulCostCumul(nxt + 1) - base <= budget) { nxt++; }
+    return nxt;
+  }
+
+  /* ── Stat helpers ── */
+  /* Parse soulLevels value at level lv, column col (1-indexed) */
+  function soulLvVal(lv, col) {
+    if (lv < 1) return 0;
+    var row = soulLevels[Math.min(lv, MAX_LV) - 1];
+    return parseFloat(row[col]) || 0;
+  }
+
+  /* Contribution of a soul to a specific stat-col at its current level */
+  function soulContrib(soul, col, lv) {
+    for (var i = 0; i < soul.primary.length; i++) {
+      if (soul.primary[i].col === col) {
+        return soulLvVal(lv, col) * soul.primary[i].sh;
+      }
+    }
+    return 0;
+  }
+
+  /* Total stat across all souls for a given column */
+  function totalStatCol(col) {
+    return SOUL_DEFS.reduce(function(sum, soul) {
+      return sum + soulContrib(soul, col, levels[soul.id]);
+    }, 0);
+  }
+
+  /* ── Card builder ── */
+  function buildCards() {
+    var wrap = document.getElementById('soul-cards');
+    wrap.innerHTML = '';
+    SOUL_DEFS.forEach(function(soul) {
+      var card = document.createElement('div');
+      card.className = 'soul-card';
+      card.id = 'card-' + soul.id;
+      card.style.setProperty('--nc', soul.color);
+
+      /* Build primary stat tags HTML */
+      var tagsHtml = soul.primary.map(function(a) {
+        return '<span class="soul-stat-tag" id="stag-' + soul.id + '-' + a.col + '" style="border-color:' + soul.color + '33;color:' + soul.color + ';background:' + soul.color + '14">' + a.lbl + ' +0%</span>';
+      }).join('');
+
+      card.innerHTML =
+        '<div class="soul-card-head">' +
+          '<img src="assets/image/lom/soul.png" class="soul-card-img" alt="">' +
+          '<div>' +
+            '<div class="soul-card-name">' + t(soul.name) + '</div>' +
+            '<div class="soul-card-sublbl">' + soul.primary.map(function(a){return a.lbl;}).join(' · ') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="soul-stats-mini" id="smini-' + soul.id + '">' + tagsHtml + '</div>' +
+        '<div class="soul-bar-track"><div class="soul-bar-fill" id="sbar-' + soul.id + '" style="width:0%"></div></div>' +
+        '<div class="soul-bar-labels"><span id="slv-' + soul.id + '">Lv 0 / 100</span><span id="spct-' + soul.id + '">0%</span></div>' +
+        '<div class="soul-controls">' +
+          '<button class="soul-btn sub" data-id="' + soul.id + '" data-d="-10">−10</button>' +
+          '<button class="soul-btn sub" data-id="' + soul.id + '" data-d="-1">−1</button>' +
+          '<input type="number" class="soul-lv-input" id="sinp-' + soul.id + '" value="0" min="0" max="100">' +
+          '<span class="soul-lv-sep">/ 100</span>' +
+          '<button class="soul-btn add" data-id="' + soul.id + '" data-d="1">+1</button>' +
+          '<button class="soul-btn add" data-id="' + soul.id + '" data-d="10">+10</button>' +
+          '<button class="soul-btn max" data-id="' + soul.id + '" data-d="max">Max →</button>' +
+          '<button class="soul-btn rst" data-id="' + soul.id + '" data-d="0">⟳</button>' +
+        '</div>' +
+        '<div class="soul-cost-chip" id="chip-' + soul.id + '">' +
+          '<span class="lang-fr"><img src="assets/image/lom/essence.png" style="width:12px;height:12px;vertical-align:middle"> Investie : <span id="ccost-' + soul.id + '">0</span></span>' +
+          '<span class="lang-en hidden"><img src="assets/image/lom/essence.png" style="width:12px;height:12px;vertical-align:middle"> Invested: <span id="ccost-' + soul.id + '-en">0</span></span>' +
+          '<span class="lang-sk hidden"><img src="assets/image/lom/essence.png" style="width:12px;height:12px;vertical-align:middle"> Investovaná: <span id="ccost-' + soul.id + '-sk">0</span></span>' +
+        '</div>';
+
+      wrap.appendChild(card);
+    });
+
+    /* Event delegation */
+    wrap.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-id][data-d]');
+      if (!btn) return;
+      var id  = btn.dataset.id;
+      var d   = btn.dataset.d;
+      var cur = levels[id];
+
+      if (d === '0') {
+        levels[id] = 0;
+      } else if (d === 'max') {
+        levels[id] = maxAffordable(cur, MAX_LV);
+      } else {
+        var delta = parseInt(d, 10);
+        if (delta > 0) {
+          levels[id] = maxAffordable(cur, Math.min(MAX_LV, cur + delta));
+        } else {
+          levels[id] = Math.max(0, cur + delta);
+        }
+      }
+      refresh();
+    });
+
+    wrap.addEventListener('change', function(e) {
+      var inp = e.target.closest('.soul-lv-input');
+      if (!inp) return;
+      var id  = inp.id.replace('sinp-', '');
+      var val = Math.min(MAX_LV, Math.max(0, parseInt(inp.value, 10) || 0));
+      if (val > levels[id]) {
+        var extra = soulCostCumul(val) - soulCostCumul(levels[id]);
+        if (extra > remaining()) val = maxAffordable(levels[id], val);
+      }
+      levels[id] = val;
+      refresh();
+    });
+  }
+
+  function updateCards() {
+    SOUL_DEFS.forEach(function(soul) {
+      var lv   = levels[soul.id];
+      var pct  = (lv / MAX_LV * 100).toFixed(1);
+      var cumC = soulCostCumul(lv);
+
+      var bar  = document.getElementById('sbar-' + soul.id);
+      var card = document.getElementById('card-' + soul.id);
+      var inp  = document.getElementById('sinp-' + soul.id);
+      var lvEl = document.getElementById('slv-' + soul.id);
+      var pEl  = document.getElementById('spct-' + soul.id);
+
+      if (bar)  bar.style.width = pct + '%';
+      if (card) card.classList.toggle('active', lv > 0);
+      if (inp)  inp.value = lv;
+      if (lvEl) lvEl.textContent = 'Lv ' + lv + ' / 100';
+      if (pEl)  pEl.textContent  = pct + '%';
+
+      /* Update stat tags */
+      soul.primary.forEach(function(a) {
+        var tag = document.getElementById('stag-' + soul.id + '-' + a.col);
+        if (!tag) return;
+        var val = soulLvVal(lv, a.col) * a.sh;
+        tag.textContent = a.lbl + ' +' + fmt(val) + '%';
+      });
+
+      /* Cost chips */
+      ['', '-en', '-sk'].forEach(function(sfx) {
+        var el = document.getElementById('ccost-' + soul.id + sfx);
+        if (el) el.textContent = fmtK(cumC);
+      });
+    });
+  }
+
+  function updateStats() {
+    var allZero = true;
+    var used    = totalUsed();
+    var rem     = remaining();
+
+    STAT_ROWS.forEach(function(row) {
+      var val = totalStatCol(row.col);
+      var el  = document.getElementById('sv-' + row.id);
+      if (el) {
+        el.textContent = '+' + fmt(val) + '%';
+        el.className   = 'srow-val' + (val === 0 ? ' zero' : '');
+      }
+      if (val > 0) allZero = false;
+    });
+
+    document.getElementById('bv-total').textContent = fmtK(used);
+    document.getElementById('bv-used').textContent  = fmtK(used);
+    var remEl = document.getElementById('bv-remain');
+    remEl.textContent = fmtK(rem);
+    remEl.className   = 'bc-stat-v ' + (rem < 0 ? 'bv-danger' : rem < 1000 ? 'bv-warn' : 'bv-ok');
+
+    /* Bubble */
+    var bubble     = document.getElementById('stat-bubble');
+    var bubbleRows = document.getElementById('bubble-rows');
+    if (!allZero && bubble && bubbleRows) {
+      bubble.style.display = '';
+      var rows = '';
+      SOUL_DEFS.forEach(function(soul) {
+        var lv = levels[soul.id];
+        if (!lv) return;
+        rows += '<div class="bubble-row">' +
+          '<span class="bubble-lbl"><img src="assets/image/lom/soul.png" style="width:11px;height:11px;vertical-align:middle"> ' + t(soul.name) + ' Lv' + lv + '</span>' +
+          '<span class="bubble-val">' + soul.primary.filter(function(a){return a.sh>=1;}).map(function(a){
+            return a.lbl + ' +' + fmt(soulLvVal(lv, a.col) * a.sh) + '%';
+          }).join(' · ') + '</span>' +
+        '</div>';
+      });
+      bubbleRows.innerHTML = rows;
+    } else if (bubble) {
+      bubble.style.display = 'none';
+    }
+  }
+
+  /* ── Optimizer ── */
+  var optMode   = 'soul';   /* 'soul' | 'scroll' | 'all' */
+  var optFilter = 'all';    /* 'all' | 'atk' | 'def' | 'crit' | 'spec' */
+
+  /* Group tags for scroll categories */
+  var SCROLL_CATS = [
+    {id:'atk',  col:1, grp:'atk',  icon:'⚔️', name:{fr:'Scroll ATK', en:'Scroll ATK', sk:'Scroll ATK'}},
+    {id:'hp',   col:2, grp:'def',  icon:'❤️', name:{fr:'Scroll HP',  en:'Scroll HP',  sk:'Scroll HP'}},
+    {id:'def',  col:3, grp:'def',  icon:'🛡️', name:{fr:'Scroll DEF', en:'Scroll DEF', sk:'Scroll DEF'}},
+    {id:'cres', col:4, grp:'crit', icon:'🔰', name:{fr:'Scroll Crit RES', en:'Scroll Crit RES', sk:'Scroll Crit RES'}},
+    {id:'cdmg', col:5, grp:'crit', icon:'💥', name:{fr:'Scroll Crit DMG', en:'Scroll Crit DMG', sk:'Scroll Crit DMG'}},
+    {id:'dmg',  col:6, grp:'atk',  icon:'🗡️', name:{fr:'Scroll DMG Boost', en:'Scroll DMG Boost', sk:'Scroll DMG Boost'}},
+  ];
+
+  /* Scroll state mirror (read-only from soul page, or default 0 if not set) */
+  var scrollLevelsState = {};
+  SCROLL_CATS.forEach(function(c){ scrollLevelsState[c.id] = 0; });
+
+  /* Marginal stat gain for a soul going lv → lv+1 */
+  function soulMarginalGain(soul, lv) {
+    if (lv >= MAX_LV) return 0;
+    return soul.primary.reduce(function(sum, a) {
+      return sum + (soulLvVal(lv + 1, a.col) - soulLvVal(lv, a.col)) * a.sh;
+    }, 0);
+  }
+
+  /* Marginal stat gain for a soul's primary stat group only */
+  function soulMarginalGainFiltered(soul, lv, filter) {
+    if (lv >= MAX_LV) return { gain: 0, stats: [] };
+    var stats = [];
+    var total = 0;
+    soul.primary.forEach(function(a) {
+      var matches = filter === 'all' ||
+        (filter === 'atk'  && a.grp === 'atk') ||
+        (filter === 'def'  && a.grp === 'def') ||
+        (filter === 'crit' && a.grp === 'crit') ||
+        (filter === 'spec' && a.grp === 'spec');
+      if (!matches) return;
+      var g = (soulLvVal(lv + 1, a.col) - soulLvVal(lv, a.col)) * a.sh;
+      if (g !== 0) { stats.push({lbl: a.lbl, gain: g}); total += g; }
+    });
+    return { gain: total, stats: stats };
+  }
+
+  /* Marginal stat gain for a scroll category going lv → lv+1 */
+  function scrollMarginalGainFiltered(cat, lv, filter) {
+    var matches = filter === 'all' ||
+      (filter === 'atk'  && cat.grp === 'atk') ||
+      (filter === 'def'  && cat.grp === 'def') ||
+      (filter === 'crit' && cat.grp === 'crit');
+    if (!matches) return { gain: 0, stats: [] };
+    if (lv >= 200) return { gain: 0, stats: [] };
+    var g = SCROLL_DATA[lv][cat.col] - SCROLL_DATA[lv > 0 ? lv - 1 : 0][cat.col];
+    if (lv === 0) g = SCROLL_DATA[0][cat.col]; /* gain from 0 → 1 */
+    return { gain: g, stats: [{lbl: t(cat.name), gain: g}] };
+  }
+
+  function buildOptimizerRows() {
+    var filter = optFilter;
+    var mode   = optMode;
+    var rows   = [];
+
+    /* Soul rows */
+    if (mode === 'soul' || mode === 'all') {
+      SOUL_DEFS.forEach(function(soul) {
+        var lv  = levels[soul.id];
+        if (lv >= MAX_LV) return;
+        var cost = soulCostCumul(lv + 1) - soulCostCumul(lv);
+        if (cost <= 0) return;
+        var mg = soulMarginalGainFiltered(soul, lv, filter);
+        if (mg.gain <= 0 && filter !== 'all') return;
+        rows.push({
+          type:   'soul',
+          label:  t(soul.name),
+          color:  soul.color,
+          lv:     lv,
+          gain:   mg.gain,
+          stats:  mg.stats,
+          cost:   cost,
+          eff:    cost > 0 ? mg.gain / cost * 10000 : 0, /* per 10k essence */
+          canAfford: cost <= remaining()
+        });
+      });
+    }
+
+    /* Scroll rows */
+    if (mode === 'scroll' || mode === 'all') {
+      SCROLL_CATS.forEach(function(cat) {
+        var lv   = scrollLevelsState[cat.id];
+        if (lv >= 200) return;
+        var cost = lv < 200 ? (SCROLL_DATA[lv] ? SCROLL_DATA[lv][7] : 0) : 0;
+        if (cost <= 0 && lv > 0) return;
+        var mg   = scrollMarginalGainFiltered(cat, lv, filter);
+        if (mg.gain <= 0 && filter !== 'all') return;
+        rows.push({
+          type:   'scroll',
+          label:  cat.icon + ' ' + t(cat.name),
+          color:  '#20d4a8',
+          lv:     lv,
+          gain:   mg.gain,
+          stats:  mg.stats,
+          cost:   cost,
+          eff:    cost > 0 ? mg.gain / cost * 100 : 0, /* per 100 scrolls */
+          canAfford: true
+        });
+      });
+    }
+
+    /* Sort by gain descending (within same type) or all-combined */
+    rows.sort(function(a, b) {
+      /* If combined mode, sort by normalized efficiency separately */
+      if (mode === 'all') {
+        /* can't directly compare across currencies, sort by gain% */
+        return b.gain - a.gain;
+      }
+      return b.gain - a.gain;
+    });
+
+    return rows;
+  }
+
+  function renderOptimizer() {
+    var rows  = buildOptimizerRows();
+    var tbody = document.getElementById('opt-tbody');
+    var info  = document.getElementById('opt-info');
+    if (!tbody) return;
+
+    /* Info line */
+    var soulsRemain = fmtK(remaining());
+    var lInfo = lang();
+    if (lInfo === 'fr') info.textContent = '💡 Essence restante : ' + soulsRemain + (optMode === 'all' ? '  ·  Les scrolls et l\'essence sont des devises différentes.' : '');
+    else if (lInfo === 'en') info.textContent = '💡 Remaining essence: ' + soulsRemain + (optMode === 'all' ? '  ·  Scrolls and essence are different currencies.' : '');
+    else info.textContent = '💡 Zostatok Esencie: ' + soulsRemain;
+
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="opt-empty">' +
+        (lang() === 'fr' ? 'Aucune amélioration disponible pour ce filtre.' :
+         lang() === 'en' ? 'No upgrades available for this filter.' :
+         'Žiadne dostupné upgrady pre tento filter.') +
+        '</td></tr>';
+      return;
+    }
+
+    /* Unit label per type */
+    var unitLabel = { soul: '/10k ess.', scroll: '/100 scr.' };
+
+    tbody.innerHTML = rows.map(function(row, i) {
+      var rank = i < 3 ? ['r1','r2','r3'][i] : '';
+      var rankBadge = '<span class="opt-rank ' + rank + '">' + (i+1) + '</span>';
+      var typeBadge = row.type === 'soul'
+        ? '<span class="opt-badge opt-badge-soul">Soul</span>'
+        : '<span class="opt-badge opt-badge-scroll">Scroll</span>';
+      var statsText = row.stats.map(function(s){
+        return s.lbl + ' <span class="opt-gain">+' + fmt(s.gain) + '%</span>';
+      }).join('<br>');
+      var costText = row.type === 'soul'
+        ? '<span class="opt-cost">' + fmtK(row.cost) + ' ess.</span>'
+        : '<span class="opt-cost">' + row.cost + ' scr.</span>';
+      var effClass = i === 0 ? 'opt-eff best' : 'opt-eff';
+      var effUnit = unitLabel[row.type] || '';
+      var affClass = (!row.canAfford && row.type === 'soul') ? 'opacity:.45' : '';
+      return '<tr class="opt-row-' + row.type + '" style="' + affClass + '">' +
+        '<td>' + rankBadge + '</td>' +
+        '<td>' + typeBadge + ' <strong>' + row.label + '</strong></td>' +
+        '<td>Lv ' + row.lv + ' → ' + (row.lv + 1) + '</td>' +
+        '<td>' + statsText + '</td>' +
+        '<td class="r">' + (row.gain > 0 ? '<span class="opt-gain">+' + fmt(row.gain) + '%</span>' : '—') + '</td>' +
+        '<td class="r">' + costText + '</td>' +
+        '<td class="r"><span class="' + effClass + '">' + row.eff.toFixed(3) + '</span><span style="font-size:.6rem;color:var(--text-muted)"> ' + effUnit + '</span></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ── Refresh ── */
+  function refresh() {
+    updateCards();
+    updateStats();
+    renderOptimizer();
+  }
+
+  /* ── Init ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    buildCards();
+    refresh();
+
+    document.getElementById('essence-pool').addEventListener('input', refresh);
+
+    document.getElementById('reset-all').addEventListener('click', function() {
+      SOUL_DEFS.forEach(function(s){ levels[s.id] = 0; });
+      refresh();
+    });
+
+    /* Optimizer mode buttons */
+    document.querySelectorAll('.opt-mode-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        optMode = btn.dataset.mode;
+        document.querySelectorAll('.opt-mode-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderOptimizer();
+      });
+    });
+
+    /* Optimizer filter buttons */
+    document.querySelectorAll('.opt-stat-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        optFilter = btn.dataset.stat;
+        document.querySelectorAll('.opt-stat-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderOptimizer();
+      });
+    });
+
+    /* Lang switch re-render */
+    document.querySelectorAll('.lang-switcher button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setTimeout(function() { buildCards(); refresh(); }, 30);
+      });
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
