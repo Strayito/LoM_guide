@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Scrolls — LoM Fan Guide</title>
+  <meta name="description" content="Simulateur de Parchemins LoM — répartissez vos scrolls sur 6 catégories jusqu'au niveau 200 et visualisez vos stats.">
+  <base href="../../">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🍄</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/data.css">
+  <link rel="stylesheet" href="assets/css/simulation.css">
+  <style>
+    /* ── Scroll budget bar ── */
+    .scroll-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .scroll-bar-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .scroll-bar-lbl  { font-size: .82rem; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
+    .scroll-input {
+      width: 100px;
+      padding: 5px 10px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: .92rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .scroll-counters {
+      margin-left: auto;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .sc-stat { text-align: center; }
+    .sc-stat-v { font-size: 1.05rem; font-weight: 800; display: block; }
+    .sc-stat-l { font-size: .68rem; color: var(--text-secondary); display: block; }
+    .sv-used   { color: var(--orange); }
+    .sv-ok     { color: var(--teal); }
+    .sv-warn   { color: var(--orange); }
+    .sv-danger { color: var(--red); }
+    .btn-reset-all {
+      padding: 6px 14px;
+      border-radius: var(--r);
+      border: 1px solid var(--red);
+      background: rgba(224,64,64,.07);
+      color: var(--red);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .btn-reset-all:hover { background: rgba(224,64,64,.16); }
+
+    /* ── Main layout ── */
+    .scr-layout {
+      display: grid;
+      grid-template-columns: 1fr 270px;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 860px) { .scr-layout { grid-template-columns: 1fr; } }
+
+    /* ── Category cards grid ── */
+    .scr-cats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 560px) { .scr-cats { grid-template-columns: 1fr; } }
+
+    /* ── Individual category card ── */
+    .scr-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 14px 16px;
+      transition: border-color .18s;
+    }
+    .scr-card.active { border-color: var(--nc); }
+    .scr-card-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .scr-card-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .scr-card-name {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+    .scr-card-sublbl {
+      font-size: .63rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Progress bar */
+    .scr-bar-track {
+      width: 100%;
+      height: 6px;
+      background: var(--bg-primary);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+    .scr-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--nc, var(--teal));
+      transition: width .2s;
+    }
+    .scr-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: .62rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    /* Stat value */
+    .scr-stat-display {
+      font-size: .78rem;
+      color: var(--teal);
+      font-weight: 700;
+      margin-bottom: 10px;
+      min-height: 1.1em;
+    }
+
+    /* Controls */
+    .scr-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .scr-btn {
+      padding: 5px 9px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: .76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+      white-space: nowrap;
+    }
+    .scr-btn:hover { color: var(--text-primary); border-color: #2a4060; }
+    .scr-btn.add { border-color: rgba(32,212,168,.4); color: var(--teal); }
+    .scr-btn.add:hover { background: rgba(32,212,168,.1); }
+    .scr-btn.sub { border-color: rgba(224,64,64,.35); color: var(--red); }
+    .scr-btn.sub:hover { background: rgba(224,64,64,.08); }
+    .scr-btn.max { border-color: rgba(232,192,64,.4); color: var(--gold); }
+    .scr-btn.max:hover { background: rgba(232,192,64,.1); }
+    .scr-btn.rst { border-color: rgba(224,64,64,.35); color: var(--red); }
+    .scr-btn.rst:hover { background: rgba(224,64,64,.08); }
+
+    .scr-lv-input {
+      width: 52px;
+      padding: 4px 6px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: .82rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .scr-lv-sep { font-size: .72rem; color: var(--text-muted); }
+
+    .scr-cost-chip {
+      margin-top: 7px;
+      font-size: .66rem;
+      color: var(--text-muted);
+    }
+    .scr-cost-chip span { color: var(--orange); font-weight: 700; }
+
+    /* ── Stats panel ── */
+    .stats-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--nav-h, 60px) + 12px);
+    }
+    .stats-head {
+      padding: 10px 14px;
+      font-size: .76rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      border-bottom: 1px solid var(--border);
+      background: rgba(32,212,168,.05);
+    }
+    .stats-body { padding: 10px 14px; }
+    .srow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(26,48,80,.4);
+      gap: 8px;
+    }
+    .srow:last-child { border-bottom: none; }
+    .srow-name { font-size: .74rem; color: var(--text-secondary); flex: 1; line-height: 1.3; }
+    .srow-val  { font-size: .82rem; font-weight: 700; color: var(--teal); white-space: nowrap; }
+    .srow-val.zero { color: var(--text-muted); }
+    .stats-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0;
+    }
+    .stats-total-box {
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: rgba(232,192,64,.06);
+      border: 1px solid rgba(232,192,64,.14);
+      border-radius: var(--r);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stot-lbl { font-size: .74rem; color: var(--text-secondary); }
+    .stot-val { font-size: .95rem; font-weight: 800; color: var(--gold); }
+
+    /* ── Stat bubble (floating result) ── */
+    .stat-bubble {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(32,212,168,.06);
+      border: 1px solid rgba(32,212,168,.2);
+      border-radius: var(--r-lg);
+    }
+    .stat-bubble-title {
+      font-size: .66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .bubble-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: .72rem;
+      padding: 2px 0;
+      gap: 6px;
+    }
+    .bubble-lbl { color: var(--text-muted); }
+    .bubble-val { font-weight: 700; color: var(--text-primary); }
+
+    @media (max-width: 480px) {
+      .scr-btn { padding: 5px 7px; font-size: .72rem; }
+      .scr-lv-input { width: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/image/logo_lom.webp" alt="Legend of Mushroom" class="nav-logo-img">
+    LoM Fan Guide
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="nav-link"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a>
+    <a href="guide.html" class="nav-link"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a>
+    <a href="calculator.html" class="nav-link"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a>
+    <a href="data/index.html" class="nav-link">Data</a>
+    <a href="simulation/index.html" class="nav-link active">Simulation</a>
+  </div>
+  <div class="lang-switcher" id="langSwitcher">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="sk">SK</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="label">
+      <span class="lang-fr">Simulation — Parchemins</span>
+      <span class="lang-en hidden">Simulation — Scrolls</span>
+      <span class="lang-sk hidden">Simulácia — Zvitky</span>
+    </span>
+    <h1>
+      <span class="lang-fr">📜 Simulateur de Parchemins</span>
+      <span class="lang-en hidden">📜 Scroll Simulator</span>
+      <span class="lang-sk hidden">📜 Simulátor Zvitkov</span>
+    </h1>
+    <p>
+      <span class="lang-fr">Répartissez vos parchemins sur les 6 catégories (max Lv 200) et visualisez vos stats totales.</span>
+      <span class="lang-en hidden">Distribute your scrolls across 6 categories (max Lv 200) and see your total stats.</span>
+      <span class="lang-sk hidden">Rozdeľte zvitky do 6 kategórií (max Lv 200) a sledujte celkové štatistiky.</span>
+    </p>
+  </div>
+
+  <div class="tabs">
+    <a class="sim-tab-btn" href="simulation/combat/index.html">⚔️ Combat</a>
+    <a class="sim-tab-btn" href="simulation/compare/index.html">⚖️ Compare A/B</a>
+    <a class="sim-tab-btn" href="simulation/pal/index.html"><span class="lang-fr">👾 Familier</span><span class="lang-en hidden">👾 Pal</span><span class="lang-sk hidden">👾 Pal</span></a>
+    <a class="sim-tab-btn" href="simulation/palcmp/index.html">⚖️ Pal A/B</a>
+    <a class="sim-tab-btn" href="simulation/hpdmg/index.html">❤️ HP Dmg</a>
+    <a class="sim-tab-btn" href="simulation/sailing/index.html">⛵ Sailing</a>
+    <a class="sim-tab-btn" href="simulation/mechanics/index.html"><span class="lang-fr">🎯 Mécaniques</span><span class="lang-en hidden">🎯 Mechanics</span><span class="lang-sk hidden">🎯 Mechaniky</span></a>
+    <a class="sim-tab-btn" href="simulation/stats/index.html">📊 Stats</a>
+    <a class="sim-tab-btn" href="simulation/guardian/index.html"><span class="lang-fr">🛡️ Gardiens</span><span class="lang-en hidden">🛡️ Guardians</span><span class="lang-sk hidden">🛡️ Strážcovia</span></a>
+    <a class="sim-tab-btn" href="simulation/talents/index.html">🪶 Talents</a>
+    <a class="sim-tab-btn active" href="simulation/scrolls/index.html">📜 Scrolls</a>
+  </div>
+
+  <!-- Scroll budget bar -->
+  <div class="scroll-bar">
+    <span class="scroll-bar-icon">📜</span>
+    <label class="scroll-bar-lbl" for="scroll-pool">
+      <span class="lang-fr">Parchemins disponibles :</span>
+      <span class="lang-en hidden">Available scrolls:</span>
+      <span class="lang-sk hidden">Dostupné zvitky:</span>
+    </label>
+    <input type="number" id="scroll-pool" class="scroll-input" value="200" min="0" max="9999">
+
+    <div class="scroll-counters">
+      <div class="sc-stat">
+        <span class="sc-stat-v sv-used" id="sv-used">0</span>
+        <span class="sc-stat-l">
+          <span class="lang-fr">utilisés</span>
+          <span class="lang-en hidden">used</span>
+          <span class="lang-sk hidden">použité</span>
+        </span>
+      </div>
+      <div class="sc-stat">
+        <span class="sc-stat-v sv-ok" id="sv-remain">200</span>
+        <span class="sc-stat-l">
+          <span class="lang-fr">restants</span>
+          <span class="lang-en hidden">remaining</span>
+          <span class="lang-sk hidden">zostatok</span>
+        </span>
+      </div>
+    </div>
+
+    <button class="btn-reset-all" id="reset-all">
+      <span class="lang-fr">Tout réinitialiser</span>
+      <span class="lang-en hidden">Reset all</span>
+      <span class="lang-sk hidden">Resetovať</span>
+    </button>
+  </div>
+
+  <!-- Main area -->
+  <div class="scr-layout">
+
+    <!-- 6 category cards -->
+    <div class="scr-cats" id="scr-cats"></div>
+
+    <!-- Stats panel -->
+    <div class="stats-panel">
+      <div class="stats-head">
+        <span class="lang-fr">📊 Stats totales</span>
+        <span class="lang-en hidden">📊 Total Stats</span>
+        <span class="lang-sk hidden">📊 Celkové štatistiky</span>
+      </div>
+      <div class="stats-body" id="stats-body">
+        <div class="srow"><span class="srow-name">Global ATK</span><span class="srow-val zero" id="sv-atk">+0%</span></div>
+        <div class="srow"><span class="srow-name">Global HP</span><span class="srow-val zero" id="sv-hp">+0%</span></div>
+        <div class="srow"><span class="srow-name">Global DEF</span><span class="srow-val zero" id="sv-def">+0%</span></div>
+        <div class="srow"><span class="srow-name">Crit RES</span><span class="srow-val zero" id="sv-cres">+0%</span></div>
+        <div class="srow">
+          <span class="srow-name">
+            <span class="lang-fr">Crit DMG / Skill Crit / Pal Crit</span>
+            <span class="lang-en hidden">Crit DMG / Skill Crit / Pal Crit</span>
+            <span class="lang-sk hidden">Krit. Poškodenie</span>
+          </span>
+          <span class="srow-val zero" id="sv-cdmg">+0%</span>
+        </div>
+        <div class="srow">
+          <span class="srow-name">
+            <span class="lang-fr">Basic ATK / Combo / Counter / Skill / Pal DMG</span>
+            <span class="lang-en hidden">Basic ATK / Combo / Counter / Skill / Pal DMG</span>
+            <span class="lang-sk hidden">Poškodenie</span>
+          </span>
+          <span class="srow-val zero" id="sv-dmg">+0%</span>
+        </div>
+
+        <div class="stats-total-box">
+          <span class="stot-lbl">
+            <span class="lang-fr">Total parchemins investis</span>
+            <span class="lang-en hidden">Total scrolls invested</span>
+            <span class="lang-sk hidden">Celkové zvitky</span>
+          </span>
+          <span class="stot-val" id="sv-total">📜 0</span>
+        </div>
+
+        <!-- Result bubble -->
+        <div class="stat-bubble" id="stat-bubble" style="display:none">
+          <div class="stat-bubble-title">
+            <span class="lang-fr">Résumé de votre build</span>
+            <span class="lang-en hidden">Build Summary</span>
+            <span class="lang-sk hidden">Prehľad buildu</span>
+          </div>
+          <div id="bubble-rows"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="font-size:.7rem;color:var(--text-muted);margin-top:1rem;text-align:center">
+    <a href="data/scrolls.html" style="color:var(--teal)">
+      <span class="lang-fr">📜 Voir le tableau de données complet (Lv 1–200)</span>
+      <span class="lang-en hidden">📜 View full data table (Lv 1–200)</span>
+      <span class="lang-sk hidden">📜 Zobraziť celú tabuľku dát (Lv 1–200)</span>
+    </a>
+  </div>
+
+</div><!-- .container -->
+
+<footer>
+  <div class="mushroom">🍄</div>
+  <p>LoM Fan Guide — built by <strong>Stray</strong></p>
+  <p style="margin-top:10px">
+    <a href="index.html"><span class="lang-fr">Accueil</span><span class="lang-en hidden">Home</span><span class="lang-sk hidden">Domov</span></a> &nbsp;·&nbsp;
+    <a href="guide.html"><span class="lang-fr">Guides</span><span class="lang-en hidden">Guides</span><span class="lang-sk hidden">Sprievodcovia</span></a> &nbsp;·&nbsp;
+    <a href="calculator.html"><span class="lang-fr">Calculateur</span><span class="lang-en hidden">Calculator</span><span class="lang-sk hidden">Kalkulačka</span></a> &nbsp;·&nbsp;
+    <a href="data/index.html">Data</a> &nbsp;·&nbsp;
+    <a href="simulation/index.html">Simulation</a>
+  </p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+<script src="assets/js/data/scroll.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function lang() { return localStorage.getItem('siteLang') || 'fr'; }
+  function t(obj) { var l = lang(); return obj[l] || obj.fr || obj.en || ''; }
+  function fmt(v) { return v % 1 ? v.toFixed(2) : String(v); }
+
+  var MAX_LV = 200;
+
+  /* Category definitions */
+  var CATS = [
+    {
+      id: 'atk', col: 1, icon: '⚔️', color: '#e04040',
+      name: { fr: 'Global ATK', en: 'Global ATK', sk: 'Globálny ATK' },
+      sub:  { fr: '', en: '', sk: '' }
+    },
+    {
+      id: 'hp', col: 2, icon: '❤️', color: '#e87820',
+      name: { fr: 'Global HP', en: 'Global HP', sk: 'Globálny HP' },
+      sub:  { fr: '', en: '', sk: '' }
+    },
+    {
+      id: 'def', col: 3, icon: '🛡️', color: '#4090d8',
+      name: { fr: 'Global DEF', en: 'Global DEF', sk: 'Globálny DEF' },
+      sub:  { fr: '', en: '', sk: '' }
+    },
+    {
+      id: 'cres', col: 4, icon: '🔰', color: '#20d4a8',
+      name: { fr: 'Crit RES', en: 'Crit RES', sk: 'Krit. Odolnosť' },
+      sub:  { fr: 'Résistance critique', en: 'Critical Resistance', sk: 'Kritická odolnosť' }
+    },
+    {
+      id: 'cdmg', col: 5, icon: '💥', color: '#c060f0',
+      name: { fr: 'Crit DMG', en: 'Crit DMG', sk: 'Krit. Poškodenie' },
+      sub:  { fr: 'Crit DMG · Skill Crit · Pal Crit', en: 'Crit DMG · Skill Crit · Pal Crit', sk: 'Krit. PD · Zručnosť · Pal' }
+    },
+    {
+      id: 'dmg', col: 6, icon: '🗡️', color: '#e8c040',
+      name: { fr: 'DMG Boost', en: 'DMG Boost', sk: 'Boost Poškodenia' },
+      sub:  { fr: 'Basic ATK · Combo · Counter · Skill · Pal DMG', en: 'Basic ATK · Combo · Counter · Skill · Pal DMG', sk: 'Základný ATK · Kombo · Protiúder · Zručnosť · Pal' }
+    }
+  ];
+
+  var levels = { atk: 0, hp: 0, def: 0, cres: 0, cdmg: 0, dmg: 0 };
+
+  function scrollPool() { return Math.max(0, parseInt(document.getElementById('scroll-pool').value, 10) || 0); }
+  function totalUsed()  { return Object.values(levels).reduce(function(s, v) { return s + v; }, 0); }
+  function remaining()  { return scrollPool() - totalUsed(); }
+  function statAt(col, lv) { return lv < 1 ? 0 : SCROLL_DATA[Math.min(lv, MAX_LV) - 1][col]; }
+
+  /* Build cards once */
+  function buildCards() {
+    var wrap = document.getElementById('scr-cats');
+    wrap.innerHTML = '';
+    CATS.forEach(function(cat) {
+      var card = document.createElement('div');
+      card.className = 'scr-card';
+      card.id = 'card-' + cat.id;
+      card.style.setProperty('--nc', cat.color);
+
+      var subHtml = t(cat.sub) ? '<div class="scr-card-sublbl">' + t(cat.sub) + '</div>' : '';
+      card.innerHTML =
+        '<div class="scr-card-head">' +
+          '<span class="scr-card-icon">' + cat.icon + '</span>' +
+          '<div><div class="scr-card-name">' + t(cat.name) + '</div>' + subHtml + '</div>' +
+        '</div>' +
+        '<div class="scr-bar-track"><div class="scr-bar-fill" id="bar-' + cat.id + '" style="width:0%"></div></div>' +
+        '<div class="scr-bar-labels"><span id="lbl-lv-' + cat.id + '">Lv 0 / 200</span><span id="lbl-pct-' + cat.id + '">0%</span></div>' +
+        '<div class="scr-stat-display" id="stat-' + cat.id + '">+0%</div>' +
+        '<div class="scr-controls">' +
+          '<button class="scr-btn sub" data-id="' + cat.id + '" data-d="-10">−10</button>' +
+          '<button class="scr-btn sub" data-id="' + cat.id + '" data-d="-1">−1</button>' +
+          '<input type="number" class="scr-lv-input" id="inp-' + cat.id + '" value="0" min="0" max="200">' +
+          '<span class="scr-lv-sep">/ 200</span>' +
+          '<button class="scr-btn add" data-id="' + cat.id + '" data-d="1">+1</button>' +
+          '<button class="scr-btn add" data-id="' + cat.id + '" data-d="10">+10</button>' +
+          '<button class="scr-btn max" data-id="' + cat.id + '" data-d="max">' +
+            '<span class="lang-fr">Max →</span><span class="lang-en hidden">Max →</span><span class="lang-sk hidden">Max →</span>' +
+          '</button>' +
+          '<button class="scr-btn rst" data-id="' + cat.id + '" data-d="0">' +
+            '<span class="lang-fr">⟳</span><span class="lang-en hidden">⟳</span><span class="lang-sk hidden">⟳</span>' +
+          '</button>' +
+        '</div>' +
+        '<div class="scr-cost-chip">' +
+          '<span class="lang-fr">📜 Coût : <span id="cost-' + cat.id + '">0</span> parchemin(s)</span>' +
+          '<span class="lang-en hidden">📜 Cost: <span id="cost-' + cat.id + '-en">0</span> scroll(s)</span>' +
+          '<span class="lang-sk hidden">📜 Cena: <span id="cost-' + cat.id + '-sk">0</span> zvitok/kov</span>' +
+        '</div>';
+
+      wrap.appendChild(card);
+    });
+
+    /* Event delegation */
+    wrap.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-id][data-d]');
+      if (!btn) return;
+      var id = btn.dataset.id;
+      var d  = btn.dataset.d;
+      var cur = levels[id];
+      if (d === '0') {
+        levels[id] = 0;
+      } else if (d === 'max') {
+        var rem = remaining();
+        levels[id] = Math.min(MAX_LV, cur + rem);
+      } else {
+        var delta = parseInt(d, 10);
+        var nxt = cur + delta;
+        if (delta > 0) nxt = Math.min(nxt, Math.min(MAX_LV, cur + remaining()));
+        if (delta < 0) nxt = Math.max(0, nxt);
+        levels[id] = nxt;
+      }
+      refresh();
+    });
+
+    wrap.addEventListener('change', function(e) {
+      var inp = e.target.closest('.scr-lv-input');
+      if (!inp) return;
+      var id  = inp.id.replace('inp-', '');
+      var val = Math.min(MAX_LV, Math.max(0, parseInt(inp.value, 10) || 0));
+      if (val > levels[id]) {
+        var canAdd = remaining() - (val - levels[id]);
+        if (canAdd < 0) val = levels[id] + remaining();
+      }
+      levels[id] = val;
+      refresh();
+    });
+  }
+
+  function updateCards() {
+    CATS.forEach(function(cat) {
+      var lv   = levels[cat.id];
+      var stat = statAt(cat.col, lv);
+      var pct  = (lv / MAX_LV * 100).toFixed(1);
+
+      var bar  = document.getElementById('bar-' + cat.id);
+      var card = document.getElementById('card-' + cat.id);
+      var inp  = document.getElementById('inp-' + cat.id);
+
+      if (bar)  bar.style.width = pct + '%';
+      if (card) card.classList.toggle('active', lv > 0);
+      if (inp)  inp.value = lv;
+
+      var lvLbl = document.getElementById('lbl-lv-' + cat.id);
+      var pctLbl = document.getElementById('lbl-pct-' + cat.id);
+      if (lvLbl)  lvLbl.textContent = 'Lv ' + lv + ' / 200';
+      if (pctLbl) pctLbl.textContent = pct + '%';
+
+      var statEl = document.getElementById('stat-' + cat.id);
+      if (statEl) statEl.textContent = lv > 0 ? '+' + fmt(stat) + '%' : '+0%';
+
+      /* Cost chips — update all three language versions */
+      ['', '-en', '-sk'].forEach(function(sfx) {
+        var el = document.getElementById('cost-' + cat.id + sfx);
+        if (el) el.textContent = lv;
+      });
+    });
+  }
+
+  function updateStats() {
+    var ids = ['atk','hp','def','cres','cdmg','dmg'];
+    var allZero = true;
+    ids.forEach(function(id, idx) {
+      var cat  = CATS[idx];
+      var lv   = levels[id];
+      var stat = statAt(cat.col, lv);
+      var el   = document.getElementById('sv-' + id);
+      if (el) {
+        el.textContent = '+' + fmt(stat) + '%';
+        el.className   = 'srow-val' + (lv === 0 ? ' zero' : '');
+      }
+      if (lv > 0) allZero = false;
+    });
+
+    var used   = totalUsed();
+    var rem    = remaining();
+    document.getElementById('sv-total').textContent = '📜 ' + used;
+    document.getElementById('sv-used').textContent  = used;
+    var remEl = document.getElementById('sv-remain');
+    remEl.textContent = rem;
+    remEl.className   = 'sc-stat-v ' + (rem < 0 ? 'sv-danger' : rem < 10 ? 'sv-warn' : 'sv-ok');
+
+    /* Bubble */
+    var bubble = document.getElementById('stat-bubble');
+    var bubbleRows = document.getElementById('bubble-rows');
+    if (!allZero && bubble && bubbleRows) {
+      bubble.style.display = '';
+      var rows = '';
+      ids.forEach(function(id, idx) {
+        var cat  = CATS[idx];
+        var lv   = levels[id];
+        if (!lv) return;
+        var stat = statAt(cat.col, lv);
+        rows += '<div class="bubble-row">' +
+          '<span class="bubble-lbl">' + cat.icon + ' ' + t(cat.name) + ' Lv' + lv + '</span>' +
+          '<span class="bubble-val">+' + fmt(stat) + '%</span>' +
+        '</div>';
+      });
+      bubbleRows.innerHTML = rows;
+    } else if (bubble) {
+      bubble.style.display = 'none';
+    }
+  }
+
+  function refresh() {
+    updateCards();
+    updateStats();
+  }
+
+  /* Pool input */
+  document.addEventListener('DOMContentLoaded', function() {
+    buildCards();
+    refresh();
+
+    document.getElementById('scroll-pool').addEventListener('input', refresh);
+
+    document.getElementById('reset-all').addEventListener('click', function() {
+      Object.keys(levels).forEach(function(k) { levels[k] = 0; });
+      refresh();
+    });
+
+    /* Re-render names on lang switch */
+    document.querySelectorAll('.lang-switcher button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setTimeout(function() { buildCards(); refresh(); }, 30);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -34,20 +34,75 @@
 </nav>
 
 <div class="data-page">
-  <a href="data/index.html" class="back-link"><span class="lang-fr">← Données du jeu</span><span class="lang-en hidden">← Game Data</span><span class="lang-sk hidden">← Herné dáta</span></a>
+  <a href="data/index.html" class="back-link">
+    <span class="lang-fr">← Données du jeu</span>
+    <span class="lang-en hidden">← Game Data</span>
+    <span class="lang-sk hidden">← Herné dáta</span>
+  </a>
   <h1 class="page-title">📜 Scrolls</h1>
+
   <div class="acc">
-    <div class="acc-item open" id="acc-scr">
-      <button class="acc-head" data-acc="scr">
+    <div class="acc-item open" id="acc-scr-lv">
+      <button class="acc-head" data-acc="scr-lv">
         <span class="acc-icon">📜</span>
-        <span class="acc-title"><span class="lang-fr">Parchemins</span><span class="lang-en hidden">Scrolls</span><span class="lang-sk hidden">Zvitky</span></span>
-        <span class="acc-badge"><span class="lang-fr">Bientôt</span><span class="lang-en hidden">Coming soon</span><span class="lang-sk hidden">Čoskoro</span></span>
+        <span class="acc-title">
+          <span class="lang-fr">Niveaux de Parchemins</span>
+          <span class="lang-en hidden">Scroll Levels</span>
+          <span class="lang-sk hidden">Úrovne Zvitkov</span>
+        </span>
+        <span class="acc-badge">Lv 1–200</span>
         <span class="acc-chev">▼</span>
       </button>
       <div class="acc-body">
-        <div class="placeholder-box"><span class="lang-fr">Données pas encore disponibles.</span><span class="lang-en hidden">Data not yet available.</span><span class="lang-sk hidden">Dáta zatiaľ nie sú k dispozícii.</span></div>
+        <div class="info-note" style="margin-bottom:.6rem">
+          <span class="lang-fr">1 parchemin = 1 niveau. La colonne <strong>Cumul.</strong> indique le total de parchemins investis pour atteindre ce niveau.</span>
+          <span class="lang-en hidden">1 scroll = 1 level. The <strong>Cumul.</strong> column shows total scrolls invested to reach that level.</span>
+          <span class="lang-sk hidden">1 zvitok = 1 úroveň. Stĺpec <strong>Kumulatívne</strong> ukazuje celkový počet zvitkov na dosiahnutie tejto úrovne.</span>
+        </div>
+        <div class="toolbar">
+          <input type="search"
+            data-placeholder-fr="Filtrer par niveau…"
+            data-placeholder-en="Filter by level…"
+            data-placeholder-sk="Filtrovať podľa úrovne…"
+            placeholder="Filtrer…"
+            data-tbl="scr-lv">
+          <span class="tbl-cnt" id="cnt-scr-lv"></span>
+        </div>
+        <div class="tbl-scroll"><table class="dt" id="tbl-scr-lv">
+          <thead><tr>
+            <th data-col="0" class="r">Lv</th>
+            <th data-col="1" class="r">
+              <span class="lang-fr">📜 Cumul.</span>
+              <span class="lang-en hidden">📜 Cumul.</span>
+              <span class="lang-sk hidden">📜 Kumulatívne</span>
+            </th>
+            <th data-col="2" class="r">Global ATK %</th>
+            <th data-col="3" class="r">Global HP %</th>
+            <th data-col="4" class="r">Global DEF %</th>
+            <th data-col="5" class="r">Crit RES %</th>
+            <th data-col="6" class="r" title="Crit DMG / Skill Crit DMG / Pal Crit DMG">Crit DMG %</th>
+            <th data-col="7" class="r" title="Basic ATK / Combo DMG / Counter DMG / Skill DMG / Pal DMG">DMG Boost %</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.5rem;padding:0 2px">
+          <span class="lang-fr">* Crit DMG % s'applique à : Crit DMG, Skill Crit DMG, Pal Crit DMG &nbsp;·&nbsp; DMG Boost % s'applique à : Basic ATK, Combo DMG, Counter DMG, Skill DMG, Pal DMG</span>
+          <span class="lang-en hidden">* Crit DMG % applies to: Crit DMG, Skill Crit DMG, Pal Crit DMG &nbsp;·&nbsp; DMG Boost % applies to: Basic ATK, Combo DMG, Counter DMG, Skill DMG, Pal DMG</span>
+          <span class="lang-sk hidden">* Krit. Poškodenie % platí pre: Crit DMG, Skill Crit DMG, Pal Crit DMG &nbsp;·&nbsp; DMG Boost % platí pre: Basic ATK, Combo DMG, Counter DMG, Skill DMG, Pal DMG</span>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div style="margin-top:1.2rem;text-align:center">
+    <a href="simulation/scrolls/index.html" style="
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 22px;border-radius:var(--r-lg);
+      background:rgba(32,212,168,.1);border:1px solid rgba(32,212,168,.3);
+      color:var(--teal);font-weight:700;font-size:.88rem;text-decoration:none;
+      transition:background .18s;">
+      🧮 <span class="lang-fr">Simulateur de Parchemins</span><span class="lang-en hidden">Scroll Simulator</span><span class="lang-sk hidden">Simulátor Zvitkov</span> →
+    </a>
   </div>
 </div>
 
@@ -68,5 +123,8 @@
     document.getElementById('navLinks').classList.toggle('open');
   });
 </script>
+<script src="assets/js/data-engine.js"></script>
+<script src="assets/js/data/scroll.js"></script>
+<script>initTable('scr-lv', scrollLevels); wireControls();</script>
 </body>
 </html>
