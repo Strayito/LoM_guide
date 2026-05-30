@@ -498,10 +498,25 @@
 
   var levels = { atk: 0, hp: 0, def: 0, cres: 0, cdmg: 0, dmg: 0 };
 
+  /* Real cumulative scroll cost to reach a given level from Lv 1 */
+  function scrollCumul(lv) {
+    if (lv <= 0) return 0;
+    return SCROLL_DATA[Math.min(lv, MAX_LV) - 1][8];
+  }
+
   function scrollPool() { return Math.max(0, parseInt(document.getElementById('scroll-pool').value, 10) || 0); }
-  function totalUsed()  { return Object.values(levels).reduce(function(s, v) { return s + v; }, 0); }
+  function totalUsed()  { return CATS.reduce(function(s, cat) { return s + scrollCumul(levels[cat.id]); }, 0); }
   function remaining()  { return scrollPool() - totalUsed(); }
   function statAt(col, lv) { return lv < 1 ? 0 : SCROLL_DATA[Math.min(lv, MAX_LV) - 1][col]; }
+
+  /* Find max affordable level in [cur, ceiling] given current remaining budget */
+  function maxAffordable(cur, ceiling) {
+    var budget = remaining();
+    var base   = scrollCumul(cur);
+    var nxt    = cur;
+    while (nxt < ceiling && scrollCumul(nxt + 1) - base <= budget) { nxt++; }
+    return nxt;
+  }
 
   /* Build cards once */
   function buildCards() {
@@ -537,9 +552,9 @@
           '</button>' +
         '</div>' +
         '<div class="scr-cost-chip">' +
-          '<span class="lang-fr">📜 Coût : <span id="cost-' + cat.id + '">0</span> parchemin(s)</span>' +
-          '<span class="lang-en hidden">📜 Cost: <span id="cost-' + cat.id + '-en">0</span> scroll(s)</span>' +
-          '<span class="lang-sk hidden">📜 Cena: <span id="cost-' + cat.id + '-sk">0</span> zvitok/kov</span>' +
+          '<span class="lang-fr">📜 Investis : <span id="cost-' + cat.id + '">0</span> parchemin(s)</span>' +
+          '<span class="lang-en hidden">📜 Invested: <span id="cost-' + cat.id + '-en">0</span> scroll(s)</span>' +
+          '<span class="lang-sk hidden">📜 Investované: <span id="cost-' + cat.id + '-sk">0</span> zvitok/kov</span>' +
         '</div>';
 
       wrap.appendChild(card);
@@ -549,20 +564,21 @@
     wrap.addEventListener('click', function(e) {
       var btn = e.target.closest('[data-id][data-d]');
       if (!btn) return;
-      var id = btn.dataset.id;
-      var d  = btn.dataset.d;
+      var id  = btn.dataset.id;
+      var d   = btn.dataset.d;
       var cur = levels[id];
+
       if (d === '0') {
         levels[id] = 0;
       } else if (d === 'max') {
-        var rem = remaining();
-        levels[id] = Math.min(MAX_LV, cur + rem);
+        levels[id] = maxAffordable(cur, MAX_LV);
       } else {
         var delta = parseInt(d, 10);
-        var nxt = cur + delta;
-        if (delta > 0) nxt = Math.min(nxt, Math.min(MAX_LV, cur + remaining()));
-        if (delta < 0) nxt = Math.max(0, nxt);
-        levels[id] = nxt;
+        if (delta > 0) {
+          levels[id] = maxAffordable(cur, Math.min(MAX_LV, cur + delta));
+        } else {
+          levels[id] = Math.max(0, cur + delta);
+        }
       }
       refresh();
     });
@@ -573,8 +589,11 @@
       var id  = inp.id.replace('inp-', '');
       var val = Math.min(MAX_LV, Math.max(0, parseInt(inp.value, 10) || 0));
       if (val > levels[id]) {
-        var canAdd = remaining() - (val - levels[id]);
-        if (canAdd < 0) val = levels[id] + remaining();
+        /* Check cumulative cost affordability */
+        var extra = scrollCumul(val) - scrollCumul(levels[id]);
+        if (extra > remaining()) {
+          val = maxAffordable(levels[id], val);
+        }
       }
       levels[id] = val;
       refresh();
@@ -595,7 +614,7 @@
       if (card) card.classList.toggle('active', lv > 0);
       if (inp)  inp.value = lv;
 
-      var lvLbl = document.getElementById('lbl-lv-' + cat.id);
+      var lvLbl  = document.getElementById('lbl-lv-' + cat.id);
       var pctLbl = document.getElementById('lbl-pct-' + cat.id);
       if (lvLbl)  lvLbl.textContent = 'Lv ' + lv + ' / 200';
       if (pctLbl) pctLbl.textContent = pct + '%';
@@ -603,10 +622,11 @@
       var statEl = document.getElementById('stat-' + cat.id);
       if (statEl) statEl.textContent = lv > 0 ? '+' + fmt(stat) + '%' : '+0%';
 
-      /* Cost chips — update all three language versions */
+      /* Cost chips — show cumulative scrolls invested in this category */
+      var cumCost = scrollCumul(lv);
       ['', '-en', '-sk'].forEach(function(sfx) {
         var el = document.getElementById('cost-' + cat.id + sfx);
-        if (el) el.textContent = lv;
+        if (el) el.textContent = cumCost;
       });
     });
   }
@@ -626,8 +646,8 @@
       if (lv > 0) allZero = false;
     });
 
-    var used   = totalUsed();
-    var rem    = remaining();
+    var used  = totalUsed();
+    var rem   = remaining();
     document.getElementById('sv-total').textContent = '📜 ' + used;
     document.getElementById('sv-used').textContent  = used;
     var remEl = document.getElementById('sv-remain');
@@ -635,7 +655,7 @@
     remEl.className   = 'sc-stat-v ' + (rem < 0 ? 'sv-danger' : rem < 10 ? 'sv-warn' : 'sv-ok');
 
     /* Bubble */
-    var bubble = document.getElementById('stat-bubble');
+    var bubble     = document.getElementById('stat-bubble');
     var bubbleRows = document.getElementById('bubble-rows');
     if (!allZero && bubble && bubbleRows) {
       bubble.style.display = '';
